@@ -1,0 +1,13 @@
+amiralizadeh9480.cpp-helper
+christian-kohler.path-intellisense
+cschlosser.doxdocgen
+formulahendry.code-runner
+jeff-hykin.better-cpp-syntax
+MS-CEINTL.vscode-language-pack-zh-hans
+ms-python.python
+ms-python.vscode-pylance
+ms-toolsai.jupyter
+ms-toolsai.jupyter-keymap
+ms-toolsai.jupyter-renderers
+ms-vscode.cpptools
+yzhang.markdown-all-in-one
