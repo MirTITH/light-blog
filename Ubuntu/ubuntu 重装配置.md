@@ -101,3 +101,9 @@ sudo apt install ubuntu-restricted-extras
 ### komorebi（动态壁纸）
 
 > https://github.com/cheesecakeufo/komorebi
+
+
+
+### samba
+
+参考[samba使用教程.md](../samba/samba使用教程.md)
