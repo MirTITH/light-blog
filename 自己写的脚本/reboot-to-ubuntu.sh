@@ -1,13 +1,16 @@
-echo --------------------
-efibootmgr | grep ubuntu
-echo --------------------
-echo
-echo 若ubuntu的启动id为 0004，按 Enter 立即执行
-echo 否则请 ctrl+c 然后输入：
-echo
-echo sudo efibootmgr --bootnext xxxx
-echo
-read -p Continue?
+#!/bin/bash
 
-sudo efibootmgr --bootnext 0004
+search_result=$(efibootmgr | grep ubuntu)
+boot_id=${search_result:4:4}
+
+# echo --------------------
+# echo $search_result
+# echo --------------------
+# echo
+# echo 若 ubuntu 的启动 id 为 $boot_id, 按 Enter
+# echo 否则请 ctrl+c 然后输入： sudo efibootmgr --bootnext xxxx
+# echo 
+# read -p Continue?
+
+sudo efibootmgr --bootnext $boot_id
 sudo reboot
