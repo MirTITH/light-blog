@@ -110,7 +110,7 @@ A:A_port-> B:B_port
 ### 动态端口转发（像VPN）
 
 ```bash
-ssh -D [收听接口:]收听端口 username@hostname
+ssh -ND [收听接口:]收听端口 username@hostname
 ```
 
 在本地发起的请求，需要由Socket代理([Socket Proxy](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/SOCKS))转发到收听端口
