@@ -48,6 +48,26 @@ sudo update-grub
 
 
 
+### Keychron键盘 F1-F12映射修复
+
+> https://blog.csdn.net/AlanCorn_02/article/details/118462860
+
+```bash
+#输入下面命令后，键盘应该能正常使用，但每次重启要重新输入
+echo 0 | sudo tee /sys/module/hid_apple/parameters/fnmode
+```
+
+```bash
+#输入下面的命令，写入配置文件，重启后就无需再次输入
+echo "options hid_apple fnmode=0" | sudo tee -a /etc/modprobe.d/hid_apple.conf
+
+#更新initramfs
+sudo update-initramfs -u # Ubuntu
+mkinitcpio -P # ArchLinux
+```
+
+
+
 ### R7000P 亮度调节
 
 ubuntu 20.04 安装510版本nvidia 驱动直接解决
@@ -72,17 +92,11 @@ sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 sudo apt install libgsettings-qt1
 ```
 
+
+
 ### git
 
-~/.ssh权限
 
-> drwx------  2 xy   xy   4096 3月  13 20:27 .ssh
->
-> -rw------- 1 xy xy 399 2月  12 16:12 id_ed25519
->
-> -rw-r--r-- 1 xy xy  92 2月  12 16:12 id_ed25519.pub
->
-> -rw-r--r-- 1 xy xy 444 3月  13 20:27 known_hosts
 
 ### 视频解码器
 
@@ -97,6 +111,8 @@ sudo apt install libdvdnav4 gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly l
 sudo dpkg-reconfigure libdvd-pkg
 sudo apt install ubuntu-restricted-extras
 ```
+
+
 
 ### komorebi（动态壁纸）
 

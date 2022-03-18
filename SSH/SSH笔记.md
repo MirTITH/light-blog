@@ -1,5 +1,41 @@
 # SSH笔记
 
+## 文件权限
+
+~/.ssh
+
+```
+drwx------  2 xy xy 4096 3月  15 23:48 ./	#.ssh 文件夹
+drwxrwxrwx 26 xy xy 4096 3月  18 18:21 ../	#home 文件夹
+-rw-------  1 xy xy   98 3月  15 23:48 authorized_keys
+-rw-------  1 xy xy  399 2月  12 16:12 id_ed25519
+-rw-r--r--  1 xy xy   92 2月  12 16:12 id_ed25519.pub
+-rw-r--r--  1 xy xy  888 3月  15 23:53 known_hosts
+```
+
+/etc/ssh
+
+```
+drwxr-xr-x   4 root root   4096 3月  15 23:46 ./
+drwxr-xr-x 147 root root  12288 3月  18 21:20 ../
+-rw-r--r--   1 root root 535195 12月  3 06:38 moduli
+-rw-r--r--   1 root root   1603 5月  29  2020 ssh_config
+drwxr-xr-x   2 root root   4096 5月  29  2020 ssh_config.d/
+-rw-r--r--   1 root root   3289 12月  3 06:38 sshd_config
+drwxr-xr-x   2 root root   4096 12月  3 06:38 sshd_config.d/
+-rw-------   1 root root   1405 3月  15 23:46 ssh_host_dsa_key
+-rw-r--r--   1 root root    620 3月  15 23:46 ssh_host_dsa_key.pub
+-rw-------   1 root root    525 3月  15 23:46 ssh_host_ecdsa_key
+-rw-r--r--   1 root root    192 3月  15 23:46 ssh_host_ecdsa_key.pub
+-rw-------   1 root root    419 3月  15 23:46 ssh_host_ed25519_key
+-rw-r--r--   1 root root    112 3月  15 23:46 ssh_host_ed25519_key.pub
+-rw-------   1 root root   2622 3月  15 23:46 ssh_host_rsa_key
+-rw-r--r--   1 root root    584 3月  15 23:46 ssh_host_rsa_key.pub
+-rw-r--r--   1 root root    342 3月  15 23:43 ssh_import_id
+```
+
+
+
 ## 端口转发
 
 ### 命令解释：
