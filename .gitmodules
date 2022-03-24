@@ -1,0 +1,3 @@
+[submodule "cmake_template"]
+	path = cmake_template
+	url = git@github.com:MirTITH/cmake_template.git
