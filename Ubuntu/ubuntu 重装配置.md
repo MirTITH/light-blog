@@ -68,6 +68,126 @@ mkinitcpio -P # ArchLinux
 
 
 
+### 禁用鼠标键盘唤醒
+
+> https://askubuntu.com/a/713247
+
+1. **找到相关设备**
+
+```bash
+$ lsusb
+```
+
+例如：`Bus 005 Device 003: ID 046d:c53f Logitech, Inc. USB Receiver`
+
+
+
+2. **创建脚本**
+
+> 名称随意，例如： `config-G304-wakeup.sh`
+>
+> 位置：`/lib/systemd/system-sleep/`
+
+执行：
+
+```bash
+cd /lib/systemd/system-sleep
+sudo gedit config-G304-wakeup.sh #会自动创建新文件
+```
+
+写入如下内容：
+
+> 注意：第4、5行的id修改为步骤1中查到的id
+
+```bash
+#!/bin/bash
+
+# From lsusb: Bus 005 Device 008: ID 046d:c53f Logitech, Inc. USB Receiver
+idVendor=046d
+idProduct=c53f
+
+# Get sys device path by vendorId and productId
+function find_device()
+{
+    local vendor=$1
+    local product=$2
+    vendor_files=( $(egrep --files-with-matches "$vendor" /sys/bus/usb/devices/*/idVendor) )
+    for file in "${vendor_files[@]}"; do
+       local dir=$(dirname "$file")
+       if grep -q -P "$product" "$dir/idProduct"; then
+         printf "%s\n" "$dir"
+         return
+       fi
+    done
+}
+
+sysdev=$(find_device $idVendor $idProduct)
+
+if [ ! -r "$sysdev/power/wakeup" ]; then
+    echo $idVendor:$idProduct not found 1>&2
+    exit 1
+fi
+
+case "$1" in
+    enabled|disabled)
+    echo $1 > "$sysdev/power/wakeup"
+    ;;
+    *)
+    echo "$0 enabled   -- to enable the wakeup for this device"
+    echo "$0 disabled  -- to disable the wakeup for this device"
+    ;;
+esac
+
+grep --color=auto -H ".*" "$sysdev/power/wakeup"
+exit 0
+```
+
+
+
+3. **赋予可执行权限**
+
+```bash
+chmod +x config-G304-wakeup.sh
+```
+
+> 此时执行 `./config-G304-wakeup.sh disabled` 即可禁用唤醒，但重启后失效
+
+
+
+4. **设置开机自动运行**
+
+```bash
+cd /etc/systemd/system/
+sudo gedit disable-G304-wakeup.service #会自动创建新文件
+```
+
+写入如下内容：
+
+> ExecStart 改为对应路径
+
+```bash
+[Unit]
+Description=Disable wakeup on mouse-move (Logitech G304)
+After=default.target
+
+[Service]
+ExecStart=/lib/systemd/system-sleep/config-G304-wakeup.sh disabled
+
+[Install]
+WantedBy=default.target
+```
+
+执行：
+
+```bash
+$ systemctl daemon-reload
+$ systemctl enable disable-G304-wakeup.service
+```
+
+完成~
+
+
+
 ### R7000P 亮度调节
 
 ubuntu 20.04 安装510版本nvidia 驱动直接解决
