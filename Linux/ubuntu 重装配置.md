@@ -12,20 +12,18 @@
 
 > https://dns.icoa.cn/
 
-119.29.29.29
+```
+119.29.29.29,1.2.4.8
 
-1.2.4.8
-
-240C::6666
-
-2402:4e00::
+240C::6666,2402:4e00::
+```
 
 
 
 ### 与windows时间同步
 
 ```bash
-timedatectl set-local-rtc 1 --adjust-system-clock 
+timedatectl set-local-rtc 1
 ```
 
 
@@ -62,8 +60,12 @@ echo 0 | sudo tee /sys/module/hid_apple/parameters/fnmode
 echo "options hid_apple fnmode=0" | sudo tee -a /etc/modprobe.d/hid_apple.conf
 
 #更新initramfs
-sudo update-initramfs -u # Ubuntu
-mkinitcpio -P # ArchLinux
+
+# Ubuntu
+sudo update-initramfs -u 
+
+# ArchLinux
+mkinitcpio -P 
 ```
 
 
@@ -91,8 +93,8 @@ $ lsusb
 执行：
 
 ```bash
-cd /lib/systemd/system-sleep
-sudo gedit config-G304-wakeup.sh #会自动创建新文件
+#会自动创建新文件
+sudo gedit /lib/systemd/system-sleep/config-G304-wakeup.sh
 ```
 
 写入如下内容：
@@ -147,7 +149,7 @@ exit 0
 3. **赋予可执行权限**
 
 ```bash
-chmod +x config-G304-wakeup.sh
+sudo chmod +x /lib/systemd/system-sleep/config-G304-wakeup.sh
 ```
 
 > 此时执行 `./config-G304-wakeup.sh disabled` 即可禁用唤醒，但重启后失效
@@ -157,8 +159,8 @@ chmod +x config-G304-wakeup.sh
 4. **设置开机自动运行**
 
 ```bash
-cd /etc/systemd/system/
-sudo gedit disable-G304-wakeup.service #会自动创建新文件
+#会自动创建新文件
+sudo gedit /etc/systemd/system/disable-G304-wakeup.service
 ```
 
 写入如下内容：
@@ -180,8 +182,8 @@ WantedBy=default.target
 执行：
 
 ```bash
-$ systemctl daemon-reload
-$ systemctl enable disable-G304-wakeup.service
+systemctl daemon-reload
+systemctl enable disable-G304-wakeup.service
 ```
 
 完成~
