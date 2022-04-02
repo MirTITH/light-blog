@@ -23,7 +23,7 @@
 ### 与windows时间同步
 
 ```bash
-timedatectl set-local-rtc 1
+timedatectl set-local-rtc 1 --adjust-system-clock
 ```
 
 
