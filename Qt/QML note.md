@@ -72,3 +72,12 @@ transform: Rotation{
 ![2022-03-29 00-01-19 的屏幕截图](QML note.assets/2022-03-29 00-01-19 的屏幕截图.png)
 
 ![2022-03-29 00-02-10 的屏幕截图](QML note.assets/2022-03-29 00-02-10 的屏幕截图.png)
+
+## Mouse and Touch
+
+ ```javascript
+ MouseArea {}
+ Flickable {} // 滑动
+ PinchArea {} // jia
+ ```
+
