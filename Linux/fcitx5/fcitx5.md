@@ -28,17 +28,32 @@ cp -r fcitx5 ~/.config/
 
 ## 安装词典
 
+中文维基
+
+https://github.com/felixonmars/fcitx5-pinyin-zhwiki
+
+萌娘百科
+
+https://github.com/outloudvi/mw2fcitx/releases
+
+
+
 Copy into ~/.local/share/fcitx5/pinyin/dictionaries/ (create the folder if it does not exist)
 
 ```
 mkdir -p ~/.local/share/fcitx5/pinyin/dictionaries/
 ```
 
+## 安装皮肤
 
+> https://www.cnblogs.com/maicss/p/15056420.html
 
-[](https://github.com/felixonmars/fcitx5-pinyin-zhwiki)
-
-https://github.com/outloudvi/mw2fcitx/releases
+```bash
+mkdir -p ~/.local/share/fcitx5/themes/
+cp -r fcitx5-simple-themes/* ~/.local/share/fcitx5/themes
+gedit ~/.config/fcitx5/conf/classicui.conf
+# 修改为 Simple-white 或 Simple-dark
+```
 
 ## 启用fcitx5
 
