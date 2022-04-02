@@ -20,9 +20,21 @@ sudo apt install fcitx5 fcitx5-frontend-qt5 fcitx5-frontend-gtk3 fcitx5-frontend
 
 将fcitx5 文件夹复制到 ~/.config/
 
+```bash
+cp -r fcitx5 ~/.config/
+```
+
+
+
 ## 安装词典
 
 Copy into ~/.local/share/fcitx5/pinyin/dictionaries/ (create the folder if it does not exist)
+
+```
+mkdir -p ~/.local/share/fcitx5/pinyin/dictionaries/
+```
+
+
 
 [](https://github.com/felixonmars/fcitx5-pinyin-zhwiki)
 
