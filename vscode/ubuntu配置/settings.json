@@ -3,6 +3,6 @@
     "editor.insertSpaces": false,
     "files.autoGuessEncoding": true,
     "editor.mouseWheelZoom": true,
-    "editor.fontFamily": "'YaHei Consolas Hybrid','Ubuntu Mono',monospace",
+    "editor.fontFamily": "'YaHei Consolas Hybrid','Ubuntu Mono', 'MesloLGS NF'",
     "editor.fontSize": 16
 }
