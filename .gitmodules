@@ -1,3 +1,6 @@
 [submodule "cmake_template"]
 	path = cmake_template
 	url = git@github.com:MirTITH/cmake_template.git
+[submodule "light-blog-resource"]
+	path = light-blog-resource
+	url = git@github.com:MirTITH/light-blog-resource.git
