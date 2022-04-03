@@ -6,8 +6,6 @@
 
 在软件更新器中换
 
-
-
 ### DNS
 
 > https://dns.icoa.cn/
@@ -18,15 +16,11 @@
 240C::6666,2402:4e00::
 ```
 
-
-
 ### 与windows时间同步
 
 ```bash
 timedatectl set-local-rtc 1 --adjust-system-clock
 ```
-
-
 
 ### GRUB2 timeout
 
@@ -43,8 +37,6 @@ Next run:
 ```bash
 sudo update-grub
 ```
-
-
 
 ### Keychron键盘 F1-F12映射修复
 
@@ -202,8 +194,13 @@ ubuntu 20.04 安装510版本nvidia 驱动直接解决
 
 ## 软件安装
 
-### 输入法
-搜狗输入法
+### 输入法(选1个)
+
+#### fcitx5
+
+[fcitx5.md](./fcitx5/fcitx5.md)
+
+#### 搜狗输入法
 
 https://pinyin.sogou.com/linux/?r=pinyin
 
@@ -214,11 +211,21 @@ sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 sudo apt install libgsettings-qt1
 ```
 
-
-
 ### git
 
+```bash
+sudo apt install git
 
+git config --global user.email "1023515576@qq.com"
+git config --global user.name "TITH"
+git config --global core.quotepath false
+```
+
+ssh 目录
+
+> ~/.ssh
+>
+> /etc/ssh
 
 ### 视频解码器
 
@@ -234,14 +241,21 @@ sudo dpkg-reconfigure libdvd-pkg
 sudo apt install ubuntu-restricted-extras
 ```
 
-
-
 ### komorebi（动态壁纸）
 
 > https://github.com/cheesecakeufo/komorebi
 
+需要安装视频解码器
 
+N卡可能需要使用闭源驱动
 
+### terminator
+
+复制 `.config/terminator` 文件夹到`~/.config`
+
+```bash
+sudo apt install terminator
+```
 ### samba
 
 参考[samba使用教程.md](../samba/samba使用教程.md)
