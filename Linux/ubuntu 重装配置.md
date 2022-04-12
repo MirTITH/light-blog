@@ -316,6 +316,10 @@ Oh My Zsh:
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
+**皮肤**
+
+> https://github.com/romkatv/powerlevel10k
+
 ### git
 
 ```bash
