@@ -194,6 +194,30 @@ ubuntu 20.04 安装510版本nvidia 驱动直接解决
 
 ## 软件安装
 
+### language package
+
+```bash 
+sudo apt install $(check-language-support)
+```
+
+### Edge
+
+**GPG error "NO_PUBKEY"**
+
+Execute the following commands in terminal
+
+```bash
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <PUBKEY>
+```
+
+where `<PUBKEY>` is your missing public key for repository, e.g. `8BAF9A6F`.
+
+Then update   
+
+```bash
+sudo apt-get update
+```
+
 ### 输入法(选1个)
 
 #### fcitx5
@@ -211,6 +235,87 @@ sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 sudo apt install libgsettings-qt1
 ```
 
+### v2rayA
+
+> https://v2raya.org/
+
+**安装V2Ray内核**
+
+```bash
+curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash
+```
+
+安装后可以关掉服务，因为 v2rayA 不依赖于该 systemd 服务。
+
+```bash
+sudo systemctl disable v2ray --now
+```
+
+**安装 v2rayA**
+
+添加公钥
+
+```bash
+wget -qO - https://apt.v2raya.mzz.pub/key/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/v2raya.asc
+```
+
+添加软件源
+
+```bash
+echo "deb https://apt.v2raya.mzz.pub/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list
+sudo apt update
+```
+
+安装
+
+```bash
+sudo apt install v2raya
+```
+
+**启动**
+
+```bash
+sudo systemctl start v2raya.service
+```
+
+**设置自动启动**
+
+```bash
+sudo systemctl enable v2raya.service
+```
+
+**访问**
+
+http://localhost:2017/
+
+### Zsh
+
+> https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
+
+ Install Zsh:
+
+```bash
+sudo apt install zsh
+```
+
+Make it your default shell:
+
+```bash
+chsh -s $(which zsh)
+```
+
+
+
+**Log out and log back in again to use your new default shell.**
+
+
+
+Oh My Zsh:
+
+```bash
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
 ### git
 
 ```bash
@@ -226,6 +331,13 @@ ssh 目录
 > ~/.ssh
 >
 > /etc/ssh
+
+### tldr
+
+```bash
+sudo apt install npm
+sudo npm install -g tldr
+```
 
 ### 视频解码器
 
