@@ -200,6 +200,12 @@ ubuntu 20.04 安装510版本nvidia 驱动直接解决
 sudo apt install $(check-language-support)
 ```
 
+### Nautilus
+
+```bash
+ sudo apt install nautilus nautilus-share
+```
+
 ### Edge
 
 **GPG error "NO_PUBKEY"**
