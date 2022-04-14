@@ -1,0 +1,9 @@
+ [Unit]
+Description=Disable wakeup on mouse-move (Logitech G304)
+After=default.target
+
+[Service]
+ExecStart=/lib/systemd/system-sleep/config-G304-wakeup.sh disabled
+
+[Install]
+WantedBy=default.target

@@ -14,3 +14,5 @@ cp conf.user.json ~/.config/Typora/conf/
 
 我觉得好用的主题都放在 theme 文件夹下，看着用吧
 
+(文件夹丢了(^ ^`))
+

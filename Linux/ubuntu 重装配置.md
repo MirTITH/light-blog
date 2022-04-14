@@ -24,8 +24,6 @@ timedatectl set-local-rtc 1 --adjust-system-clock
 
 ### GRUB2 timeout
 
-Run in terminal:
-
 ```bash
 sudo gedit /etc/default/grub
 ```
@@ -60,127 +58,54 @@ sudo update-initramfs -u
 mkinitcpio -P 
 ```
 
-
-
 ### 禁用鼠标键盘唤醒
 
 > https://askubuntu.com/a/713247
 
-1. **找到相关设备**
+#### 对于G304鼠标：
 
 ```bash
-$ lsusb
-```
-
-例如：`Bus 005 Device 003: ID 046d:c53f Logitech, Inc. USB Receiver`
-
-
-
-2. **创建脚本**
-
-> 名称随意，例如： `config-G304-wakeup.sh`
->
-> 位置：`/lib/systemd/system-sleep/`
-
-执行：
-
-```bash
-#会自动创建新文件
-sudo gedit /lib/systemd/system-sleep/config-G304-wakeup.sh
-```
-
-写入如下内容：
-
-> 注意：第4、5行的id修改为步骤1中查到的id
-
-```bash
-#!/bin/bash
-
-# From lsusb: Bus 005 Device 008: ID 046d:c53f Logitech, Inc. USB Receiver
-idVendor=046d
-idProduct=c53f
-
-# Get sys device path by vendorId and productId
-function find_device()
-{
-    local vendor=$1
-    local product=$2
-    vendor_files=( $(egrep --files-with-matches "$vendor" /sys/bus/usb/devices/*/idVendor) )
-    for file in "${vendor_files[@]}"; do
-       local dir=$(dirname "$file")
-       if grep -q -P "$product" "$dir/idProduct"; then
-         printf "%s\n" "$dir"
-         return
-       fi
-    done
-}
-
-sysdev=$(find_device $idVendor $idProduct)
-
-if [ ! -r "$sysdev/power/wakeup" ]; then
-    echo $idVendor:$idProduct not found 1>&2
-    exit 1
-fi
-
-case "$1" in
-    enabled|disabled)
-    echo $1 > "$sysdev/power/wakeup"
-    ;;
-    *)
-    echo "$0 enabled   -- to enable the wakeup for this device"
-    echo "$0 disabled  -- to disable the wakeup for this device"
-    ;;
-esac
-
-grep --color=auto -H ".*" "$sysdev/power/wakeup"
-exit 0
-```
-
-
-
-3. **赋予可执行权限**
-
-```bash
+sudo cp config-G304-wakeup.sh /lib/systemd/system-sleep/
 sudo chmod +x /lib/systemd/system-sleep/config-G304-wakeup.sh
-```
-
-> 此时执行 `./config-G304-wakeup.sh disabled` 即可禁用唤醒，但重启后失效
-
-
-
-4. **设置开机自动运行**
-
-```bash
-#会自动创建新文件
-sudo gedit /etc/systemd/system/disable-G304-wakeup.service
-```
-
-写入如下内容：
-
-> ExecStart 改为对应路径
-
-```bash
-[Unit]
-Description=Disable wakeup on mouse-move (Logitech G304)
-After=default.target
-
-[Service]
-ExecStart=/lib/systemd/system-sleep/config-G304-wakeup.sh disabled
-
-[Install]
-WantedBy=default.target
-```
-
-执行：
-
-```bash
+sudo cp disable-G304-wakeup.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable disable-G304-wakeup.service
 ```
 
-完成~
+### 对于其他鼠标：
 
+1. **找到相关设备**
 
+```bash
+lsusb
+```
+
+>  例如：`Bus 005 Device 003: ID 046d:c53f Logitech, Inc. USB Receiver`
+>
+> 其中ID格式为：`idVendor:idProduct`
+
+2. **修改脚本**
+
+修改`config-G304-wakeup.sh`脚本中的id（并换个文件名）
+
+**这两行换成在步骤1中查到的id**
+
+```bash
+idVendor=046d
+idProduct=c53f
+```
+
+修改`disable-G304-wakeup.service`中的对应信息（并换个文件名）
+
+3. **部署脚本**
+
+```bash
+sudo cp config-新名字-wakeup.sh /lib/systemd/system-sleep/
+sudo chmod +x /lib/systemd/system-sleep/config-新名字-wakeup.sh
+sudo cp disable-新名字-wakeup.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable disable-新名字-wakeup.service
+```
 
 ### R7000P 亮度调节
 
@@ -198,12 +123,6 @@ ubuntu 20.04 安装510版本nvidia 驱动直接解决
 
 ```bash 
 sudo apt install $(check-language-support)
-```
-
-### Nautilus
-
-```bash
- sudo apt install nautilus nautilus-share
 ```
 
 ### Edge
