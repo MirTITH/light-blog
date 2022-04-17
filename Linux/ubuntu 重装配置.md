@@ -229,9 +229,15 @@ Make it your default shell:
 chsh -s $(which zsh)
 ```
 
-
-
 **Log out and log back in again to use your new default shell.**
+
+
+
+临时切换到bash: 
+
+```bash
+exec bash
+```
 
 
 

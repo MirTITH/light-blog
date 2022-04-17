@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Icalingua
+Exec=/opt/Icalingua/Icalingua-2.4.6.AppImage %U
+Terminal=false
+Type=Application
+Icon=/opt/Icalingua/icalingua.png
+StartupWMClass=Icalingua
+Comment=A client for (maybe) any IM made with Electron
+Categories=Network;
