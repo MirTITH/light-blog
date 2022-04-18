@@ -22,7 +22,11 @@ sudo apt install $(check-language-support)
 
 然后在设置-开机和关机-自动启动里添加启动项
 
-### Active Window Control
+### kde最大化窗口时隐藏标题栏
+
+安装：Active Window Control（在顶栏显示按钮）
+
+参考https://blog.csdn.net/yalin1997/article/details/122711033 在latte-dock 里设置最大化隐藏标题栏
 
 ### flameshot 截图工具
 
