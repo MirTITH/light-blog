@@ -7,4 +7,3 @@
 
 
 Praise the sun!
-

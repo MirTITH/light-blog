@@ -1,12 +1,10 @@
 # ubuntu 重装配置
 
-## 系统配置
-
-### 换源
+## 换源
 
 在软件更新器中换
 
-### DNS
+## DNS
 
 > https://dns.icoa.cn/
 
@@ -16,13 +14,17 @@
 240C::6666,2402:4e00::
 ```
 
-### 与windows时间同步
+
+
+## 与windows时间同步
 
 ```bash
 timedatectl set-local-rtc 1 --adjust-system-clock
 ```
 
-### GRUB2 timeout
+
+
+## GRUB2 timeout
 
 ```bash
 sudo gedit /etc/default/grub
@@ -36,7 +38,9 @@ Next run:
 sudo update-grub
 ```
 
-### Keychron键盘 F1-F12映射修复
+
+
+## Keychron键盘 F1-F12映射修复
 
 > https://blog.csdn.net/AlanCorn_02/article/details/118462860
 
@@ -58,11 +62,13 @@ sudo update-initramfs -u
 mkinitcpio -P 
 ```
 
-### 禁用鼠标键盘唤醒
+
+
+## 禁用鼠标键盘唤醒
 
 > https://askubuntu.com/a/713247
 
-#### 对于G304鼠标：
+### 对于G304鼠标：
 
 ```bash
 sudo cp config-G304-wakeup.sh /lib/systemd/system-sleep/
@@ -107,7 +113,17 @@ systemctl daemon-reload
 systemctl enable disable-新名字-wakeup.service
 ```
 
-### R7000P 亮度调节
+
+
+## reboot-to-ubuntu.sh
+
+```bash
+sudo cp ./reboot-to-ubuntu.sh /usr/local/bin/
+```
+
+
+
+## R7000P 亮度调节
 
 ubuntu 20.04 安装510版本nvidia 驱动直接解决
 
@@ -115,194 +131,3 @@ ubuntu 20.04 安装510版本nvidia 驱动直接解决
 >
 > https://zhuanlan.zhihu.com/p/348624522?ivk_sa=1024320u
 
-
-
-## 软件安装
-
-### language package
-
-```bash 
-sudo apt install $(check-language-support)
-```
-
-### Edge
-
-**GPG error "NO_PUBKEY"**
-
-Execute the following commands in terminal
-
-```bash
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <PUBKEY>
-```
-
-where `<PUBKEY>` is your missing public key for repository, e.g. `8BAF9A6F`.
-
-Then update   
-
-```bash
-sudo apt-get update
-```
-
-### 输入法(选1个)
-
-#### fcitx5
-
-[fcitx5.md](./fcitx5/fcitx5.md)
-
-#### 搜狗输入法
-
-https://pinyin.sogou.com/linux/?r=pinyin
-
-不显示问题：安装以下依赖
-
-```bash
-sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
-sudo apt install libgsettings-qt1
-```
-
-### v2rayA
-
-> https://v2raya.org/
-
-**安装V2Ray内核**
-
-```bash
-curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash
-```
-
-安装后可以关掉服务，因为 v2rayA 不依赖于该 systemd 服务。
-
-```bash
-sudo systemctl disable v2ray --now
-```
-
-**安装 v2rayA**
-
-添加公钥
-
-```bash
-wget -qO - https://apt.v2raya.mzz.pub/key/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/v2raya.asc
-```
-
-添加软件源
-
-```bash
-echo "deb https://apt.v2raya.mzz.pub/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list
-sudo apt update
-```
-
-安装
-
-```bash
-sudo apt install v2raya
-```
-
-**启动**
-
-```bash
-sudo systemctl start v2raya.service
-```
-
-**设置自动启动**
-
-```bash
-sudo systemctl enable v2raya.service
-```
-
-**访问**
-
-http://localhost:2017/
-
-### Zsh
-
-> https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
-
- Install Zsh:
-
-```bash
-sudo apt install zsh
-```
-
-Make it your default shell:
-
-```bash
-chsh -s $(which zsh)
-```
-
-**Log out and log back in again to use your new default shell.**
-
-
-
-临时切换到bash: 
-
-```bash
-exec bash
-```
-
-
-
-Oh My Zsh:
-
-```bash
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-**皮肤**
-
-> https://github.com/romkatv/powerlevel10k
-
-### git
-
-```bash
-sudo apt install git
-
-git config --global user.email "1023515576@qq.com"
-git config --global user.name "TITH"
-git config --global core.quotepath false
-```
-
-ssh 目录
-
-> ~/.ssh
->
-> /etc/ssh
-
-### tldr
-
-```bash
-sudo apt install npm
-sudo npm install -g tldr
-```
-
-### 视频解码器
-
-> https://linuxhint.com/install-h264-decoder-ubuntu/
-
-直接执行以下命令
-
-（期间会有对话框，前两行命令全选默认的，最后一行接受）
-
-```bash
-sudo apt install libdvdnav4 gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libdvd-pkg -y
-sudo dpkg-reconfigure libdvd-pkg
-sudo apt install ubuntu-restricted-extras
-```
-
-### komorebi（动态壁纸）
-
-> https://github.com/cheesecakeufo/komorebi
-
-需要安装视频解码器
-
-N卡可能需要使用闭源驱动
-
-### terminator
-
-复制 `.config/terminator` 文件夹到`~/.config`
-
-```bash
-sudo apt install terminator
-```
-### samba
-
-参考[samba使用教程.md](../samba/samba使用教程.md)

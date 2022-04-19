@@ -2,7 +2,7 @@
 RightButton;NoModifier=org.kde.latte.contextmenu
 
 [Containments][11]
-PreloadWeight=10
+PreloadWeight=2
 activityId=
 formfactor=2
 immutability=1
@@ -17,49 +17,49 @@ immutability=1
 plugin=org.kde.kdeconnect
 
 [Containments][11][Applets][12][Configuration]
-PreloadWeight=10
+PreloadWeight=2
 
 [Containments][11][Applets][14]
 immutability=1
 plugin=org.kde.plasma.volume
 
 [Containments][11][Applets][14][Configuration]
-PreloadWeight=10
+PreloadWeight=15
 
 [Containments][11][Applets][15]
 immutability=1
 plugin=org.kde.plasma.devicenotifier
 
 [Containments][11][Applets][15][Configuration]
-PreloadWeight=10
+PreloadWeight=2
 
 [Containments][11][Applets][16]
 immutability=1
 plugin=org.kde.plasma.notifications
 
 [Containments][11][Applets][16][Configuration]
-PreloadWeight=50
+PreloadWeight=55
 
 [Containments][11][Applets][17]
 immutability=1
 plugin=org.kde.plasma.printmanager
 
 [Containments][11][Applets][17][Configuration]
-PreloadWeight=10
+PreloadWeight=2
 
 [Containments][11][Applets][18]
 immutability=1
 plugin=org.kde.plasma.clipboard
 
 [Containments][11][Applets][18][Configuration]
-PreloadWeight=10
+PreloadWeight=7
 
 [Containments][11][Applets][21]
 immutability=1
 plugin=org.kde.plasma.networkmanagement
 
 [Containments][11][Applets][21][Configuration]
-PreloadWeight=15
+PreloadWeight=25
 
 [Containments][11][Applets][22]
 immutability=1
@@ -73,14 +73,14 @@ immutability=1
 plugin=org.kde.plasma.vault
 
 [Containments][11][Applets][61][Configuration]
-PreloadWeight=10
+PreloadWeight=2
 
 [Containments][11][Applets][62]
 immutability=1
 plugin=org.kde.plasma.nightcolorcontrol
 
 [Containments][11][Applets][62][Configuration]
-PreloadWeight=10
+PreloadWeight=2
 
 [Containments][11][Applets][63]
 immutability=1
@@ -89,16 +89,9 @@ plugin=org.kde.plasma.keyboardindicator
 [Containments][11][Applets][63][Configuration]
 PreloadWeight=10
 
-[Containments][11][Applets][78]
+[Containments][11][Applets][82]
 immutability=1
 plugin=org.kde.plasma.battery
-
-[Containments][11][Applets][79]
-immutability=1
-plugin=org.kde.plasma.mediacontroller
-
-[Containments][11][Applets][79][Configuration]
-PreloadWeight=0
 
 [Containments][11][General]
 extraItems=org.kde.plasma.networkmanagement,org.kde.ktp-contactlist,org.kde.plasma.clipboard,org.kde.plasma.printmanager,org.kde.kdeconnect,org.kde.plasma.pkupdates,org.kde.plasma.battery,org.kde.plasma.bluetooth,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.mediacontroller,org.kde.discovernotifier,org.kde.plasma.vault,org.kde.plasma.keyboardindicator,org.kde.plasma.nightcolorcontrol
@@ -121,13 +114,6 @@ plugin=org.kde.plasma.keyboardindicator
 
 [Containments][13][Applets][40][Configuration]
 PreloadWeight=10
-
-[Containments][13][Applets][41]
-immutability=1
-plugin=org.kde.plasma.mediacontroller
-
-[Containments][13][Applets][41][Configuration]
-PreloadWeight=0
 
 [Containments][13][Applets][42]
 immutability=1
@@ -199,7 +185,7 @@ plugin=org.kde.plasma.bluetooth
 [Containments][13][Applets][51][Configuration]
 PreloadWeight=10
 
-[Containments][13][Applets][52]
+[Containments][13][Applets][81]
 immutability=1
 plugin=org.kde.plasma.battery
 
@@ -230,28 +216,6 @@ viewType=0
 visibility=0
 wallpaperplugin=org.kde.image
 
-[Containments][19][Applets][53]
-immutability=1
-plugin=org.kde.plasma.systemloadviewer
-
-[Containments][19][Applets][53][Configuration]
-PreloadWeight=42
-
-[Containments][19][Applets][53][Configuration][ConfigDialog]
-DialogHeight=600
-DialogWidth=800
-
-[Containments][19][Applets][53][Configuration][General]
-cpuIOWaitColor=170,170,255
-cpuNiceColor=170,170,255
-cpuSysColor=170,170,255
-cpuUserColor=170,170,255
-memApplicationColor=85,170,255
-memBuffersColor=85,170,127
-monitorType=Circular
-setColorsManually=true
-swapActivated=false
-
 [Containments][19][Applets][54]
 immutability=1
 plugin=org.kde.plasma.digitalclock
@@ -261,7 +225,6 @@ PreloadWeight=20
 
 [Containments][19][Applets][54][Configuration][Appearance]
 dateFormat=isoDate
-showDate=true
 showSeconds=true
 use24hFormat=2
 
@@ -340,40 +303,6 @@ showWindowTitle=false
 DialogHeight=671
 DialogWidth=1280
 
-[Containments][19][Applets][60]
-immutability=1
-plugin=org.kde.plasma.awesomewidget
-
-[Containments][19][Applets][60][Configuration]
-PreloadWeight=42
-
-[Containments][19][Applets][60][Configuration][Advanced]
-background=false
-checkUpdates=false
-customTime=$hh:$mm:$ss  $MM-$dd \s
-notify=false
-telemetryId=7ca75235-a6b7-4207-a41c-20a94e6ae560
-
-[Containments][19][Applets][60][Configuration][Appearance]
-fontColor=#ffffff
-fontFamily=Noto Sans CJK SC
-
-[Containments][19][Applets][60][Configuration][ConfigDialog]
-DialogHeight=600
-DialogWidth=800
-
-[Containments][19][Applets][60][Configuration][Tooltip]
-batTooltip=false
-cpuTooltip=false
-cpuclTooltip=false
-downkbTooltip=false
-memTooltip=false
-swapTooltip=false
-useTooltipBackground=false
-
-[Containments][19][Applets][60][Configuration][Widget]
-text=<p align="center">\n\t<span style="color:#75ffe8">\n\t\t$down$downunits↓\n\t</span>\n\t<span style="color:#ffb07c">\n\t\t$up$upunits↑\n\t</span>\n\t[GPU$gpu%$gputemp℃]\n</p>
-
 [Containments][19][ConfigDialog]
 DialogHeight=968
 DialogWidth=600
@@ -385,7 +314,7 @@ PreloadWeight=10
 advanced=false
 alignment=10
 alignmentUpgraded=true
-appletOrder=55;54;57;58;60;53;59;56
+appletOrder=55;57;58;54;59;56
 autoDecreaseIconSize=false
 blurEnabled=false
 dragActiveWindowEnabled=true
@@ -405,8 +334,8 @@ shadowSize=50
 shadows=None
 shadowsUpgraded=true
 shrinkThickMargins=true
-splitterPosition=5
-splitterPosition2=6
+splitterPosition=3
+splitterPosition2=5
 tasksUpgraded=true
 thickMargin=0
 zoomLevel=0
@@ -478,7 +407,7 @@ immutability=1
 plugin=org.kde.plasma.digitalclock
 
 [Containments][4][Applets][25][Configuration]
-PreloadWeight=20
+PreloadWeight=25
 
 [Containments][4][Applets][25][Configuration][Appearance]
 dateFormat=isoDate
@@ -609,6 +538,13 @@ showWindowTitle=false
 DialogHeight=671
 DialogWidth=1280
 
+[Containments][4][Applets][83]
+immutability=1
+plugin=org.kde.kscreen
+
+[Containments][4][Applets][83][Configuration]
+PreloadWeight=55
+
 [Containments][4][ConfigDialog]
 DialogHeight=968
 DialogWidth=600
@@ -620,13 +556,14 @@ PreloadWeight=10
 advanced=false
 alignment=10
 alignmentUpgraded=true
-appletOrder=73;25;69;64;76;77;80;10
+appletOrder=73;25;69;64;76;77;80;83;10
 autoDecreaseIconSize=false
 blurEnabled=false
 dragActiveWindowEnabled=true
 hoverAction=PreviewWindows
 iconSize=30
 inConfigureAppletsMode=true
+maxLength=90
 middleClickAction=Close
 mouseWheelActions=false
 panelPosition=10
