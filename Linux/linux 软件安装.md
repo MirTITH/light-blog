@@ -45,7 +45,25 @@ deb包只有2.4.5版本
 
 如果要用2.5.6版本：
 
-只有 AppImage，并且如果要创建开始菜单链接，需要把`icalingua`文件夹中的两个文件复制到相应地方
+> 只有 AppImage
+
+复制文件
+
+```bash
+sudo mkdir /opt/Icalingua/
+sudo cp Icalingua-2.4.6.AppImage /opt/Icalingua/
+sudo cp icalingua.png /opt/Icalingua/
+```
+
+确保`Icalingua-2.4.6.AppImage`有可执行权限
+
+复制.desktop
+
+```bash
+sudo cp icalingua.desktop /usr/share/applications/
+```
+
+确保`icalingua.desktop `有可执行权限
 
 
 
