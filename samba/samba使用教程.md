@@ -43,3 +43,11 @@ net usershare add: cannot share path /mnt/E/_XY as we are restricted to only sha
 	Ask the administrator to add the line "usershare owner only = false" 
 	to the [global] section of the smb.conf to allow this.
 
+#### daemon failed to start: Samba cannot init registry
+
+https://blog.csdn.net/u013310025/article/details/86721604
+
+```bash
+sudo rm /var/lib/samba/registry.tdb
+```
+
