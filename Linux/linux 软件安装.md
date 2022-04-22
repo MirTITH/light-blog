@@ -267,9 +267,22 @@ sudo apt install ubuntu-restricted-extras
 
 ```bash 
 sudo apt install $(check-language-support)
+
+# 安装中文语言包
+sudo apt install language-pack-zh-han*
+
+# 安装gnome包
+sudo apt install language-pack-gnome-zh-han*
+
+# 安装kde包
+sudo apt-ge install language-pack-kde-zh-han*
 ```
 
+**zsh使用通配符要加单引号**
 
+> `fcitx-ui-qimpanel `  in $(check-language-support) is confilct with sogoupinyin. Do not install it if using sogoupinyin. 
+>
+> Some input methods in the list is not needed when using other input methods. 
 
 ### Nautilus
 
@@ -277,7 +290,17 @@ sudo apt install $(check-language-support)
  sudo apt install nautilus nautilus-share
 ```
 
+### gnome-disk-utility
 
+```bash
+sudo apt install gnome-disk-utility
+```
+
+### gnome-keyring
+
+```bash
+sudo apt install gnome-keyring
+```
 
 ### yakuake
 
@@ -383,4 +406,3 @@ N卡可能需要使用闭源驱动
 sudo apt install terminator
 ```
 
-### 

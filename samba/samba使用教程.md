@@ -39,9 +39,25 @@ smb.conf文件位置
 
 #### net usershare”返回错误 255
 
-net usershare add: cannot share path /mnt/E/_XY as we are restricted to only sharing directories we own.
-	Ask the administrator to add the line "usershare owner only = false" 
-	to the [global] section of the smb.conf to allow this.
+在`smb.conf`的 [global]下添加：
+
+```
+usershare owner only = false
+```
+
+> net usershare add: cannot share path /mnt/E/_XY as we are restricted to only sharing directories we own.
+> 	Ask the administrator to add the line "usershare owner only = false" 
+> 	to the [global] section of the smb.conf to allow this.
+
+### 软连接支持
+
+在[global]下添加：
+
+```
+unix extensions = No
+follow symlinks = Yes
+wide links = Yes
+```
 
 #### daemon failed to start: Samba cannot init registry
 
