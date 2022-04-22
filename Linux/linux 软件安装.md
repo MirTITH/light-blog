@@ -37,6 +37,16 @@ sudo apt install libgsettings-qt1
 
 ### icalingua
 
+新版：**icalingua++**（感谢大佬接手）
+
+https://github.com/Icalingua-plus-plus/Icalingua-plus-plus
+
+直接下载安装即可
+
+
+
+**以下为原版（原作者删库，不再更新）**
+
 *软件本体太大，不放在仓库中*
 
 deb包只有2.4.5版本
