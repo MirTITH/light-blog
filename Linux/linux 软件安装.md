@@ -198,9 +198,7 @@ chsh -s $(which zsh)
 exec bash
 ```
 
-
-
-## Oh My Zsh
+#### Oh My Zsh
 
 需要先安装Zsh
 
@@ -210,9 +208,11 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 
 **皮肤**
 
-> https://github.com/romkatv/powerlevel10k
+https://github.com/romkatv/powerlevel10k
 
+#### 插件
 
+https://zhuanlan.zhihu.com/p/61447507
 
 ### tldr
 
