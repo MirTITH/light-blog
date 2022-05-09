@@ -55,6 +55,12 @@ DefaultTimeoutStartSec=30s
 DefaultTimeoutStopSec=30s
 ```
 
+执行：
+
+```bash
+systemctl daemon-reload
+```
+
 
 
 ## Keychron键盘 F1-F12映射修复
