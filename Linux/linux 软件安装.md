@@ -275,7 +275,7 @@ sudo apt install language-pack-zh-han*
 sudo apt install language-pack-gnome-zh-han*
 
 # 安装kde包
-sudo apt-ge install language-pack-kde-zh-han*
+sudo apt install language-pack-kde-zh-han*
 ```
 
 **zsh使用通配符要加单引号**
