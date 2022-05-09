@@ -24,7 +24,9 @@ timedatectl set-local-rtc 1 --adjust-system-clock
 
 
 
-## GRUB2 timeout
+## GRUB2 timeout和关机timeout
+
+GRUB:
 
 ```bash
 sudo gedit /etc/default/grub
@@ -36,6 +38,21 @@ Next run:
 
 ```bash
 sudo update-grub
+```
+
+
+
+**关机:**
+
+```bash
+sudo gedit /etc/systemd/system.conf
+```
+
+修改为：（注意删掉文件这两行开头的#）
+
+```
+DefaultTimeoutStartSec=30s
+DefaultTimeoutStopSec=30s
 ```
 
 
