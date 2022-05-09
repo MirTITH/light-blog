@@ -136,7 +136,9 @@ http://localhost:2017/
 
 官网下载安装包
 
-如果遇到`GPG error "NO_PUBKEY"`：
+
+
+**如果遇到`GPG error "NO_PUBKEY"`：**
 
 Execute the following commands in terminal
 
@@ -151,6 +153,12 @@ Then update
 ```bash
 sudo apt-get update
 ```
+
+
+
+**如果遇到Warning: apt-key is deprecated:** 
+
+https://askubuntu.com/questions/1398344/apt-key-deprecation-warning-when-updating-system
 
 
 
