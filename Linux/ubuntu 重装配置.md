@@ -42,7 +42,7 @@ sudo update-grub
 
 
 
-**关机:**
+**关机timeout:**
 
 ```bash
 sudo gedit /etc/systemd/system.conf
