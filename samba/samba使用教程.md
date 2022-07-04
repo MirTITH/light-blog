@@ -2,14 +2,13 @@
 
 ## 软件安装
 
-1. 在nautilus文件管理器中点击共享，会自动安装
-2. 添加用户：
 
 ```bash
-sudo smbpasswd -a username
+sudo apt install samba
+sudo smbpasswd -a <用户名>
 ```
 
-> username 必须是已经存在系统中的用户名
+> **<用户名>** 必须是已经存在系统中的用户名
 >
 > 之后提示输入New SMB password，此处的密码可与系统密码不同
 
