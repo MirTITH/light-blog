@@ -1,6 +1,0 @@
-#VERSION 2
-path=/home/xy/Documents
-comment=
-usershare_acl=S-1-1-0:F
-guest_ok=n
-sharename=Documents
