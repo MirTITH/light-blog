@@ -168,7 +168,7 @@ https://askubuntu.com/questions/1398344/apt-key-deprecation-warning-when-updatin
 sudo apt install git
 
 git config --global user.email "1023515576@qq.com"
-git config --global user.name "TITH"
+git config --global user.name "X. Y."
 git config --global core.quotepath false
 ```
 
