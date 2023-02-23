@@ -29,7 +29,7 @@ https://pinyin.sogou.com/linux/?r=pinyin
 不显示问题：安装以下依赖
 
 ```bash
-sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
+# sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 sudo apt install libgsettings-qt1
 ```
 
@@ -43,15 +43,11 @@ https://github.com/Icalingua-plus-plus/Icalingua-plus-plus
 
 直接下载安装即可
 
-
-
 **以下为原版（原作者删库，不再更新）**
 
 *软件本体太大，不放在仓库中*
 
 deb包只有2.4.5版本
-
-
 
 如果要用2.5.6版本：
 

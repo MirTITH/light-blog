@@ -3,13 +3,41 @@
 ## 重装配置
 
 ### 更新系统
-```shell
-# 换源
-sudo pacman-mirrors -c China
 
-#更新系统
-sudo pacman -Syu
-```
+1. 换源
+
+- 方法一（自动配置）
+    ```shell
+    sudo pacman-mirrors -c China
+    ```
+
+- 方法二（图形界面手动选择）
+    ```
+    sudo pacman-mirrors -i -c China
+    ```
+
+- 方法三（编辑配置文件，可以使用官方源里没有的镜像）
+    > 编辑文件 /etc/pacman.d/mirrorlist
+    ```
+    ##
+    ## Manjaro Linux custom mirrorlist
+    ## Generated on 2023-02-22 11:31
+    ##
+    ## Please use 'pacman-mirrors -id' To reset custom mirrorlist
+    ## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
+    ## To remove custom config run  'pacman-mirrors -c all'
+    ##
+
+    ## Country : China
+    Server = https://ipv4.mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+    ```
+
+
+2. 更新系统
+    ```
+    sudo pacman -Syu
+    ```
+
 
 ### 安装 AUR 助手等
 ```bash
@@ -52,10 +80,48 @@ sudo pacman -Rs firefox
 sudo pacman -Rsc firefox
 ```
 
-### 安装中文输入法
+### 安装 fcitx5 中文输入法
+1. 安装输入法
 ```bash
 paru -S manjaro-asian-input-support-fcitx5 fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
 ```
+2. 解决 Qt6 程序无法使用输入法的问题
+
+    > 可以尝试直接将编译好的文件复制到相应目录（记得修改为你的Qt安装路径）
+    ```
+    cp ./libfcitx5platforminputcontextplugin.so ~/Qt/6.4.2/gcc_64/plugins/platforminputcontexts
+    cp ./libfcitx5platforminputcontextplugin.so ~/Qt/Tools/QtCreator/lib/Qt/plugins/platforminputcontexts
+    ```
+
+    如果以上操作无效：
+
+    1. 克隆仓库
+        ```
+        git clone git@github.com:fcitx/fcitx5-qt.git
+        或：
+        git clone https://github.com/fcitx/fcitx5-qt.git
+        ```
+    2. 修改CMakeLists.txt
+        ```
+        option(ENABLE_QT4 "Enable Qt 4" On)
+        option(ENABLE_QT5 "Enable Qt 5" On)
+        option(ENABLE_QT6 "Enable Qt 6" On)
+        ```
+    3. 编译安装
+        ```
+        cd fcitx5-qt
+        mkdir build && cd build
+        cmake ..
+        make -j8
+        sudo make install
+        ```
+    4. 复制文件（记得修改为你的Qt安装路径）
+    ```
+    # qt6 程序
+    cp ./qt6/platforminputcontext/libfcitx5platforminputcontextplugin.so ~/Qt/6.4.2/gcc_64/plugins/platforminputcontexts
+    # qt creator
+    cp ./qt6/platforminputcontext/libfcitx5platforminputcontextplugin.so ~/Qt/Tools/QtCreator/lib/Qt/plugins/platforminputcontexts
+    ```
 
 ### 修改 grub
 ```bash
