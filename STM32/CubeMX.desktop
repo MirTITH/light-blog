@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=CubeMX
-Exec=/home/xy/STM32CubeMX/STM32CubeMX
+Exec=/home/xy/STM32CubeMX/STM32CubeMX %u
 Terminal=false
 Type=Application
 Icon=/home/xy/STM32CubeMX/help/STM32CubeMX.png
