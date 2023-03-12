@@ -29,7 +29,9 @@
     ##
 
     ## Country : China
-    Server = https://ipv4.mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+    Server = http://10.249.12.85/manjaro/stable/$repo/$arch
+    Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+
     ```
 
 
@@ -134,6 +136,17 @@ paru arm none eabi
 # 然后选择安装需要的 arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
 ```
 
+### docker
+```
+paru -S docker
+sudo systemctl start docker.service
+sudo systemctl enable docker.service
+sudo docker version
+sudo docker info
+sudo usermod -aG docker $USER
+reboot
+```
+
 ### 其他软件
 - gdb
 - cmake ninja
@@ -154,9 +167,25 @@ mkdir ~/.local/bin
 cp ./reboot-to-manjaro.sh ~/.local/bin/
 ```
 
+
 ## 注意事项
 
 ### 安装软件时密钥出错
 Signature from "User <email@gmail.com>" is unknown trust, installation failed
 
 <https://wiki.archlinuxcn.org/wiki/Pacman#Signature_from_%22User_%3Cemail@gmail.com%3E%22_is_unknown_trust,_installation_failed>
+
+### 关闭 TTY Tab 报警声
+`setterm -blength 0`
+
+### swap 文件
+
+> btrfs 不太支持 swap 文件，如果是 btrfs 建议使用 swap 分区
+
+```bash
+sudo fallocate -l 8G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo bash -c "echo /swapfile none swap defaults 0 0 >> /etc/fstab"
+```

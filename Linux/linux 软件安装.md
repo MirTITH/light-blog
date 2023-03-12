@@ -35,7 +35,7 @@ sudo apt install libgsettings-qt1
 
 
 
-### icalingua
+<!-- ### icalingua
 
 新版：**icalingua++**（感谢大佬接手）
 
@@ -69,7 +69,7 @@ sudo cp icalingua.png /opt/Icalingua/
 sudo cp icalingua.desktop /usr/share/applications/
 ```
 
-确保`icalingua.desktop `有可执行权限
+确保`icalingua.desktop `有可执行权限 -->
 
 
 
@@ -241,7 +241,14 @@ sudo npm install -g tldr
 pip3 install tldr
 ```
 
+### Qt Creator
 
+官网下载安装包
+
+如果要换源：
+```
+./qt-unified-linux-x64-4.5.1-online.run --mirror https://ipv4.mirrors.ustc.edu.cn/qtproject
+```
 
 ### 视频解码器
 
