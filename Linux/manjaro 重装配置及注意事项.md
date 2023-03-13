@@ -17,28 +17,29 @@
     ```
 
 - 方法三（编辑配置文件，可以使用官方源里没有的镜像）
-    > 编辑文件 /etc/pacman.d/mirrorlist
-    ```
-    ##
-    ## Manjaro Linux custom mirrorlist
-    ## Generated on 2023-02-22 11:31
-    ##
-    ## Please use 'pacman-mirrors -id' To reset custom mirrorlist
-    ## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
-    ## To remove custom config run  'pacman-mirrors -c all'
-    ##
 
-    ## Country : China
-    Server = http://10.249.12.85/manjaro/stable/$repo/$arch
-    Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+> 编辑文件 /etc/pacman.d/mirrorlist
 
-    ```
+```
+##
+## Manjaro Linux custom mirrorlist
+## Generated on 2023-02-22 11:31
+##
+## Please use 'pacman-mirrors -id' To reset custom mirrorlist
+## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
+## To remove custom config run  'pacman-mirrors -c all'
+##
 
+## Country : China
+Server = http://10.249.12.85/manjaro/stable/$repo/$arch
+Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+```
 
 2. 更新系统
-    ```
-    sudo pacman -Syu
-    ```
+
+```
+sudo pacman -Syu
+```
 
 
 ### 安装 AUR 助手等
@@ -81,6 +82,40 @@ sudo pacman -Rs firefox
 # 如果说会破坏依赖，可以尝试如下命令，删除软件包和所有依赖这个软件包的程序
 sudo pacman -Rsc firefox
 ```
+
+### Zsh
+#### Oh My Zsh
+```bash
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+#### Theme: powerlevel10k
+1. Clone the repository:
+```bash
+git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+2. Set ZSH_THEME="powerlevel10k/powerlevel10k" in ~/.zshrc.
+
+#### 插件
+> https://zhuanlan.zhihu.com/p/61447507
+
+```
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+
+Edit ~/.zshrc:
+
+```
+plugins=(
+    git
+    z
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+```
+
 
 ### 安装 fcitx5 中文输入法
 1. 安装输入法
@@ -132,8 +167,14 @@ kate /etc/default/grub
 
 ### 安装 arm-none-eabi 套件
 ```bash
-paru arm none eabi
-# 然后选择安装需要的 arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
+paru -S arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
+```
+
+### git
+```
+git config --global user.email "1023515576@qq.com"
+git config --global user.name "X. Y."
+git config --global core.quotepath false
 ```
 
 ### docker
@@ -153,10 +194,18 @@ reboot
 - linuxqq
 - qqmusic
 - netease-cloud-music
-- noto cjk
+- noto-fonts-cjk
 - dotnet-runtime-6.0
 
 > 另见 [linux 软件安装.md](linux%20软件安装.md)
+
+### tldr
+```
+pip3 install tldr
+```
+
+### Piper 鼠标管理软件
+paru -S piper
 
 ### 禁用鼠标键盘唤醒
 [ubuntu 重装配置.md](ubuntu%20重装配置.md##%20禁用鼠标键盘唤醒)
@@ -167,7 +216,6 @@ mkdir ~/.local/bin
 cp ./reboot-to-manjaro.sh ~/.local/bin/
 ```
 
-
 ## 注意事项
 
 ### 安装软件时密钥出错
@@ -176,7 +224,7 @@ Signature from "User <email@gmail.com>" is unknown trust, installation failed
 <https://wiki.archlinuxcn.org/wiki/Pacman#Signature_from_%22User_%3Cemail@gmail.com%3E%22_is_unknown_trust,_installation_failed>
 
 ### 关闭 TTY Tab 报警声
-`setterm -blength 0`
+`setterm --blength 0`
 
 ### swap 文件
 
