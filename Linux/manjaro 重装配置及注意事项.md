@@ -190,7 +190,7 @@ reboot
 
 ### 其他软件
 - gdb
-- cmake ninja
+- cmake ninja make
 - linuxqq
 - qqmusic
 - netease-cloud-music
