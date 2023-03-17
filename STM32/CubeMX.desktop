@@ -1,18 +1,7 @@
 [Desktop Entry]
-Categories=Development;
-Comment[zh_CN]=
-Comment=
-Exec="$HOME/STM32CubeMX/STM32CubeMX" %u
-GenericName[zh_CN]=
-GenericName=
-Icon=/home/xy/STM32CubeMX/help/STM32CubeMX.png
-MimeType=text/CubeMX-ioc;
-Name[zh_CN]=CubeMX
 Name=CubeMX
-Path=
-StartupNotify=true
-Terminal=false
-TerminalOptions=
+Exec=/home/xy/STM32CubeMX/STM32CubeMX %u
+Icon=/home/xy/STM32CubeMX/help/STM32CubeMX.png
 Type=Application
-X-KDE-SubstituteUID=false
-X-KDE-Username=
+Categories=Development;
+MimeType=application/x-ioc;
