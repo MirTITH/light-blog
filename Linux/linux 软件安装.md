@@ -210,13 +210,37 @@ exec bash
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-**皮肤**
+#### Theme: powerlevel10k
 
-https://github.com/romkatv/powerlevel10k
+> https://github.com/romkatv/powerlevel10k
+
+1. Clone the repository:
+
+```bash
+git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+2. Set ZSH_THEME="powerlevel10k/powerlevel10k" in ~/.zshrc.
 
 #### 插件
 
-https://zhuanlan.zhihu.com/p/61447507
+> https://zhuanlan.zhihu.com/p/61447507
+
+```
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+
+Edit ~/.zshrc:
+
+```
+plugins=(
+    git
+    z
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+```
 
 ### tldr
 
