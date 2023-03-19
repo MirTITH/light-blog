@@ -146,6 +146,16 @@ sudo cp ./reboot-to-ubuntu.sh /usr/local/bin/
 
 
 
+## KDE Dolpnin 无法访问 Windows 共享文件夹
+
+### The file or folder smb://ip does not exist.
+
+> https://forum.manjaro.org/t/dolphin-the-file-or-folder-smb-sharename-does-not-exist/114900/10
+
+A user on Reddit found a fix: In System Settings–>Network Settings–>Windows Shares, add ANY text to the user and password fields and restart Dolphin. Now I get a password prompt and can view and mount shares.
+
+
+
 ## R7000P 亮度调节
 
 ubuntu 20.04 安装510版本nvidia 驱动直接解决
