@@ -2,19 +2,59 @@
 
 # Linux 软件安装
 
-## 通用
+## Proxy
 
-### 字体
+~/.bashrc 或 ~/.zshrc
 
-firacode
+```shell
+proxy_on() {
+export http_proxy=http://localhost:1081
+export https_proxy=http://localhost:1081
+}
 
-```bash
-sudo apt install fonts-firacode
+proxy_off() {
+export http_proxy=http://localhost:1081
+export https_proxy=http://localhost:1081
+}
+
+proxy_on
 ```
 
-思源黑体
+### Pip 源
 
-https://github.com/adobe-fonts/source-han-sans/releases
+```
+# 清华源
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 阿里源
+pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+# 腾讯源(最快)
+pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
+
+# 换回默认源
+pip config unset global.index-url
+```
+
+## 通用
+
+### 字体安装方法
+
+ttf 文件复制到这里：
+
+```
+/usr/share/fonts/truetype/<New-Folder>/
+```
+
+然后，更新字体缓存：
+
+```
+sudo fc-cache -fv
+```
+
+这样，你就可以在 Ubuntu 上使用你安装的字体了。你可以用以下命令查看已经安装的字体：
+
+```
+fc-list
+```
 
 ### 输入法(选1个)
 
@@ -29,85 +69,51 @@ https://pinyin.sogou.com/linux/?r=pinyin
 不显示问题：安装以下依赖
 
 ```bash
-# sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
+sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 sudo apt install libgsettings-qt1
 ```
 
+### 解决 konsole，kate等软件无法切换中文输入法
 
+解决方案（arch）：
 
-<!-- ### icalingua
+修改/etc/profile，增加以下语句：
 
-新版：**icalingua++**（感谢大佬接手）
-
-https://github.com/Icalingua-plus-plus/Icalingua-plus-plus
-
-直接下载安装即可
-
-**以下为原版（原作者删库，不再更新）**
-
-*软件本体太大，不放在仓库中*
-
-deb包只有2.4.5版本
-
-如果要用2.5.6版本：
-
-> 只有 AppImage
-
-复制文件
-
-```bash
-sudo mkdir /opt/Icalingua/
-sudo cp Icalingua-2.4.6.AppImage /opt/Icalingua/
-sudo cp icalingua.png /opt/Icalingua/
+```shell
+#fcitx
+export XIM_PROGRAM=fcitx
+export XIM=fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
 ```
 
-确保`Icalingua-2.4.6.AppImage`有可执行权限
-
-复制.desktop
-
-```bash
-sudo cp icalingua.desktop /usr/share/applications/
-```
-
-确保`icalingua.desktop `有可执行权限 -->
-
-
+注销或重启即可解决问题
 
 ### v2rayA
 
 > https://v2raya.org/
-
-**安装V2Ray内核**
-
-```bash
-curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash
-```
-
-安装后可以关掉服务，因为 v2rayA 不依赖于该 systemd 服务。
-
-```bash
-sudo systemctl disable v2ray --now
-```
 
 **安装 v2rayA**
 
 添加公钥
 
 ```bash
-wget -qO - https://apt.v2raya.mzz.pub/key/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/v2raya.asc
+sudo mkdir /etc/apt/keyrings
+wget -qO - https://apt.v2raya.org/key/public-key.asc | sudo tee /etc/apt/keyrings/v2raya.asc
 ```
 
 添加软件源
 
 ```bash
-echo "deb https://apt.v2raya.mzz.pub/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list
+echo "deb [signed-by=/etc/apt/keyrings/v2raya.asc] https://apt.v2raya.org/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list
 sudo apt update
 ```
 
 安装
 
 ```bash
-sudo apt install v2raya
+sudo apt install v2raya v2ray
 ```
 
 **启动**
@@ -126,13 +132,11 @@ sudo systemctl enable v2raya.service
 
 http://localhost:2017/
 
-
-
 ### Edge
 
 官网下载安装包
 
-
+尝试在英文语言下安装，也许会用必应国际作为默认搜索引擎
 
 **如果遇到`GPG error "NO_PUBKEY"`：**
 
@@ -150,13 +154,9 @@ Then update
 sudo apt-get update
 ```
 
-
-
 **如果遇到Warning: apt-key is deprecated:** 
 
 https://askubuntu.com/questions/1398344/apt-key-deprecation-warning-when-updating-system
-
-
 
 ### git
 
@@ -173,8 +173,6 @@ ssh 目录
 > ~/.ssh
 >
 > /etc/ssh
-
-
 
 ### Zsh
 
@@ -193,8 +191,6 @@ chsh -s $(which zsh)
 ```
 
 **Log out and log back in again to use your new default shell.**
-
-
 
 如果需要临时切换到bash: 
 
@@ -244,23 +240,6 @@ plugins=(
 
 ### tldr
 
-> https://tldr.sh/
->
-> 似乎 Node.js 版本不会显示中文文档，并且高亮不如python版本
->
-> 但 Node.js 会缓存所有文档，查询比python版本快
->
-> python 版本在没梯子时贼慢，几乎不能用
-
-Node.js 版本：
-
-```bash
-sudo apt install npm
-sudo npm install -g tldr
-```
-
-或者安装python版本：
-
 ```
 pip3 install tldr
 ```
@@ -288,13 +267,17 @@ sudo dpkg-reconfigure libdvd-pkg
 sudo apt install ubuntu-restricted-extras
 ```
 
-
-
 ### samba
 
 参考[samba使用教程.md](../samba/samba使用教程.md)
 
+### .Net 6
 
+```
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb\nsudo dpkg -i packages-microsoft-prod.deb\nrm packages-microsoft-prod.deb
+sudo apt update
+sudo apt install dotnet-runtime-6.0
+```
 
 ## KDE 推荐安装
 
@@ -344,8 +327,6 @@ sudo apt install gnome-keyring
 ```
 
 然后在设置-开机和关机-自动启动里添加启动项
-
-
 
 ### flameshot 截图工具
 
@@ -407,8 +388,6 @@ Steps for using the configuration:
    ln -s /var/lib/flatpak/exports/bin/org.flameshot.Flameshot ~/.local/bin/flameshot
    ```
 
-
-
 ### latte-dock
 
 在 `light-blog-resource/latte-dock-0.10.8` 文件夹中编译安装
@@ -420,8 +399,6 @@ Steps for using the configuration:
 布局备份：`TITH-latte10.layout.latte`
 
 面板备份：`TITH-主显示器面板.view.latte`
-
-
 
 ## GNOME 推荐安装
 
@@ -440,4 +417,84 @@ N卡可能需要使用闭源驱动
 ```bash
 sudo apt install terminator
 ```
+
+### konsole 终端
+
+```
+sudo apt install konsole
+# 切换默认终端
+sudo update-alternatives --config x-terminal-emulator
+```
+
+### Gnome 插件
+
+```
+sudo apt install gnome-tweak-tool gnome-shell-extensions gnome-shell-extension-prefs gnome-shell-extension-autohidetopbar gnome-shell-extension-dash-to-panel
+```
+
+### 剪切板
+
+```
+sudo apt install parcellite
+```
+
+然后按 `Ctrl`+`Alt`+P 打开设置菜单
+
+### 文件管理器右键菜单
+
+```
+sudo apt install nautilus-actions filemanager-actions
+```
+
+然后打开 fma-config-tool
+
+(配置完可能需要重启 nautilus 才能生效：`nautilus -q`)
+
+Preference:
+
+![image-20231126174855274](linux 软件安装.assets/image-20231126174855274.png)
+
+**Open in Konsole**
+
+![image-20231126174759816](linux 软件安装.assets/image-20231126174759816.png)
+
+![image-20231126174818021](linux 软件安装.assets/image-20231126174818021.png)
+
+**Open in VSCode**
+
+![image-20231126175002467](linux 软件安装.assets/image-20231126175002467.png)
+
+![image-20231126175034696](linux 软件安装.assets/image-20231126175034696.png)
+
+## 开发
+
+### Miniconda
+
+These four commands quickly and quietly install the latest 64-bit version of the installer and then clean up after themselves. To install a different version or architecture of Miniconda for Linux, change the name of the `.sh` installer in the `wget` command.
+
+```bash
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm -rf ~/miniconda3/miniconda.sh
+```
+
+After installing, initialize your newly-installed Miniconda. The following commands initialize for bash and zsh shells:
+
+```bash
+~/miniconda3/bin/conda init bash
+~/miniconda3/bin/conda init zsh
+```
+
+取消默认进入 base
+
+```shell
+conda config --set auto_activate_base false
+```
+
+### ROS
+
+校内源：https://mirrors-help.osa.moe/ros/
+
+官网：http://wiki.ros.org/noetic/Installation/Ubuntu
 

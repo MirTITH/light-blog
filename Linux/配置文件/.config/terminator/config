@@ -10,7 +10,6 @@
   resize_right = None
 [profiles]
   [[default]]
-    background_color = "#292e3a"
     background_darkness = 0.8
     background_type = transparent
     cursor_color = "#aaaaaa"
@@ -24,4 +23,5 @@
     [[[child1]]]
       type = Terminal
       parent = window0
+      profile = default
 [plugins]

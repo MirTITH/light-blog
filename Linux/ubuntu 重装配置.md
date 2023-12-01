@@ -2,7 +2,24 @@
 
 ## 换源
 
-在软件更新器中换
+```
+# https://mirrors.osa.moe/ubuntu/
+# https://mirrors.ustc.edu.cn/ubuntu/
+
+# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.osa.moe/ubuntu/ focal main restricted universe multiverse
+# deb-src https://mirrors.osa.moe/ubuntu/ focal main restricted universe multiverse
+deb https://mirrors.osa.moe/ubuntu/ focal-updates main restricted universe multiverse
+# deb-src https://mirrors.osa.moe/ubuntu/ focal-updates main restricted universe multiverse
+deb https://mirrors.osa.moe/ubuntu/ focal-backports main restricted universe multiverse
+# deb-src https://mirrors.osa.moe/ubuntu/ focal-backports main restricted universe multiverse
+deb https://mirrors.osa.moe/ubuntu/ focal-security main restricted universe multiverse
+# deb-src https://mirrors.osa.moe/ubuntu/ focal-security main restricted universe multiverse
+
+# 预发布软件源，不建议启用
+# deb https://mirrors.osa.moe/ubuntu/ focal-proposed main restricted universe multiverse
+# deb-src https://mirrors.osa.moe/ubuntu/ focal-proposed main restricted universe multiverse
+```
 
 ## DNS
 
@@ -14,15 +31,14 @@
 240C::6666,2402:4e00::
 ```
 
-
-
 ## 与windows时间同步
 
+(建议修改 windows 端，与 ubuntu 时间同步)
+
 ```bash
+# 修改 linux 端
 timedatectl set-local-rtc 1 --adjust-system-clock
 ```
-
-
 
 ## GRUB2 timeout和关机timeout
 
@@ -39,8 +55,6 @@ Next run:
 ```bash
 sudo update-grub
 ```
-
-
 
 **关机timeout:**
 
@@ -60,8 +74,6 @@ DefaultTimeoutStopSec=30s
 ```bash
 systemctl daemon-reload
 ```
-
-
 
 ## Keychron键盘 F1-F12映射修复
 
@@ -84,8 +96,6 @@ sudo update-initramfs -u
 # ArchLinux
 mkinitcpio -P 
 ```
-
-
 
 ## 禁用鼠标键盘唤醒
 
@@ -136,15 +146,11 @@ systemctl daemon-reload
 systemctl enable disable-新名字-wakeup.service
 ```
 
-
-
 ## reboot-to-ubuntu.sh
 
 ```bash
-sudo cp ./reboot-to-ubuntu.sh /usr/local/bin/
+cp ./reboot-to-ubuntu.sh ~/.local/bin
 ```
-
-
 
 ## KDE Dolpnin 无法访问 Windows 共享文件夹
 
@@ -154,13 +160,4 @@ sudo cp ./reboot-to-ubuntu.sh /usr/local/bin/
 
 A user on Reddit found a fix: In System Settings–>Network Settings–>Windows Shares, add ANY text to the user and password fields and restart Dolphin. Now I get a password prompt and can view and mount shares.
 
-
-
-## R7000P 亮度调节
-
-ubuntu 20.04 安装510版本nvidia 驱动直接解决
-
-> 无效则参考以下链接
->
-> https://zhuanlan.zhihu.com/p/348624522?ivk_sa=1024320u
 
