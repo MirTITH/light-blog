@@ -152,6 +152,33 @@ systemctl enable disable-新名字-wakeup.service
 cp ./reboot-to-ubuntu.sh ~/.local/bin
 ```
 
+## 开机挂载硬盘
+
+仿照如下修改 fstab
+
+或者直接使用 gnome-disk-utility 配置 `sudo apt install gnome-disk-utility`
+
+```
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/nvme1n1p3 during installation
+UUID=f4bc711c-5c5e-40e0-92e5-38a351d20f43 /               ext4    errors=remount-ro 0       1
+# /boot/efi was on /dev/nvme0n1p1 during installation
+UUID=225C-912A  /boot/efi       vfat    umask=0077      0       1
+# swap was on /dev/nvme1n1p4 during installation
+UUID=4b888711-6ff2-480f-9615-700ec0e7a8c4 none            swap    sw              0       0
+/dev/disk/by-uuid/7C506F8E506F4DC8 /mnt/win_d auto nosuid,nodev,nofail,x-gvfs-show 0 0
+/dev/disk/by-uuid/7080BF8880BF5378 /mnt/win_e auto nosuid,nodev,nofail,x-gvfs-show 0 0
+/dev/disk/by-id/ata-TOSHIBA_MQ04UBF100_71UCT000T-part1 /mnt/xy_disk auto nosuid,nodev,nofail,x-gvfs-show 0 0
+```
+
+
+
 ## KDE Dolpnin 无法访问 Windows 共享文件夹
 
 ### The file or folder smb://ip does not exist.
@@ -159,5 +186,4 @@ cp ./reboot-to-ubuntu.sh ~/.local/bin
 > https://forum.manjaro.org/t/dolphin-the-file-or-folder-smb-sharename-does-not-exist/114900/10
 
 A user on Reddit found a fix: In System Settings–>Network Settings–>Windows Shares, add ANY text to the user and password fields and restart Dolphin. Now I get a password prompt and can view and mount shares.
-
 

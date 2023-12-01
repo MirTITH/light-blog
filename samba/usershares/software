@@ -1,6 +1,0 @@
-#VERSION 2
-path=/media/xy/XY_移动硬盘/Software
-comment=
-usershare_acl=S-1-1-0:f
-guest_ok=y
-sharename=Software

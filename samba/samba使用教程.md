@@ -2,7 +2,6 @@
 
 ## 软件安装
 
-
 ```bash
 sudo apt install samba
 sudo smbpasswd -a <用户名>
@@ -12,13 +11,24 @@ sudo smbpasswd -a <用户名>
 >
 > 之后提示输入New SMB password，此处的密码可与系统密码不同
 
+## 配置 smb.conf
+
+在 /etc/samba/smb.conf 的 [global] 下添加
+
+```
+# 共享 owner 不是自己的文件，比如 NTFS 磁盘
+usershare owner only = false
+# 允许软链接
+unix extensions = No
+follow symlinks = Yes
+wide links = Yes
+```
+
 ## 重启
 
 ```bash
 sudo service smbd restart
 ```
-
-
 
 ## 文件位置
 
@@ -48,7 +58,7 @@ usershare owner only = false
 > 	Ask the administrator to add the line "usershare owner only = false" 
 > 	to the [global] section of the smb.conf to allow this.
 
-### 软连接支持
+### 软链接支持
 
 在[global]下添加：
 
