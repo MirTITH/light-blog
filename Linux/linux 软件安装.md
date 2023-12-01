@@ -2,38 +2,6 @@
 
 # Linux 软件安装
 
-## Proxy
-
-~/.bashrc 或 ~/.zshrc
-
-```shell
-proxy_on() {
-export http_proxy=http://localhost:1081
-export https_proxy=http://localhost:1081
-}
-
-proxy_off() {
-export http_proxy=http://localhost:1081
-export https_proxy=http://localhost:1081
-}
-
-proxy_on
-```
-
-### Pip 源
-
-```
-# 清华源
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-# 阿里源
-pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
-# 腾讯源(最快)
-pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
-
-# 换回默认源
-pip config unset global.index-url
-```
-
 ## 通用
 
 ### 字体安装方法
@@ -73,9 +41,7 @@ sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
 sudo apt install libgsettings-qt1
 ```
 
-### 解决 konsole，kate等软件无法切换中文输入法
-
-解决方案（arch）：
+解决 konsole，kate等软件无法切换中文输入法：
 
 修改/etc/profile，增加以下语句：
 
@@ -168,7 +134,7 @@ Then update
 sudo apt-get update
 ```
 
-**如果遇到Warning: apt-key is deprecated:** 
+**如果遇到 Warning: apt-key is deprecated:** 
 
 https://askubuntu.com/questions/1398344/apt-key-deprecation-warning-when-updating-system
 
@@ -250,6 +216,38 @@ plugins=(
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
+```
+
+## Proxy
+
+~/.bashrc 或 ~/.zshrc
+
+```shell
+proxy_on() {
+export http_proxy=http://localhost:1081
+export https_proxy=http://localhost:1081
+}
+
+proxy_off() {
+export http_proxy=http://localhost:1081
+export https_proxy=http://localhost:1081
+}
+
+proxy_on
+```
+
+### Pip 源
+
+```
+# 清华源
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 阿里源
+pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+# 腾讯源(最快)
+pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
+
+# 换回默认源
+pip config unset global.index-url
 ```
 
 ### tldr
