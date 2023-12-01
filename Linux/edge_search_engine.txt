@@ -1,0 +1,1 @@
+{bing:baseURL}search?q=%s&{bing:cvid}{bing:msb}{google:assistedQueryStats}

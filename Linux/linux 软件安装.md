@@ -94,6 +94,20 @@ export XMODIFIERS="@im=fcitx"
 
 > https://v2raya.org/
 
+**APT proxy**
+
+```shell
+sudo nano /etc/apt/apt.conf
+```
+
+Add this line to your /etc/apt/apt.conf file (substitute your details for yourproxyaddress and proxyport).
+
+```
+Acquire::http::Proxy "http://yourproxyaddress:proxyport";
+```
+
+Save the apt.conf file. 
+
 **安装 v2rayA**
 
 添加公钥
