@@ -1,5 +1,29 @@
 # ubuntu 重装配置
 
+## 修改 efi 位置
+
+1. 删除 /boot/efi/ubuntu
+
+2. `lsblk` 找到新的 efi 设备分区，如 `nvme1n1p5`
+
+3. `sudo blkid /dev/设备分区` 得到 UUID. 如 `5C51-1F97`
+
+4. 修改 `/etc/fstab` 中 `UUID=XXXX-XXXX /boot/efi vfat umask=0077 0 1` 行，将 `XXXX-XXXX` 换成第 3 步中得到的 UUID
+
+5. 卸载旧分区，挂载新分区： 
+
+   ```shell
+   sudo umount /boot/efi
+   sudo mount /boot/efi
+   ```
+
+6. ```shell
+   sudo grub-install
+   sudo update-grub
+   ```
+
+完成！
+
 ## 换源
 
 ```
