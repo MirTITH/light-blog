@@ -118,6 +118,10 @@ http://localhost:2017/
 
 尝试在英文语言下安装，也许会用必应国际作为默认搜索引擎
 
+```
+{bing:baseURL}search?q=%s&{bing:cvid}{bing:msb}{google:assistedQueryStats}
+```
+
 **如果遇到`GPG error "NO_PUBKEY"`：**
 
 Execute the following commands in terminal
@@ -226,16 +230,24 @@ plugins=(
 proxy_on() {
 export http_proxy=http://localhost:1081
 export https_proxy=http://localhost:1081
+proxy_info
 }
 
 proxy_off() {
-export http_proxy=http://localhost:1081
-export https_proxy=http://localhost:1081
+unset http_proxy
+unset https_proxy
+proxy_info
 }
 
 proxy_direct() {
 export http_proxy=http://localhost:30000
 export https_proxy=http://localhost:30000
+proxy_info
+}
+
+proxy_info(){
+    echo -e "http_proxy=${http_proxy}"
+    echo -e "https_proxy=${https_proxy}"
 }
 ```
 
