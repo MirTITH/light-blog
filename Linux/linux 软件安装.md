@@ -233,7 +233,10 @@ export http_proxy=http://localhost:1081
 export https_proxy=http://localhost:1081
 }
 
-proxy_on
+proxy_direct() {
+export http_proxy=http://localhost:30000
+export https_proxy=http://localhost:30000
+}
 ```
 
 ### Pip 源
@@ -285,8 +288,10 @@ sudo apt install ubuntu-restricted-extras
 
 ### .Net 6
 
-```
-wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb\nsudo dpkg -i packages-microsoft-prod.deb\nrm packages-microsoft-prod.deb
+```shell
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
 sudo apt update
 sudo apt install dotnet-runtime-6.0
 ```
@@ -509,4 +514,3 @@ conda config --set auto_activate_base false
 校内源：https://mirrors-help.osa.moe/ros/
 
 官网：http://wiki.ros.org/noetic/Installation/Ubuntu
-

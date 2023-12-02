@@ -30,7 +30,7 @@ With Samba 3.0.25, you can use the non-SAM account aliases of AD Bridge by inclu
 
 - Add `username map = /etc/samba/users.map` to the global section of smb.conf.
 - Create an /etc/samba/users.map file.
-- In the users.map file, add an entry for each aliased user in the following form: !alias = DOMAIN\user. (xy = xieyang)
+- In the users.map file, add an entry for each aliased user in the following form: !alias = DOMAIN\user. (例如：`xy = xieyang`)
 
 To make an alias for an Active Directory group, use the form !alias = @DOMAIN\group. The exclamation point triggers Samba to stop processing on the first matching alias, preventing issues with multiple alias matches from wildcards.
 
