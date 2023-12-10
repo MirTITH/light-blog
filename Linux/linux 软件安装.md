@@ -222,34 +222,13 @@ plugins=(
 )
 ```
 
-## Proxy
-
-~/.bashrc 或 ~/.zshrc
+## xyrc
 
 ```shell
-proxy_on() {
-export http_proxy=http://localhost:1081
-export https_proxy=http://localhost:1081
-proxy_info
-}
-
-proxy_off() {
-unset http_proxy
-unset https_proxy
-proxy_info
-}
-
-proxy_direct() {
-export http_proxy=http://localhost:30000
-export https_proxy=http://localhost:30000
-proxy_info
-}
-
-proxy_info(){
-    echo -e "http_proxy=${http_proxy}"
-    echo -e "https_proxy=${https_proxy}"
-}
+cp xyrc ~/.local/
 ```
+
+然后在 .zshrc 和 .bashrc 中添加 `source $HOME/.local/xyrc`
 
 ### Pip 源
 

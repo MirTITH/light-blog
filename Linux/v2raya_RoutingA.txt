@@ -1,5 +1,7 @@
-inbound: socks_direct = http(address: 0.0.0.0, port: 30000)
+inbound: socks_direct = socks(address: 0.0.0.0, port: 30000)
 inboundTag(socks_direct) -> direct
+inbound: http_direct = http(address: 0.0.0.0, port: 30001)
+inboundTag(http_direct) -> direct
 
 default: proxy
 
@@ -13,3 +15,4 @@ domain(geosite:geolocation-!cn, geosite:google)->proxy
 domain(geosite:cn)->direct
 ip(geoip:hk,geoip:mo)->proxy
 ip(geoip:private, geoip:cn)->direct
+

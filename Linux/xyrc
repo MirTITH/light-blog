@@ -1,0 +1,41 @@
+proxy() {
+    case "$1" in
+    "on")
+        export http_proxy=http://localhost:1081
+        export https_proxy=http://localhost:1081
+        ;;
+    "off")
+        unset http_proxy
+        unset https_proxy
+        ;;
+    "direct")
+        export http_proxy=http://localhost:30000
+        export https_proxy=http://localhost:30000
+        ;;
+    "info")
+        echo -e "http_proxy=${http_proxy}"
+        echo -e "https_proxy=${https_proxy}"
+        return 0
+        ;;
+    *)
+        echo "Usage: proxy [on|off|direct|info]"
+        ;;
+    esac
+
+    proxy info
+}
+
+hf_endpoint() {
+    if [ -z "$1" ]; then
+        export HF_ENDPOINT="https://hf-mirror.com"
+        echo "HF_ENDPOINT is set to $HF_ENDPOINT"
+    elif [ "$1" = "on" ]; then
+        export HF_ENDPOINT="https://hf-mirror.com"
+        echo "HF_ENDPOINT is set to $HF_ENDPOINT"
+    elif [ "$1" = "off" ]; then
+        unset HF_ENDPOINT
+        echo "HF_ENDPOINT is unset"
+    else
+        echo "Usage: hf_endpoint [on|off]"
+    fi
+}
