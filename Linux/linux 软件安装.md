@@ -500,6 +500,12 @@ After installing, initialize your newly-installed Miniconda. The following comma
 conda config --set auto_activate_base false
 ```
 
+### Conda-NVCC
+
+```sh
+conda install -c nvidia cuda-compiler
+```
+
 ### ROS
 
 校内源：https://mirrors-help.osa.moe/ros/

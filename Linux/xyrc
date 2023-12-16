@@ -3,18 +3,22 @@ proxy() {
     "on")
         export http_proxy=http://localhost:1081
         export https_proxy=http://localhost:1081
+        # export socks_proxy=http://localhost:1080
         ;;
     "off")
         unset http_proxy
         unset https_proxy
         ;;
     "direct")
-        export http_proxy=http://localhost:30000
-        export https_proxy=http://localhost:30000
+        export http_proxy=http://localhost:30001
+        export https_proxy=http://localhost:30001
+        # export socks_proxy=http://localhost:30000
         ;;
     "info")
         echo -e "http_proxy=${http_proxy}"
         echo -e "https_proxy=${https_proxy}"
+        echo -e "socks_proxy=${socks_proxy}"
+        curl ipinfo.io
         return 0
         ;;
     *)
@@ -22,7 +26,7 @@ proxy() {
         ;;
     esac
 
-    proxy info
+    # proxy info
 }
 
 hf_endpoint() {
@@ -39,3 +43,5 @@ hf_endpoint() {
         echo "Usage: hf_endpoint [on|off]"
     fi
 }
+
+alias hibernate='systemctl hibernate'
