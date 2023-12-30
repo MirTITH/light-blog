@@ -4,27 +4,33 @@
 
 ## 卸载fcitx
 
-```bash
+```sh
 sudo apt purge *fcitx*
 ```
 
 ## 安装 fcitx5
+### ubuntu 22.04
+```sh
+sudo apt update
+sudo apt install fcitx5 'fcitx5-frontend*' fcitx5-chinese-addons fcitx5-material-color fcitx5-module-cloudpinyin kde-config-fcitx5
+```
 
-```sudo
-sudo add-apt-repository ppa:hosxy/fcitx5
-sudo apt-get update
-sudo apt install fcitx5 fcitx5-frontend-qt5 fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 fcitx5-chinese-addons
+### ubuntu 20.04
+```sh
+sudo apt update
+sudo apt install fcitx5 'fcitx5-frontend*' fcitx5-chinese-addons
 ```
 
 ## 配置 fcitx5
+### kubuntu 22.04
+系统配置里有图形化配置界面
 
+### ubuntu 20.04
 将fcitx5 文件夹复制到 ~/.config/
 
 ```bash
 cp -r fcitx5 ~/.config/
 ```
-
-
 
 ## 安装词典
 
@@ -37,7 +43,6 @@ https://github.com/felixonmars/fcitx5-pinyin-zhwiki
 https://github.com/outloudvi/mw2fcitx/releases
 
 
-
 Copy into ~/.local/share/fcitx5/pinyin/dictionaries/ (create the folder if it does not exist)
 
 ```
@@ -45,7 +50,12 @@ mkdir -p ~/.local/share/fcitx5/pinyin/dictionaries/
 ```
 
 ## 安装皮肤
+### fcitx5-breeze
+1.  下载 https://github.com/scratch-er/fcitx5-breeze/releases
+2.  执行 `install.sh`
 
+
+### Simple-white 和 Simple-dark
 > https://www.cnblogs.com/maicss/p/15056420.html
 
 ```bash
@@ -56,7 +66,9 @@ gedit ~/.config/fcitx5/conf/classicui.conf
 ```
 
 ## 启用fcitx5
+kubuntu 22.04 重启即可
 
+如果重启不行：
 ```bash
 im-config
 ```

@@ -1,4 +1,4 @@
-proxy() {
+setproxy() {
     case "$1" in
     "on")
         export http_proxy=http://localhost:1081
@@ -22,11 +22,11 @@ proxy() {
         return 0
         ;;
     *)
-        echo "Usage: proxy [on|off|direct|info]"
+        echo "Usage: setproxy [on|off|direct|info]"
         ;;
     esac
 
-    # proxy info
+    # setproxy info
 }
 
 hf_endpoint() {

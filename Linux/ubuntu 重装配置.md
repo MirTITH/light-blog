@@ -2,7 +2,7 @@
 
 ## 修改 efi 位置
 
-1. 删除 /boot/efi/ubuntu
+1. 删除 /boot/efi/EFI/ubuntu
 
 2. `lsblk` 找到新的 efi 设备分区，如 `nvme1n1p5`
 
@@ -25,6 +25,10 @@
 完成！
 
 ## 换源
+**适用于 ubuntu 20.04.**
+- ubuntu 22.04 请将 focal 替换为 jammy
+- ubuntu 18.04 请将 focal 替换为 bionic
+- ubuntu 16.04 请将 focal 替换为 xenial
 
 ```
 # https://mirrors.osa.moe/ubuntu/
@@ -37,12 +41,16 @@ deb https://mirrors.osa.moe/ubuntu/ focal-updates main restricted universe multi
 # deb-src https://mirrors.osa.moe/ubuntu/ focal-updates main restricted universe multiverse
 deb https://mirrors.osa.moe/ubuntu/ focal-backports main restricted universe multiverse
 # deb-src https://mirrors.osa.moe/ubuntu/ focal-backports main restricted universe multiverse
+
 deb https://mirrors.osa.moe/ubuntu/ focal-security main restricted universe multiverse
 # deb-src https://mirrors.osa.moe/ubuntu/ focal-security main restricted universe multiverse
 
+# deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+# # deb-src http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse
+
 # 预发布软件源，不建议启用
 # deb https://mirrors.osa.moe/ubuntu/ focal-proposed main restricted universe multiverse
-# deb-src https://mirrors.osa.moe/ubuntu/ focal-proposed main restricted universe multiverse
+# # deb-src https://mirrors.osa.moe/ubuntu/ focal-proposed main restricted universe multiverse
 ```
 
 ## DNS
@@ -52,7 +60,7 @@ deb https://mirrors.osa.moe/ubuntu/ focal-security main restricted universe mult
 ```
 119.29.29.29,1.2.4.8
 
-240C::6666,2402:4e00::
+2402:4e00::,240c::6666
 ```
 
 ## 与windows时间同步
@@ -99,7 +107,7 @@ DefaultTimeoutStopSec=30s
 systemctl daemon-reload
 ```
 
-## Keychron键盘 F1-F12映射修复
+## Keychron键盘 F1-F12映射修复(Ubuntu 22 is not needed)
 
 > https://blog.csdn.net/AlanCorn_02/article/details/118462860
 
@@ -173,7 +181,8 @@ systemctl enable disable-新名字-wakeup.service
 ## reboot-to-ubuntu.sh
 
 ```bash
-cp ./reboot-to-ubuntu.sh ~/.local/bin
+mkdir -p ~/.local/bin/
+cp ./reboot-to-ubuntu.sh ~/.local/bin/
 ```
 
 ## 开机挂载硬盘
@@ -182,6 +191,8 @@ cp ./reboot-to-ubuntu.sh ~/.local/bin
 
 或者直接使用 gnome-disk-utility 配置 `sudo apt install gnome-disk-utility`
 
+另外 kubuntu 22.04 自带的 KDE 分区管理器也好用（20.04的似乎不好用）
+
 ```
 # /etc/fstab: static file system information.
 #
@@ -189,16 +200,21 @@ cp ./reboot-to-ubuntu.sh ~/.local/bin
 # device; this may be used with UUID= as a more robust way to name devices
 # that works even if disks are added and removed. See fstab(5).
 #
-# <file system> <mount point>   <type>  <options>       <dump>  <pass>
-# / was on /dev/nvme1n1p3 during installation
-UUID=f4bc711c-5c5e-40e0-92e5-38a351d20f43 /               ext4    errors=remount-ro 0       1
-# /boot/efi was on /dev/nvme0n1p1 during installation
-UUID=225C-912A  /boot/efi       vfat    umask=0077      0       1
+# <file system>                             <mount point>        <type> <options>     <dump>  <pass>
+# / was on /dev/nvme1n1p6 during installation
+UUID=bc37ee02-3ac4-44da-b6ad-34f43a80673b   /                    ext4   errors=remount-ro   0 1 
+# /boot/efi was on /dev/nvme1n1p5 during installation
+UUID=5C51-1F97                              /boot/efi            vfat   umask=0077          0 1 
 # swap was on /dev/nvme1n1p4 during installation
-UUID=4b888711-6ff2-480f-9615-700ec0e7a8c4 none            swap    sw              0       0
-/dev/disk/by-uuid/7C506F8E506F4DC8 /mnt/win_d auto nosuid,nodev,nofail,x-gvfs-show 0 0
-/dev/disk/by-uuid/7080BF8880BF5378 /mnt/win_e auto nosuid,nodev,nofail,x-gvfs-show 0 0
-/dev/disk/by-id/ata-TOSHIBA_MQ04UBF100_71UCT000T-part1 /mnt/xy_disk auto nosuid,nodev,nofail,x-gvfs-show 0 0
+UUID=4b888711-6ff2-480f-9615-700ec0e7a8c4   none                 swap   sw                  0 0 
+UUID=f4bc711c-5c5e-40e0-92e5-38a351d20f43   /mnt/ubuntu          ext4   defaults            0 0 
+UUID=7080BF8880BF5378                       /mnt/win_e           ntfs   defaults            0 0 
+UUID=7C506F8E506F4DC8                       /mnt/win_d           ntfs   defaults            0 0 
+/mnt/ubuntu/home/xy/Documents               /home/xy/Documents   none   bind                0 0
+/mnt/ubuntu/home/xy/Downloads               /home/xy/Downloads   none   bind                0 0
+/mnt/ubuntu/home/xy/Music                   /home/xy/Music       none   bind                0 0
+/mnt/ubuntu/home/xy/Pictures                /home/xy/Pictures    none   bind                0 0
+/mnt/ubuntu/home/xy/Videos                  /home/xy/Videos      none   bind                0 0
 ```
 
 
