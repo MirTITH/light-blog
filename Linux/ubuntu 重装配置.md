@@ -217,7 +217,16 @@ UUID=7C506F8E506F4DC8                       /mnt/win_d           ntfs   defaults
 /mnt/ubuntu/home/xy/Videos                  /home/xy/Videos      none   bind                0 0
 ```
 
+## locate 命令 updatedb 搜索路径配置
 
+/etc/updatedb.conf
+
+```properties
+PRUNE_BIND_MOUNTS="no"
+# PRUNENAMES=".git .bzr .hg .svn"
+PRUNEPATHS="/tmp /var/spool /media /mnt /var/lib/os-prober /var/lib/ceph /home/.ecryptfs /var/lib/schroot"
+PRUNEFS="NFS afs autofs binfmt_misc ceph cgroup cgroup2 cifs coda configfs curlftpfs debugfs devfs devpts devtmpfs ecryptfs ftpfs fuse.ceph fuse.cryfs fuse.encfs fuse.glusterfs fuse.gvfsd-fuse fuse.mfs fuse.rclone fuse.rozofs fuse.sshfs fusectl fusesmb hugetlbfs iso9660 lustre lustre_lite mfs mqueue ncpfs nfs nfs4 ocfs ocfs2 proc pstore rpc_pipefs securityfs shfs smbfs sysfs tmpfs tracefs udev udf usbfs"
+```
 
 ## KDE Dolpnin 无法访问 Windows 共享文件夹
 

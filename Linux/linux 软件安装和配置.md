@@ -280,6 +280,8 @@ sudo apt install ubuntu-restricted-extras
 ### .Net 6
 
 ```shell
+# 注意 20.04 改成对应的 ubuntu 发行版本
+# ubuntu 22.04 可以直接执行最后一步 apt install
 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
