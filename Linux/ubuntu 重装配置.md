@@ -228,6 +228,33 @@ PRUNEPATHS="/tmp /var/spool /media /mnt /var/lib/os-prober /var/lib/ceph /home/.
 PRUNEFS="NFS afs autofs binfmt_misc ceph cgroup cgroup2 cifs coda configfs curlftpfs debugfs devfs devpts devtmpfs ecryptfs ftpfs fuse.ceph fuse.cryfs fuse.encfs fuse.glusterfs fuse.gvfsd-fuse fuse.mfs fuse.rclone fuse.rozofs fuse.sshfs fusectl fusesmb hugetlbfs iso9660 lustre lustre_lite mfs mqueue ncpfs nfs nfs4 ocfs ocfs2 proc pstore rpc_pipefs securityfs shfs smbfs sysfs tmpfs tracefs udev udf usbfs"
 ```
 
+## Kubuntu 休眠按钮
+
+> kubuntu 22.04 测试成功
+
+1. 启用休眠功能（忘记怎么做了，建议上网搜）
+
+2. ```shell
+   sudo -i
+   cd /var/lib/polkit-1/localauthority/50-local.d/
+   vim com.ubuntu.enable-hibernate.pkla
+   ```
+
+3. 粘贴：
+
+   ```shell
+   [Re-enable hibernate by default in upower]
+   Identity=unix-user:*
+   Action=org.freedesktop.upower.hibernate
+   ResultActive=yes
+   [Re-enable hibernate by default in logind]
+   Identity=unix-user:*
+   Action=org.freedesktop.login1.hibernate
+   ResultActive=yes
+   ```
+
+4. 保存并重启
+
 ## KDE Dolpnin 无法访问 Windows 共享文件夹
 
 ### The file or folder smb://ip does not exist.

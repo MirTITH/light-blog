@@ -39,3 +39,15 @@ conda remove cuda
 校内源：https://mirrors-help.osa.moe/ros/
 
 官网：http://wiki.ros.org/noetic/Installation/Ubuntu
+
+### 解决zsh下ros2命令无法补全的问题
+
+在 `/opt/ros/humble/setup.zsh` 中最后加上
+
+```sh
+# argcomplete for ros2 & colcon
+eval "$(register-python-argcomplete3 ros2)"
+eval "$(register-python-argcomplete3 colcon)"
+```
+
+> https://blog.csdn.net/lhz_king/article/details/132456374
