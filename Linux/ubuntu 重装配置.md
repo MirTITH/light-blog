@@ -249,19 +249,19 @@ cp reboot-to-ubuntu.sh ~/.local/bin/
 #
 # <file system>                             <mount point>        <type> <options>     <dump>  <pass>
 # / was on /dev/nvme1n1p6 during installation
-UUID=bc37ee02-3ac4-44da-b6ad-34f43a80673b   /                    ext4   errors=remount-ro   0 1 
+UUID=bc37ee02-3ac4-44da-b6ad-34f43a80673b   /                    ext4   errors=remount-ro       0 1 
 # /boot/efi was on /dev/nvme1n1p5 during installation
-UUID=5C51-1F97                              /boot/efi            vfat   umask=0077          0 1 
+UUID=5C51-1F97                              /boot/efi            vfat   umask=0077              0 1 
 # swap was on /dev/nvme1n1p4 during installation
-UUID=4b888711-6ff2-480f-9615-700ec0e7a8c4   none                 swap   sw                  0 0 
-UUID=f4bc711c-5c5e-40e0-92e5-38a351d20f43   /mnt/ubuntu          ext4   defaults            0 0 
-UUID=7080BF8880BF5378                       /mnt/win_e           ntfs   defaults            0 0 
-UUID=7C506F8E506F4DC8                       /mnt/win_d           ntfs   defaults            0 0 
-/mnt/ubuntu/home/xy/Documents               /home/xy/Documents   none   bind                0 0
-/mnt/ubuntu/home/xy/Downloads               /home/xy/Downloads   none   bind                0 0
-/mnt/ubuntu/home/xy/Music                   /home/xy/Music       none   bind                0 0
-/mnt/ubuntu/home/xy/Pictures                /home/xy/Pictures    none   bind                0 0
-/mnt/ubuntu/home/xy/Videos                  /home/xy/Videos      none   bind                0 0
+UUID=4b888711-6ff2-480f-9615-700ec0e7a8c4   none                 swap   sw                      0 0 
+UUID=f4bc711c-5c5e-40e0-92e5-38a351d20f43   /mnt/ubuntu          ext4   defaults                0 0 
+UUID=7080BF8880BF5378                       /mnt/win_e           ntfs   defaults,windows_names  0 0 
+UUID=7C506F8E506F4DC8                       /mnt/win_d           ntfs   defaults,windows_names  0 0 
+/mnt/ubuntu/home/xy/Documents               /home/xy/Documents   none   bind                    0 0
+/mnt/ubuntu/home/xy/Downloads               /home/xy/Downloads   none   bind                    0 0
+/mnt/ubuntu/home/xy/Music                   /home/xy/Music       none   bind                    0 0
+/mnt/ubuntu/home/xy/Pictures                /home/xy/Pictures    none   bind                    0 0
+/mnt/ubuntu/home/xy/Videos                  /home/xy/Videos      none   bind                    0 0
 ```
 
 ## locate 命令 updatedb 搜索路径配置
