@@ -1,32 +1,23 @@
-setproxy() {
-    case "$1" in
-    "on")
-        export http_proxy=http://localhost:1081
-        export https_proxy=http://localhost:1081
-        # export socks_proxy=http://localhost:1080
-        ;;
-    "off")
-        unset http_proxy
-        unset https_proxy
-        ;;
-    "direct")
-        export http_proxy=http://localhost:30001
-        export https_proxy=http://localhost:30001
-        # export socks_proxy=http://localhost:30000
-        ;;
-    "info")
-        echo -e "http_proxy=${http_proxy}"
-        echo -e "https_proxy=${https_proxy}"
-        echo -e "socks_proxy=${socks_proxy}"
-        curl ipinfo.io
-        return 0
-        ;;
-    *)
-        echo "Usage: setproxy [on|off|direct|info]"
-        ;;
-    esac
+proxy_on() {
+    export http_proxy=http://localhost:1081
+    export https_proxy=http://localhost:1081
+}
 
-    # setproxy info
+proxy_off() {
+    unset http_proxy
+    unset https_proxy
+}
+
+proxy_direct() {
+    export http_proxy=http://localhost:30001
+    export https_proxy=http://localhost:30001
+}
+
+proxy_info() {
+    echo -e "http_proxy=${http_proxy}"
+    echo -e "https_proxy=${https_proxy}"
+    echo -e "socks_proxy=${socks_proxy}"
+    curl ipinfo.io
 }
 
 hf_endpoint() {

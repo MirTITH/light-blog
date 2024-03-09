@@ -51,3 +51,25 @@ eval "$(register-python-argcomplete3 colcon)"
 ```
 
 > https://blog.csdn.net/lhz_king/article/details/132456374
+
+## Qt Creator
+
+官网下载安装包
+
+如果要换源：
+
+```
+./qt-unified-linux-x64-4.5.1-online.run --mirror https://ipv4.mirrors.ustc.edu.cn/qtproject
+```
+
+## .Net 6
+
+```shell
+# 注意 20.04 改成对应的 ubuntu 发行版本
+# ubuntu 22.04 可以直接执行最后一步 apt install
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+sudo apt update
+sudo apt install dotnet-runtime-6.0
+```

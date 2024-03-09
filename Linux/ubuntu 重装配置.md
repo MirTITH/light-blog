@@ -25,7 +25,13 @@
 完成！
 
 ## 换源
-**适用于 ubuntu 20.04.**
+
+### APT
+
+>  校内源：https://mirrors-help.osa.moe/ubuntu/
+
+**以下配置适用于 ubuntu 20.04**
+
 - ubuntu 22.04 请将 focal 替换为 jammy
 - ubuntu 18.04 请将 focal 替换为 bionic
 - ubuntu 16.04 请将 focal 替换为 xenial
@@ -53,6 +59,35 @@ deb https://mirrors.osa.moe/ubuntu/ focal-security main restricted universe mult
 # # deb-src https://mirrors.osa.moe/ubuntu/ focal-proposed main restricted universe multiverse
 ```
 
+### APT proxy
+
+```shell
+sudo nano /etc/apt/apt.conf.d/proxy.conf
+```
+
+添加如下
+
+```
+Acquire::http::Proxy "http://localhost:1081";
+Acquire::https::Proxy "http://localhost:1081";
+```
+
+### Pip
+
+```
+# HITsz(内网最快)
+pip config set global.index-url https://mirrors.osa.moe/pypi/web/simple
+# 清华源
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 阿里源
+pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+# 腾讯源(最快)
+pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
+
+# 换回默认源
+pip config unset global.index-url
+```
+
 ## DNS
 
 > https://dns.icoa.cn/
@@ -67,7 +102,7 @@ deb https://mirrors.osa.moe/ubuntu/ focal-security main restricted universe mult
 
 (建议修改 windows 端，与 ubuntu 时间同步)
 
-```bash
+```shell
 # 修改 linux 端
 timedatectl set-local-rtc 1 --adjust-system-clock
 ```
@@ -76,22 +111,22 @@ timedatectl set-local-rtc 1 --adjust-system-clock
 
 GRUB:
 
-```bash
-sudo gedit /etc/default/grub
+```shell
+sudo nano /etc/default/grub
 ```
 
 Change the value of GRUB_TIMEOUT
 
 Next run:
 
-```bash
+```shell
 sudo update-grub
 ```
 
 **关机timeout:**
 
-```bash
-sudo gedit /etc/systemd/system.conf
+```shell
+sudo nano /etc/systemd/system.conf
 ```
 
 修改为：（注意删掉文件这两行开头的#）
@@ -103,20 +138,20 @@ DefaultTimeoutStopSec=30s
 
 执行：
 
-```bash
+```shell
 systemctl daemon-reload
 ```
 
-## Keychron键盘 F1-F12映射修复(Ubuntu 22 is not needed)
+## Keychron键盘 F1-F12映射修复
 
-> https://blog.csdn.net/AlanCorn_02/article/details/118462860
+> Ubuntu 22 不需要此操作
 
-```bash
+```shell
 #输入下面命令后，键盘应该能正常使用，但每次重启要重新输入
 echo 0 | sudo tee /sys/module/hid_apple/parameters/fnmode
 ```
 
-```bash
+```shell
 #输入下面的命令，写入配置文件，重启后就无需再次输入
 echo "options hid_apple fnmode=0" | sudo tee -a /etc/modprobe.d/hid_apple.conf
 
@@ -129,25 +164,35 @@ sudo update-initramfs -u
 mkinitcpio -P 
 ```
 
-## 禁用鼠标键盘唤醒
+> 参考自：https://blog.csdn.net/AlanCorn_02/article/details/118462860
 
-> https://askubuntu.com/a/713247
+## 禁用鼠标键盘唤醒
 
 ### 对于G304鼠标：
 
-```bash
-sudo cp config-G304-wakeup.sh /lib/systemd/system-sleep/
+```shell
+sudo cp config_files/config-G304-wakeup.sh /lib/systemd/system-sleep/
 sudo chmod +x /lib/systemd/system-sleep/config-G304-wakeup.sh
-sudo cp disable-G304-wakeup.service /etc/systemd/system/
+sudo cp config_files/disable-G304-wakeup.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable disable-G304-wakeup.service
+```
+
+### 对于G102鼠标：
+
+```shell
+sudo cp config_files/config-G102-wakeup.sh /lib/systemd/system-sleep/
+sudo chmod +x /lib/systemd/system-sleep/config-G102-wakeup.sh
+sudo cp config_files/disable-G102-wakeup.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable disable-G102-wakeup.service
 ```
 
 ### 对于其他鼠标：
 
 1. **找到相关设备**
 
-```bash
+```shell
 lsusb
 ```
 
@@ -161,7 +206,7 @@ lsusb
 
 **这两行换成在步骤1中查到的id**
 
-```bash
+```shell
 idVendor=046d
 idProduct=c53f
 ```
@@ -170,7 +215,7 @@ idProduct=c53f
 
 3. **部署脚本**
 
-```bash
+```shell
 sudo cp config-新名字-wakeup.sh /lib/systemd/system-sleep/
 sudo chmod +x /lib/systemd/system-sleep/config-新名字-wakeup.sh
 sudo cp disable-新名字-wakeup.service /etc/systemd/system/
@@ -180,10 +225,12 @@ systemctl enable disable-新名字-wakeup.service
 
 ## reboot-to-ubuntu.sh
 
-```bash
+```shell
 mkdir -p ~/.local/bin/
-cp ./reboot-to-ubuntu.sh ~/.local/bin/
+cp reboot-to-ubuntu.sh ~/.local/bin/
 ```
+
+> 参考自：https://askubuntu.com/a/713247
 
 ## 开机挂载硬盘
 
@@ -218,6 +265,8 @@ UUID=7C506F8E506F4DC8                       /mnt/win_d           ntfs   defaults
 ```
 
 ## locate 命令 updatedb 搜索路径配置
+
+> ubuntu 22.04 有效，ubuntu 20.04 无效
 
 /etc/updatedb.conf
 
@@ -255,11 +304,322 @@ PRUNEFS="NFS afs autofs binfmt_misc ceph cgroup cgroup2 cifs coda configfs curlf
 
 4. 保存并重启
 
+## v2rayA
+
+官网：https://v2raya.org
+
+Ubuntu安装方法：https://v2raya.org/docs/prologue/installation/debian/
+
+安装完成后访问：http://localhost:2017
+
+## 字体安装方法
+
+KDE 直接右键批量安装
+
+Gnome 似乎不能批量安装，只能手动安装
+
+#### 手动安装
+
+ttf 文件复制到这里：
+
+```
+/usr/share/fonts/truetype/<New-Folder>/
+```
+
+然后，更新字体缓存：
+
+```
+sudo fc-cache -fv
+```
+
+这样，你就可以在 Ubuntu 上使用你安装的字体了。你可以用以下命令查看已经安装的字体：
+
+```
+fc-list
+```
+
+## git
+
+```shell
+sudo apt install git
+
+git config --global user.email "1023515576@qq.com"
+git config --global user.name "X. Y."
+git config --global core.quotepath false
+```
+
+ssh 目录
+
+> ~/.ssh
+>
+> /etc/ssh
+
+## Zsh
+
+Install Zsh:
+
+```shell
+sudo apt install zsh
+```
+
+Make it your default shell:
+
+```shell
+chsh -s $(which zsh)
+```
+
+Log out and log back in again to use your new default shell.
+
+如果需要临时切换到bash: 
+
+```shell
+exec bash
+```
+
+### Oh My Zsh
+
+```shell
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+### Theme: powerlevel10k
+
+1. Clone the repository:
+
+```shell
+git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+2. Set ZSH_THEME="powerlevel10k/powerlevel10k" in ~/.zshrc.
+
+### 插件
+
+```shell
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+
+Edit ~/.zshrc:
+
+```
+plugins=(
+    git
+    z
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+```
+
+## xyrc
+
+```shell
+cp xyrc ~/.local/
+```
+
+然后在 .zshrc 和 .bashrc 中添加 `source $HOME/.local/xyrc`
+
+### 
+
+## 输入法
+
+### kununtu 22.04：建议 fcitx5
+
+直接安装 [language package](#language-package)，这会默认帮你安装 fcitx5
+
+之后重启系统，在系统设置的输入法界面添加 Pinyin 输入法（不是 Keyboard - Chinese）
+
+### kubuntu 20.04：建议搜狗输入法
+
+https://pinyin.sogou.com/linux/?r=pinyin
+
+搜狗输入法不显示问题：安装以下依赖
+
+```shell
+sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2
+sudo apt install libgsettings-qt1
+```
+
+解决 konsole，kate等软件无法切换中文输入法：
+
+修改/etc/profile，增加以下语句：
+
+```shell
+#fcitx
+export XIM_PROGRAM=fcitx
+export XIM=fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+```
+
+注销或重启即可解决问题
+
+### ubuntu 20.04：建议系统自带的
+
+## language package
+
+注意：以下命令建议全部安装（如果使用搜狗输入法，则记得卸载 `fcitx-ui-qimpanel`，因为它与搜狗输入法冲突）
+
+```shell
+sudo apt install $(check-language-support)
+
+# 安装中文语言包
+sudo apt install 'language-pack-zh-han*'
+
+# 安装gnome包
+sudo apt install 'language-pack-gnome-zh-han*'
+
+# 安装kde包
+sudo apt install 'language-pack-kde-zh-han*'
+```
+
+# 一些软件
+
+## Edge
+
+官网下载安装包
+
+尝试在英文语言下安装，也许会用必应国际作为默认搜索引擎
+
+```
+{bing:baseURL}search?q=%s&{bing:cvid}{bing:msb}{google:assistedQueryStats}
+```
+
+**如果遇到`GPG error "NO_PUBKEY"`：**
+
+Execute the following commands in terminal
+
+```shell
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <PUBKEY>
+```
+
+where `<PUBKEY>` is your missing public key for repository, e.g. `8BAF9A6F`.
+
+Then update   
+
+```shell
+sudo apt-get update
+```
+
+**如果遇到 Warning: apt-key is deprecated:** 
+
+https://askubuntu.com/questions/1398344/apt-key-deprecation-warning-when-updating-system
+
+## samba
+
+[samba使用教程.md](../samba/samba使用教程.md)
+
+## 其他软件
+
+```shell
+sudo apt install gnome-disk-utility
+sudo apt install gnome-keyring
+sudo apt install yakuake
+pip3 install tldr
+sudo apt install flameshot # https://github.com/flameshot-org/flameshot
+```
+
+## 视频解码器
+
+**建议仅在需要时安装**
+
+直接执行以下命令，期间会有对话框，前两行命令全选默认的，最后一行接受
+
+```shell
+sudo apt install libdvdnav4 gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libdvd-pkg -y
+sudo dpkg-reconfigure libdvd-pkg
+sudo apt install ubuntu-restricted-extras
+```
+
+> 参考自：https://linuxhint.com/install-h264-decoder-ubuntu/
+
+## Gnome桌面环境推荐额外安装：
+
+### konsole 终端
+
+```
+sudo apt install konsole
+# 切换默认终端
+sudo update-alternatives --config x-terminal-emulator
+```
+
+### Gnome 插件
+
+```
+sudo apt install gnome-tweak-tool gnome-shell-extensions gnome-shell-extension-prefs gnome-shell-extension-autohidetopbar gnome-shell-extension-dash-to-panel
+```
+
+### 剪切板
+
+```
+sudo apt install parcellite
+```
+
+然后按 `Ctrl`+`Alt`+P 打开设置菜单
+
+### 文件管理器右键菜单
+
+```
+sudo apt install nautilus-actions filemanager-actions
+```
+
+然后打开 fma-config-tool
+
+(配置完可能需要重启 nautilus 才能生效：`nautilus -q`)
+
+Preference:
+
+![image-20231126174855274](/home/xy/Documents/light-blog/Linux/ubuntu 重装配置.assets/image-20231126174855274.png)
+
+**Open in Konsole**
+
+![image-20231126174759816](/home/xy/Documents/light-blog/Linux/ubuntu 重装配置.assets/image-20231126174759816.png)
+
+![image-20231126174818021](/home/xy/Documents/light-blog/Linux/ubuntu 重装配置.assets/image-20231126174818021.png)
+
+**Open in VSCode**
+
+![image-20231126175002467](/home/xy/Documents/light-blog/Linux/ubuntu 重装配置.assets/image-20231126175002467.png)
+
+![image-20231126175034696](/home/xy/Documents/light-blog/Linux/ubuntu 重装配置.assets/image-20231126175034696.png)
+
+
+
+# Bugs
+
 ## KDE Dolpnin 无法访问 Windows 共享文件夹
 
-### The file or folder smb://ip does not exist.
-
-> https://forum.manjaro.org/t/dolphin-the-file-or-folder-smb-sharename-does-not-exist/114900/10
+报错：The file or folder smb://ip does not exist.
 
 A user on Reddit found a fix: In System Settings–>Network Settings–>Windows Shares, add ANY text to the user and password fields and restart Dolphin. Now I get a password prompt and can view and mount shares.
 
+> https://forum.manjaro.org/t/dolphin-the-file-or-folder-smb-sharename-does-not-exist/114900/10
+
+## update-grub 不会找到其他 btrfs 分区中的 linux
+
+The GRUB os-prober has problems detecting btrfs @subvolumes, the easiest answer from "rick3332" from ubuntu-forums made it work for me on both dual-boot btrfs based OS installs(ubuntu16&18) each with their own grub. There is no need for comprehensive hack os-prober code or do non-persistent manual grub.cfg edits. Just create symlinks in each btrfs volume roots for @/boot and @/etc and run "sudo update-grub2" afterwards in each OS.
+
+```shell
+#navigate to root of your current booted brtfs based OS
+cd /
+#create symlink for boot
+ln -s @/boot boot
+#create symlink for etc
+ln -s @/etc etc
+
+#mount the other btrfs volume with OS-install and navigate to its root
+cd /mnt/exampleotherbtrfsvolume
+#create symlink for boot
+ln -s @/boot boot
+#create symlink for etc
+ln -s @/etc etc
+
+#let grub detect btrfs based install volume
+sudo update-grub2
+
+#reboot to the other btrfs based OS (probably listed this time in grubmenu)
+#let this grub detect the previously booted btrfs volume
+sudo update-grub2
+```
+
+> 参考自：https://askubuntu.com/a/1032354
