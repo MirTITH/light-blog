@@ -40,6 +40,36 @@ conda remove cuda
 
 官网：http://wiki.ros.org/noetic/Installation/Ubuntu
 
+## ROS 2
+
+### Humble for 22.04
+
+```shell
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+sudo apt update && sudo apt install curl -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+# 添加源（以下二选一）：
+# 官方源
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+# HITsz 内网源
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] https://mirrors.osa.moe/ros2/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+sudo apt update
+sudo apt upgrade
+sudo apt install ros-humble-desktop ros-dev-tools
+# 完成！
+
+# 测试：
+# 开一个终端：
+source /opt/ros/humble/setup.bash
+ros2 run demo_nodes_cpp talker
+# 再开一个终端：
+source /opt/ros/humble/setup.bash
+ros2 run demo_nodes_py listener
+```
+
 ### 解决zsh下ros2命令无法补全的问题
 
 在 `/opt/ros/humble/setup.zsh` 中最后加上
