@@ -1,6 +1,6 @@
 [Groups/0]
 # Group Name
-Name=默认
+Name=Default
 # Layout
 Default Layout=us
 # Default Input Method
@@ -19,5 +19,5 @@ Name=pinyin
 Layout=
 
 [GroupOrder]
-0=默认
+0=Default
 

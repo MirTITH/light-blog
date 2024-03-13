@@ -109,13 +109,19 @@ timedatectl set-local-rtc 1 --adjust-system-clock
 
 ## GRUB2 timeout和关机timeout
 
-GRUB:
+**GRUB:**
 
 ```shell
 sudo nano /etc/default/grub
 ```
 
-Change the value of GRUB_TIMEOUT
+Change the value of **GRUB_TIMEOUT**
+
+有时候这不生效，则添加一行：
+
+```
+GRUB_RECORDFAIL_TIMEOUT=3
+```
 
 Next run:
 
