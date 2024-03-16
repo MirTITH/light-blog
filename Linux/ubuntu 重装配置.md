@@ -424,8 +424,6 @@ cp xyrc ~/.local/
 
 然后在 .zshrc 和 .bashrc 中添加 `source $HOME/.local/xyrc`
 
-### 
-
 ## 输入法
 
 ### kununtu 22.04：建议 fcitx5

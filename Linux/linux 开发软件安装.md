@@ -61,6 +61,9 @@ sudo apt upgrade
 sudo apt install ros-humble-desktop ros-dev-tools
 # 完成！
 
+# Gazebo 11
+sudo apt install ros-humble-gazebo-ros-pkgs
+
 # 测试：
 # 开一个终端：
 source /opt/ros/humble/setup.bash
