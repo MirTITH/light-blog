@@ -106,3 +106,21 @@ rm packages-microsoft-prod.deb
 sudo apt update
 sudo apt install dotnet-runtime-6.0
 ```
+
+### Docker
+
+1. 安装 docker
+
+   ```shell
+   curl -fsSL https://get.docker.com -o get-docker.sh
+   sudo sh get-docker.sh
+   ```
+
+2. 使 docker 命令不需要 root 运行
+
+   ```shell
+   sudo groupadd docker
+   sudo usermod -aG docker $USER
+   ```
+
+3. Log out and log back in so that your group membership is re-evaluated.
