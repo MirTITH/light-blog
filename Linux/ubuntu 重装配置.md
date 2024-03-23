@@ -573,22 +573,19 @@ sudo apt install nautilus-actions filemanager-actions
 
 Preference:
 
-
-
-![image-20231126174855274](./ubuntu 重装配置.assets/image-20231126174855274.png)
+![image-20231126174855274](./ubuntu%20重装配置.assets/image-20231126174855274.png)
 
 **Open in Konsole**
 
-![image-20231126174759816](./ubuntu 重装配置.assets/image-20231126174759816.png)
+![image-20231126174759816](./ubuntu%20重装配置.assets/image-20231126174759816.png)
 
-![image-20231126174818021](./ubuntu 重装配置.assets/image-20231126174818021.png)
+![image-20231126174818021](./ubuntu%20重装配置.assets/image-20231126174818021.png)
 
 **Open in VSCode**
 
-![image-20231126175002467](./ubuntu 重装配置.assets/image-20231126175002467.png)
+![image-20231126175002467](./ubuntu%20重装配置.assets/image-20231126175002467.png)
 
-![image-20231126175034696](./ubuntu 重装配置.assets/image-20231126175034696.png)
-
+![image-20231126175034696](./ubuntu%20重装配置.assets/image-20231126175034696.png)
 
 
 # Bugs

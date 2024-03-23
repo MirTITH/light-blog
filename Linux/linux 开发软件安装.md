@@ -97,13 +97,19 @@ eval "$(register-python-argcomplete3 colcon)"
 
 ## .Net 6
 
+### ubuntu 20.04
+
 ```shell
-# 注意 20.04 改成对应的 ubuntu 发行版本
-# ubuntu 22.04 可以直接执行最后一步 apt install
 wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 sudo apt update
+sudo apt install dotnet-runtime-6.0
+```
+
+### ubuntu 22.04
+
+```shell
 sudo apt install dotnet-runtime-6.0
 ```
 
