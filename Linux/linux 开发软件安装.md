@@ -130,3 +130,36 @@ sudo apt install dotnet-runtime-6.0
    ```
 
 3. Log out and log back in so that your group membership is re-evaluated.
+
+## arm-none-eabi toolchain
+
+1. 从这里下载安装包：
+
+   https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/
+
+   > 注：不要从https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads/下载，这个网站下载的版本会遇到奇怪的依赖和python版本问题
+
+2. 解压到 `~/.local/xPacks/arm-none-eabi-gcc`
+
+   ```shell
+   mkdir -p ~/.local/xPacks/arm-none-eabi-gcc
+   cd ~/.local/xPacks/arm-none-eabi-gcc
+   tar xvf <下载的安装包路径>
+   
+   # 删除写权限（更安全）
+   chmod -R -w <刚刚解压得到的文件夹>
+   # 例如 chmod -R -w xpack-arm-none-eabi-gcc-13.2.1-1.1
+   
+   # 测试
+   cd <刚刚解压得到的文件夹（如 xpack-arm-none-eabi-gcc-13.2.1-1.1）>/bin
+   # 例如 cd xpack-arm-none-eabi-gcc-13.2.1-1.1/bin
+   ./arm-none-eabi-gcc -v
+   ./arm-none-eabi-gdb -v
+   ```
+
+3. 链接到PATH中的路径（可选）
+
+   ```shell
+   ln -s <刚刚解压得到的文件夹的绝对路径>/bin/* ~/.local/bin
+   # 例如 ln -s ~/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/* ~/.local/bin
+   ```
