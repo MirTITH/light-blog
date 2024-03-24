@@ -287,7 +287,27 @@ PRUNEFS="NFS afs autofs binfmt_misc ceph cgroup cgroup2 cifs coda configfs curlf
 
 > kubuntu 22.04 测试成功
 
-1. 启用休眠功能（忘记怎么做了，建议上网搜）
+1. 启用休眠功能：
+
+   1. 创建SWAP分区，启动SWAP
+
+   2. 找到 SWAP 分区的 UUID：
+
+      ```shell
+      sudo blkid | grep swap
+      ```
+
+   3. 修改GRUB_CMDLINE_LINUX_DEFAULT：
+
+      ```
+      GRUB_CMDLINE_LINUX_DEFAULT="quiet splash resume=UUID=xxxx-xxxx-xxxx"
+      ```
+
+   4. 测试是否能够休眠：
+
+      ```shell
+      sudo systemctl hibernate
+      ```
 
 2. ```shell
    sudo -i
