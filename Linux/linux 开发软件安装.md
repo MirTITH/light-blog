@@ -64,6 +64,12 @@ sudo apt install ros-humble-desktop ros-dev-tools
 # Gazebo 11
 sudo apt install ros-humble-gazebo-ros-pkgs
 
+# colcon mixin
+sudo apt install python3-colcon-common-extensions
+sudo apt install python3-colcon-mixin
+colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
+colcon mixin update default
+
 # 测试：
 # 开一个终端：
 source /opt/ros/humble/setup.bash
@@ -73,17 +79,33 @@ source /opt/ros/humble/setup.bash
 ros2 run demo_nodes_py listener
 ```
 
-### 解决zsh下ros2命令无法补全的问题
+### zsh 下 ros2 命令补全
 
-在 `/opt/ros/humble/setup.zsh` 中最后加上
+在 `~/.zshrc` 中加上：
 
-```sh
+```shell
 # argcomplete for ros2 & colcon
-eval "$(register-python-argcomplete3 ros2)"
-eval "$(register-python-argcomplete3 colcon)"
+# eval "$(register-python-argcomplete3 ros2)"
+# eval "$(register-python-argcomplete3 colcon)"
+
+source /opt/ros/humble/setup.zsh
+source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
+source /usr/share/colcon_cd/function/colcon_cd.sh
+export _colcon_cd_root=/opt/ros/humble/
 ```
 
 > https://blog.csdn.net/lhz_king/article/details/132456374
+
+### bash 下 ros2 命令补全
+
+在 `~/.bashrc` 中加上：
+
+```shell
+source /opt/ros/humble/setup.bash
+source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
+source /usr/share/colcon_cd/function/colcon_cd.sh
+export _colcon_cd_root=/opt/ros/humble/
+```
 
 ## Qt Creator
 
@@ -91,7 +113,7 @@ eval "$(register-python-argcomplete3 colcon)"
 
 如果要换源：
 
-```
+```shell
 ./qt-unified-linux-x64-4.5.1-online.run --mirror https://ipv4.mirrors.ustc.edu.cn/qtproject
 ```
 
