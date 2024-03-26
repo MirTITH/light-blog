@@ -246,7 +246,7 @@ cp reboot-to-ubuntu.sh ~/.local/bin/
 
 另外 kubuntu 22.04 自带的 KDE 分区管理器也好用（20.04的似乎不好用）
 
-```
+```shell
 # /etc/fstab: static file system information.
 #
 # Use 'blkid' to print the universally unique identifier for a
