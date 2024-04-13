@@ -65,8 +65,7 @@ sudo apt install ros-humble-desktop ros-dev-tools
 sudo apt install ros-humble-gazebo-ros-pkgs
 
 # colcon mixin
-sudo apt install python3-colcon-common-extensions
-sudo apt install python3-colcon-mixin
+sudo apt install python3-colcon-common-extensions python3-colcon-mixin
 colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
 colcon mixin update default
 
@@ -106,6 +105,19 @@ source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
 source /usr/share/colcon_cd/function/colcon_cd.sh
 export _colcon_cd_root=/opt/ros/humble/
 ```
+
+### 解决 EasyInstallDeprecationWarning
+
+因为 ros2 humble 安装 Python 包的方式已经被弃用了，所以报 warning. 
+
+但目前 ros2 humble 并没有很好的替代方案，所以为了不报 warning, 只能降级安装工具 setuptools. 
+
+```shell
+# 降级到最后一个不会报 warning 的版本
+pip install setuptools==58.2.0
+```
+
+> 参考链接：https://answers.ros.org/question/396439/setuptoolsdeprecationwarning-setuppy-install-is-deprecated-use-build-and-pip-and-other-standards-based-tools/
 
 ## Qt Creator
 
