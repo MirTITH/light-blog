@@ -370,7 +370,7 @@ fc-list
 sudo apt install git
 
 git config --global user.email "1023515576@qq.com"
-git config --global user.name "X. Y."
+git config --global user.name "Yang Xie"
 git config --global core.quotepath false
 ```
 
