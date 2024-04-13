@@ -85,8 +85,8 @@ ros2 run demo_nodes_py listener
 
 ```shell
 # argcomplete for ros2 & colcon
-# eval "$(register-python-argcomplete3 ros2)"
-# eval "$(register-python-argcomplete3 colcon)"
+eval "$(register-python-argcomplete3 ros2)"
+eval "$(register-python-argcomplete3 colcon)"
 
 source /opt/ros/humble/setup.zsh
 source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
