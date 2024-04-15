@@ -30,6 +30,11 @@ conda config --set auto_activate_base false
 # 安装
 conda install cuda -c nvidia
 
+# 安装指定版本
+# 版本列表请查看 https://anaconda.org/nvidia/cuda
+# 例如
+conda install nvidia/label/cuda-11.8.0::cuda
+
 # 卸载
 conda remove cuda
 ```
