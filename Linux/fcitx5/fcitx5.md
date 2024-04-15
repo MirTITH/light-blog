@@ -23,13 +23,19 @@ sudo apt install fcitx5 'fcitx5-frontend*' fcitx5-chinese-addons
 
 ## 配置 fcitx5
 ### kubuntu 22.04
-系统配置里有图形化配置界面
 
-### ubuntu 20.04
-将fcitx5 文件夹复制到 ~/.config/
+ 方法1：自行用图形化界面配置
 
-```bash
-cp -r fcitx5 ~/.config/
+方法2：使用我喜欢的配置
+
+```shell
+# 备份
+mv ~/.config/fcitx5 ~/.config/fcitx5.bak
+mv ~/.local/share/fcitx5 ~/.local/share/fcitx5.bak
+
+# 配置
+cp -r fcitx5_config_file/config/fcitx5 ~/.config/
+cp -r fcitx5_config_file/share/fcitx5 ~/.local/share/
 ```
 
 ## 安装词典
