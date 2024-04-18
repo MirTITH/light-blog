@@ -170,6 +170,12 @@ sudo apt install dotnet-runtime-6.0
 
 3. Log out and log back in so that your group membership is re-evaluated.
 
+4. Test your docker installation
+
+   ```shell
+   docker run hello-world
+   ```
+
 ## arm-none-eabi toolchain
 
 1. 从这里下载安装包：
