@@ -45,6 +45,8 @@ conda remove cuda
 
 官网：http://wiki.ros.org/noetic/Installation/Ubuntu
 
+在conda中安装ROS: https://robostack.github.io/GettingStarted.html
+
 ## ROS 2
 
 ### Humble for 22.04
