@@ -30,6 +30,11 @@ conda config --set auto_activate_base false
 # 安装
 conda install cuda -c nvidia
 
+# 安装指定版本
+# 版本列表请查看 https://anaconda.org/nvidia/cuda
+# 例如
+conda install nvidia/label/cuda-11.8.0::cuda
+
 # 卸载
 conda remove cuda
 ```
@@ -39,6 +44,8 @@ conda remove cuda
 校内源：https://mirrors-help.osa.moe/ros/
 
 官网：http://wiki.ros.org/noetic/Installation/Ubuntu
+
+在conda中安装ROS: https://robostack.github.io/GettingStarted.html
 
 ## ROS 2
 
@@ -164,6 +171,12 @@ sudo apt install dotnet-runtime-6.0
    ```
 
 3. Log out and log back in so that your group membership is re-evaluated.
+
+4. Test your docker installation
+
+   ```shell
+   docker run hello-world
+   ```
 
 ## arm-none-eabi toolchain
 
