@@ -21,6 +21,8 @@ docker image build -t <new_image_name> <Dockerfile_folder>
 
 ```shell
 docker run [switches] <image>
+# Recommended example:
+docker run -it --user ros --network=host --ipc=host -v $PWD/source:/my_source_code my_image
 ```
 
 | switches                              | description                                                                        |
@@ -30,6 +32,8 @@ docker run [switches] <image>
 | --name <container_name>               | Give the new container a name.                                                     |
 | -v <path_on_host>:<path_in_container> | Mount path_on_host to path_in_container. Note: these path should be absolute path. |
 | --user <user>                         | Run as a user. <user> can be user name or uid which is in docker environment.      |
+| --network=host                        |                                                                                    |
+| --ipc=host                            |                                                                                    |
 
 #### Other commands
 
