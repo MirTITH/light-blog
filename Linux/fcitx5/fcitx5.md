@@ -47,6 +47,9 @@ https://github.com/felixonmars/fcitx5-pinyin-zhwiki
 https://github.com/outloudvi/mw2fcitx/releases
 
 
+
+Download latest version of "xxx.dict"
+
 Copy into ~/.local/share/fcitx5/pinyin/dictionaries/ (create the folder if it does not exist)
 
 ```
