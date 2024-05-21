@@ -18,22 +18,22 @@
 
 - 方法三（编辑配置文件，可以使用官方源里没有的镜像）
 
-> 编辑文件 /etc/pacman.d/mirrorlist
+    > 编辑文件 /etc/pacman.d/mirrorlist
 
-```
-##
-## Manjaro Linux custom mirrorlist
-## Generated on 2023-02-22 11:31
-##
-## Please use 'pacman-mirrors -id' To reset custom mirrorlist
-## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
-## To remove custom config run  'pacman-mirrors -c all'
-##
-
-## Country : China
-Server = http://10.249.12.85/manjaro/stable/$repo/$arch
-Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
-```
+    ```
+    ##
+    ## Manjaro Linux custom mirrorlist
+    ## Generated on 2023-02-22 11:31
+    ##
+    ## Please use 'pacman-mirrors -id' To reset custom mirrorlist
+    ## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
+    ## To remove custom config run  'pacman-mirrors -c all'
+    ##
+    
+    ## Country : China
+    Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
+    Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+    ```
 
 2. 更新系统
 
@@ -44,21 +44,28 @@ sudo pacman -Syu
 
 ### 安装 AUR 助手等
 ```bash
+# 编译各种包需要的依赖
+sudo pacman -S base-devel
+
 # AUR 助手
 sudo pacman -Ss yay
 
-# v2raya，没有梯子寸步难行
+# clash-verge-rev-bin
+yay -S clash-verge-rev-bin
+
+# v2raya（没有 clash 好用）
 yay -S v2raya-bin
 
+# v2raya 自启动
 sudo systemctl disable v2ray --now
 sudo systemctl start v2raya.service
 sudo systemctl enable v2raya.service
 
-# 浏览器（没有梯子安装慢）
-yay -S microsoft-edge-stable-bin
-
 # 另一个 AUR 助手（没有梯子装不上）
 yay -S paru-bin
+
+# edge 建议先将系统语言切换成英文，这样默认bing才是国际版的
+paru -S microsoft-edge-stable-bin
 ```
 
 ```bash
@@ -173,7 +180,7 @@ paru -S arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
 ### git
 ```
 git config --global user.email "1023515576@qq.com"
-git config --global user.name "X. Y."
+git config --global user.name "Yang XIE"
 git config --global core.quotepath false
 ```
 
@@ -215,6 +222,14 @@ paru -S piper
 mkdir ~/.local/bin
 cp ./reboot-to-manjaro.sh ~/.local/bin/
 ```
+
+## xyrc
+
+```shell
+cp xyrc ~/.local/
+```
+
+然后在 .zshrc 和 .bashrc 中添加 `source $HOME/.local/xyrc`
 
 ## 注意事项
 

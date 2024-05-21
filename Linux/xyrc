@@ -37,7 +37,7 @@ hf_endpoint() {
     fi
 }
 
-alias hibernate='systemctl hibernate'
+# alias hibernate='systemctl hibernate'
 
 rr() {
     # ros2
