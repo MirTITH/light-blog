@@ -18,22 +18,22 @@
 
 - 方法三（编辑配置文件，可以使用官方源里没有的镜像）
 
-    > 编辑文件 /etc/pacman.d/mirrorlist
+> 编辑文件 /etc/pacman.d/mirrorlist
 
-    ```
-    ##
-    ## Manjaro Linux custom mirrorlist
-    ## Generated on 2023-02-22 11:31
-    ##
-    ## Please use 'pacman-mirrors -id' To reset custom mirrorlist
-    ## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
-    ## To remove custom config run  'pacman-mirrors -c all'
-    ##
-    
-    ## Country : China
-    Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
-    Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
-    ```
+```
+##
+## Manjaro Linux custom mirrorlist
+## Generated on 2023-02-22 11:31
+##
+## Please use 'pacman-mirrors -id' To reset custom mirrorlist
+## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
+## To remove custom config run  'pacman-mirrors -c all'
+##
+
+## Country : China
+Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
+Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+```
 
 2. 更新系统
 
@@ -41,6 +41,47 @@
 sudo pacman -Syu
 ```
 
+### 调整挂载
+
+#### 添加 @data 子卷
+```shell
+sudo su
+mkdir /mnt/root
+mount /dev/nvmeXnXpX /mnt/root/ # 将 nvmeXnXpX 修改为系统所在分区
+cd /mnt/root/
+btrfs subvolume create @data
+chown xy:xy \@data
+su xy
+cd \@home/xy/
+mv Documents Downloads Music Pictures Public Templates Videos /mnt/root/\@data/
+```
+
+修改 /etc/fstab:
+```
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# <file system>             <mount point>  <type>  <options>  <dump>  <pass>
+UUID=ECF3-4233                            /boot/efi      vfat    umask=0077 0 2
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /              btrfs   subvol=/@,defaults,discard=async,ssd 0 0
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /home          btrfs   subvol=/@home,defaults,discard=async,ssd 0 0
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /mnt/data      btrfs   subvol=/@data,defaults,discard=async,ssd 0 0
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /var/cache     btrfs   subvol=/@cache,defaults,discard=async,ssd 0 0
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /var/log       btrfs   subvol=/@log,defaults,discard=async,ssd 0 0
+UUID=50ef37f3-c793-4358-a857-3c943b5aac37 swap           swap    defaults,noatime 0 0
+tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+
+/mnt/data/Documents       /home/xy/Documents   none   bind    0 0
+/mnt/data/Downloads       /home/xy/Downloads   none   bind    0 0
+/mnt/data/Music           /home/xy/Music       none   bind    0 0
+/mnt/data/Pictures        /home/xy/Pictures    none   bind    0 0
+/mnt/data/Public          /home/xy/Public      none   bind    0 0
+/mnt/data/Templates       /home/xy/Templates   none   bind    0 0
+/mnt/data/Videos          /home/xy/Videos      none   bind    0 0
+```
 
 ### 安装 AUR 助手等
 ```bash
@@ -48,7 +89,7 @@ sudo pacman -Syu
 sudo pacman -S base-devel
 
 # AUR 助手
-sudo pacman -Ss yay
+sudo pacman -S yay
 
 # clash-verge-rev-bin
 yay -S clash-verge-rev-bin
