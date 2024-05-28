@@ -225,17 +225,6 @@ git config --global user.name "Yang XIE"
 git config --global core.quotepath false
 ```
 
-### docker
-```
-paru -S docker
-sudo systemctl start docker.service
-sudo systemctl enable docker.service
-sudo docker version
-sudo docker info
-sudo usermod -aG docker $USER
-reboot
-```
-
 ### 其他软件
 - gdb
 - cmake ninja make
@@ -243,6 +232,7 @@ reboot
 - qqmusic
 - netease-cloud-music
 - noto-fonts-cjk
+- ttf-lxgw-wenkai
 - dotnet-runtime-6.0
 
 > 另见 [linux 软件安装.md](linux%20软件安装.md)
