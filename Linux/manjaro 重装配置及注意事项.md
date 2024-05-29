@@ -234,12 +234,15 @@ git config --global core.quotepath false
 - noto-fonts-cjk
 - ttf-lxgw-wenkai
 - dotnet-runtime-6.0
+- tldr
 
 > 另见 [linux 软件安装.md](linux%20软件安装.md)
 
-### tldr
-```
-pip3 install tldr
+### ssh
+```shell
+sudo pacman -S openssh
+sudo systemctl enable sshd.service
+sudo systemctl start sshd.service
 ```
 
 ### Piper 鼠标管理软件
