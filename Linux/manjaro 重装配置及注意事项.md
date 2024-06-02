@@ -56,7 +56,10 @@ cd \@home/xy/
 mv Documents Downloads Music Pictures Public Templates Videos /mnt/root/\@data/
 ```
 
-修改 /etc/fstab:
+仿照下面内容修改 /etc/fstab:
+
+> 注意：ntfs3 仅在 Linux Kernel 5.15 及之后版本支持，在之前的版本需要改为 ntfs
+
 ```
 # /etc/fstab: static file system information.
 #
@@ -65,22 +68,23 @@ mv Documents Downloads Music Pictures Public Templates Videos /mnt/root/\@data/
 # disks are added and removed. See fstab(5).
 #
 # <file system>             <mount point>  <type>  <options>  <dump>  <pass>
-UUID=ECF3-4233                            /boot/efi      vfat    umask=0077 0 2
-UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /              btrfs   subvol=/@,defaults,discard=async,ssd 0 0
-UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /home          btrfs   subvol=/@home,defaults,discard=async,ssd 0 0
-UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /mnt/data      btrfs   subvol=/@data,defaults,discard=async,ssd 0 0
-UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /var/cache     btrfs   subvol=/@cache,defaults,discard=async,ssd 0 0
-UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239 /var/log       btrfs   subvol=/@log,defaults,discard=async,ssd 0 0
-UUID=50ef37f3-c793-4358-a857-3c943b5aac37 swap           swap    defaults,noatime 0 0
-tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+UUID=ECF3-4233                              /boot/efi            vfat    umask=0077                               0 2 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /                    btrfs   subvol=/@,discard=async,ssd              0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /home                btrfs   subvol=/@home,discard=async,ssd          0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /mnt/data            btrfs   subvol=/@data,discard=async,ssd          0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /var/cache           btrfs   subvol=/@cache,discard=async,ssd         0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /var/log             btrfs   subvol=/@log,discard=async,ssd           0 0 
+UUID=50ef37f3-c793-4358-a857-3c943b5aac37   swap                 swap    noatime                                  0 0 
+tmpfs                                       /tmp                 tmpfs   noatime,mode=1777                        0 0 
 
-/mnt/data/Documents       /home/xy/Documents   none   bind    0 0
-/mnt/data/Downloads       /home/xy/Downloads   none   bind    0 0
-/mnt/data/Music           /home/xy/Music       none   bind    0 0
-/mnt/data/Pictures        /home/xy/Pictures    none   bind    0 0
-/mnt/data/Public          /home/xy/Public      none   bind    0 0
-/mnt/data/Templates       /home/xy/Templates   none   bind    0 0
-/mnt/data/Videos          /home/xy/Videos      none   bind    0 0
+/mnt/data/Documents                         /home/xy/Documents   none    bind                                     0 0 
+/mnt/data/Downloads                         /home/xy/Downloads   none    bind                                     0 0 
+/mnt/data/Music                             /home/xy/Music       none    bind                                     0 0 
+/mnt/data/Pictures                          /home/xy/Pictures    none    bind                                     0 0 
+/mnt/data/Public                            /home/xy/Public      none    bind                                     0 0 
+/mnt/data/Templates                         /home/xy/Templates   none    bind                                     0 0 
+/mnt/data/Videos                            /home/xy/Videos      none    bind                                     0 0 
+UUID=7484A7EC84A7AF54                       /mnt/win_d           ntfs3   windows_names,uid=1000,gid=1000,nofail   0 0 
 ```
 
 ### 安装 AUR 助手等
