@@ -223,7 +223,7 @@ paru -S arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
 ```
 
 ### git
-```
+```shell
 git config --global user.email "1023515576@qq.com"
 git config --global user.name "Yang XIE"
 git config --global core.quotepath false
