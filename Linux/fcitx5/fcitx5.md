@@ -1,22 +1,20 @@
 # fcitx5 安装 
 
-> https://plumz.me/archives/11740/?replyTo=125225
-
 ## 卸载fcitx
 
-```sh
+```shell
 sudo apt purge *fcitx*
 ```
 
 ## 安装 fcitx5
 ### ubuntu 22.04
-```sh
+```shell
 sudo apt update
 sudo apt install fcitx5 'fcitx5-frontend*' fcitx5-chinese-addons fcitx5-material-color fcitx5-module-cloudpinyin kde-config-fcitx5
 ```
 
 ### ubuntu 20.04
-```sh
+```shell
 sudo apt update
 sudo apt install fcitx5 'fcitx5-frontend*' fcitx5-chinese-addons
 ```
@@ -48,6 +46,9 @@ https://github.com/felixonmars/fcitx5-pinyin-zhwiki
 
 https://github.com/outloudvi/mw2fcitx/releases
 
+
+
+Download latest version of "xxx.dict"
 
 Copy into ~/.local/share/fcitx5/pinyin/dictionaries/ (create the folder if it does not exist)
 

@@ -1,30 +1,74 @@
 # samba 使用教程
 
-## 软件安装
+## 软件安装和配置
 
-```bash
-sudo apt install samba
+### Manjaro Linux
+
+> 参考自：https://wiki.archlinux.org/title/Samba
+
+```shell
+# 安装
+sudo pacman -S samba
+
+# 添加用户
+# <用户名> 必须是 Linux 系统中的用户名
+# 之后提示输入 New SMB password，此处的密码可与系统密码不同
 sudo smbpasswd -a <用户名>
+
+# 配置 smb.conf
+# 注：这个文件默认分享 home
+sudo cp manjaro_smb.conf /etc/samba/smb.conf
+
+# Enable Usershares
+sudo mkdir /var/lib/samba/usershares
+sudo groupadd -r sambashare
+sudo chown root:sambashare /var/lib/samba/usershares
+sudo chmod 1770 /var/lib/samba/usershares
+sudo gpasswd sambashare -a $USER
+
+# 设置开机自启
+sudo systemctl enable smb
+
+# 启动
+sudo systemctl start smb
 ```
 
-> **<用户名>** 必须是已经存在系统中的用户名
->
-> 之后提示输入New SMB password，此处的密码可与系统密码不同
+### Ubuntu
 
-## 配置 smb.conf
+1. 安装
 
-在 /etc/samba/smb.conf 的 [global] 下添加
+    ```shell
+    # 安装
+    sudo apt install samba
+    
+    # 添加用户
+    # <用户名> 必须是 Linux 系统中的用户名
+    # 之后提示输入 New SMB password，此处的密码可与系统密码不同
+    sudo smbpasswd -a <用户名>
+    ```
 
-```
-# 共享 owner 不是自己的文件，比如 NTFS 磁盘
-usershare owner only = false
-# 允许软链接
-unix extensions = No
-follow symlinks = Yes
-wide links = Yes
-```
+2. 配置 smb.conf
 
-## Aliases
+    在 /etc/samba/smb.conf 的 [global] 下添加：
+
+    ```shell
+    # 共享 owner 不是自己的文件，比如 NTFS 磁盘
+    usershare owner only = false
+    # 允许软链接
+    unix extensions = No
+    follow symlinks = Yes
+    wide links = Yes
+    ```
+
+3. 重启 samba
+
+    ```shell
+    sudo service smbd restart
+    ```
+
+## 其他配置
+
+### 用户别名
 
 With Samba 3.0.25, you can use the non-SAM account aliases of AD Bridge by including a user name map:
 
@@ -34,29 +78,17 @@ With Samba 3.0.25, you can use the non-SAM account aliases of AD Bridge by inclu
 
 To make an alias for an Active Directory group, use the form !alias = @DOMAIN\group. The exclamation point triggers Samba to stop processing on the first matching alias, preventing issues with multiple alias matches from wildcards.
 
-## 重启
+### 文件位置
 
-```bash
-sudo service smbd restart
-```
+共享目录记录位置：/var/lib/samba/usershares
 
-## 文件位置
+smb.conf文件位置：/etc/samba/smb.conf
 
-共享目录记录位置
-
-> /var/lib/samba/usershares
-
-smb.conf文件位置
-
-> /etc/samba/smb.conf
-
-注：
-
-> 在smb.conf中也可以添加共享目录，这与在usershares文件夹中添加是等效的
+>  注：建议在 usershares 中添加要共享的目录信息
 
 ## 常见问题
 
-#### net usershare”返回错误 255
+### net usershare”返回错误 255
 
 在`smb.conf`的 [global]下添加：
 
@@ -78,7 +110,7 @@ follow symlinks = Yes
 wide links = Yes
 ```
 
-#### daemon failed to start: Samba cannot init registry
+### daemon failed to start: Samba cannot init registry
 
 https://blog.csdn.net/u013310025/article/details/86721604
 

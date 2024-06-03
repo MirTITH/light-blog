@@ -31,7 +31,7 @@
 ##
 
 ## Country : China
-Server = http://10.249.12.85/manjaro/stable/$repo/$arch
+Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
 Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
 ```
 
@@ -41,24 +41,76 @@ Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
 sudo pacman -Syu
 ```
 
+### 调整挂载
+
+#### 添加 @data 子卷
+```shell
+sudo su
+mkdir /mnt/root
+mount /dev/nvmeXnXpX /mnt/root/ # 将 nvmeXnXpX 修改为系统所在分区
+cd /mnt/root/
+btrfs subvolume create @data
+chown xy:xy \@data
+su xy
+cd \@home/xy/
+mv Documents Downloads Music Pictures Public Templates Videos /mnt/root/\@data/
+```
+
+仿照下面内容修改 /etc/fstab:
+
+> 注意：ntfs3 仅在 Linux Kernel 5.15 及之后版本支持，在之前的版本需要改为 ntfs
+
+```
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# <file system>             <mount point>  <type>  <options>  <dump>  <pass>
+UUID=ECF3-4233                              /boot/efi            vfat    umask=0077                               0 2 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /                    btrfs   subvol=/@,discard=async,ssd              0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /home                btrfs   subvol=/@home,discard=async,ssd          0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /mnt/data            btrfs   subvol=/@data,discard=async,ssd          0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /var/cache           btrfs   subvol=/@cache,discard=async,ssd         0 0 
+UUID=54f87a00-f2f8-43cf-ba1f-fc907d8af239   /var/log             btrfs   subvol=/@log,discard=async,ssd           0 0 
+UUID=50ef37f3-c793-4358-a857-3c943b5aac37   swap                 swap    noatime                                  0 0 
+tmpfs                                       /tmp                 tmpfs   noatime,mode=1777                        0 0 
+
+/mnt/data/Documents                         /home/xy/Documents   none    bind                                     0 0 
+/mnt/data/Downloads                         /home/xy/Downloads   none    bind                                     0 0 
+/mnt/data/Music                             /home/xy/Music       none    bind                                     0 0 
+/mnt/data/Pictures                          /home/xy/Pictures    none    bind                                     0 0 
+/mnt/data/Public                            /home/xy/Public      none    bind                                     0 0 
+/mnt/data/Templates                         /home/xy/Templates   none    bind                                     0 0 
+/mnt/data/Videos                            /home/xy/Videos      none    bind                                     0 0 
+UUID=7484A7EC84A7AF54                       /mnt/win_d           ntfs3   windows_names,uid=1000,gid=1000,nofail   0 0 
+```
 
 ### 安装 AUR 助手等
 ```bash
-# AUR 助手
-sudo pacman -Ss yay
+# 编译各种包需要的依赖
+sudo pacman -S base-devel
 
-# v2raya，没有梯子寸步难行
+# AUR 助手
+sudo pacman -S yay
+
+# clash-verge-rev-bin
+yay -S clash-verge-rev-bin
+
+# v2raya（没有 clash 好用）
 yay -S v2raya-bin
 
+# v2raya 自启动
 sudo systemctl disable v2ray --now
 sudo systemctl start v2raya.service
 sudo systemctl enable v2raya.service
 
-# 浏览器（没有梯子安装慢）
-yay -S microsoft-edge-stable-bin
-
 # 另一个 AUR 助手（没有梯子装不上）
 yay -S paru-bin
+
+# edge 建议先将系统语言切换成英文，这样默认bing才是国际版的
+paru -S microsoft-edge-stable-bin
 ```
 
 ```bash
@@ -173,19 +225,8 @@ paru -S arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
 ### git
 ```
 git config --global user.email "1023515576@qq.com"
-git config --global user.name "X. Y."
+git config --global user.name "Yang XIE"
 git config --global core.quotepath false
-```
-
-### docker
-```
-paru -S docker
-sudo systemctl start docker.service
-sudo systemctl enable docker.service
-sudo docker version
-sudo docker info
-sudo usermod -aG docker $USER
-reboot
 ```
 
 ### 其他软件
@@ -195,13 +236,17 @@ reboot
 - qqmusic
 - netease-cloud-music
 - noto-fonts-cjk
+- ttf-lxgw-wenkai
 - dotnet-runtime-6.0
+- tldr
 
 > 另见 [linux 软件安装.md](linux%20软件安装.md)
 
-### tldr
-```
-pip3 install tldr
+### ssh
+```shell
+sudo pacman -S openssh
+sudo systemctl enable sshd.service
+sudo systemctl start sshd.service
 ```
 
 ### Piper 鼠标管理软件
@@ -215,6 +260,14 @@ paru -S piper
 mkdir ~/.local/bin
 cp ./reboot-to-manjaro.sh ~/.local/bin/
 ```
+
+## xyrc
+
+```shell
+cp xyrc ~/.local/
+```
+
+然后在 .zshrc 和 .bashrc 中添加 `source $HOME/.local/xyrc`
 
 ## 注意事项
 
