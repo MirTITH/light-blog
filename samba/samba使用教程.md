@@ -16,10 +16,10 @@ sudo pacman -S samba
 sudo smbpasswd -a <用户名>
 
 # 配置 smb.conf
-# 注：这个文件默认分享 home
 sudo cp manjaro_smb.conf /etc/samba/smb.conf
 
 # Enable Usershares
+# 之后可以直接在 Dolphin 文件管理器中右键共享文件夹
 sudo mkdir /var/lib/samba/usershares
 sudo groupadd -r sambashare
 sudo chown root:sambashare /var/lib/samba/usershares
@@ -67,6 +67,18 @@ sudo systemctl start smb
     ```
 
 ## 其他配置
+
+### 添加共享文件夹
+
+KDE Manjaro 可以直接在 Dolphin 文件管理器中右键添加：
+
+![image-20240603145410655](samba使用教程.assets/image-20240603145410655.png)
+
+KUbuntu 应该也行，但可能由于版本较低，不好用
+
+有时候可能会弹出下面的提示，如果能正常用，建议忽略：
+
+![image-20240603145614449](samba使用教程.assets/image-20240603145614449.png)
 
 ### 用户别名
 
