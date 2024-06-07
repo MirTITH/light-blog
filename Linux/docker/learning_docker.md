@@ -71,6 +71,8 @@ docker run -it --network=host --ipc=host \
     <IMAGE_NAME>
 ```
 
+# Issue
+
 ## Network problem when building image
 
 ```shell
@@ -79,3 +81,28 @@ docker build -t <IMAGE_NAME> . \
     --build-arg "https_proxy=http://localhost:1081" \
     --network host
 ```
+
+## ros topic list 卡住
+
+> 参考 https://github.com/ros2/ros2cli/issues/903#issuecomment-2146858338
+
+在 `/etc/docker/daemon.json` 中添加 `"default-ulimits"` 配置：
+
+```json
+{
+    "default-ulimits": {
+        "nofile": {
+            "Name": "nofile",
+            "Hard": 1048576,
+            "Soft": 1024
+        }
+    }
+}
+```
+
+然后执行：
+
+```shell
+sudo systemctl restart docker
+```
+
