@@ -1,5 +1,11 @@
 # git 笔记
 
+## GitHub 下载文件夹
+
+右键点击文件夹，复制链接，粘贴进下面网址：
+
+https://download-directory.github.io/
+
 ## 远程库
 
 ```bash
