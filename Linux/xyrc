@@ -1,6 +1,6 @@
 proxy_on() {
-    # export http_proxy=http://localhost:7890
-    # export https_proxy=http://localhost:7890
+    export http_proxy=http://localhost:7890
+    export https_proxy=http://localhost:7890
     export ALL_PROXY=socks5://localhost:7890
 }
 
@@ -8,11 +8,6 @@ proxy_off() {
     unset http_proxy
     unset https_proxy
     unset ALL_PROXY
-}
-
-proxy_direct() {
-    export http_proxy=http://localhost:30001
-    export https_proxy=http://localhost:30001
 }
 
 proxy_info() {
