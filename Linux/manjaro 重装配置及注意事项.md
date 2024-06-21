@@ -129,7 +129,7 @@ kate /etc/pacman.conf /etc/makepkg.conf /etc/paru.conf
 
 ### 删除 firefox
 ```bash
-sudo pacman -Rs firefox
+sudo pacman -Rns firefox
 
 # 如果说会破坏依赖，可以尝试如下命令，删除软件包和所有依赖这个软件包的程序
 sudo pacman -Rsc firefox
