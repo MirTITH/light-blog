@@ -46,3 +46,5 @@ rr() {
     # moveit
     # source $HOME/.local/ws_moveit/install/setup.zsh
 }
+
+alias rosdep_install='rosdep install --from-paths src --ignore-src -r -y'
