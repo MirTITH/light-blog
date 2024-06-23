@@ -12,7 +12,7 @@ docker image rm -f # Delete image even there is a container related to the image
 docker image build -t <new_image_name> <Dockerfile_folder>
 
 # 保存、压缩镜像
-docker save grasp_model:v1.1 | zstd -T16 -15 -o grasp_model_v1.1.tar.zst
+docker save my_image:latest | zstd -T16 -10 -o my_image.tar.zst
 # 保存、压缩并传输镜像
 docker save my_image:latest | zstd | ssh user@target_host 'zstd -d | docker load'
 ```
@@ -35,9 +35,9 @@ docker run -it --user ros --network=host --ipc=host -v $PWD/source:/my_source_co
 | --rm                                  | Remove container after it stopped.                                                 |
 | --name <container_name>               | Give the new container a name.                                                     |
 | -v <path_on_host>:<path_in_container> | Mount path_on_host to path_in_container. Note: these path should be absolute path. |
-| --user`<user>`                      | Run as a user.`<user>` can be user name or uid which is in docker environment.   |
-| --network=host                        |                                                                                    |
-| --ipc=host                            |                                                                                    |
+| --user`<user>`                        | Run as a user.`<user>` can be user name or uid which is in docker environment.     |
+| --network=host                        | 容器与宿主机共享相同的网络接口和 IP 地址                                           |
+| --ipc=host                            | 容器使用宿主机的 IPC（Inter-Process Communication，进程间通信）命名空间            |
 
 #### Other commands
 
@@ -125,7 +125,7 @@ See subfolders
 
 3. 测试：在docker中运行nvidia-smi，看是否正常输出
 
-# Issue
+# Issues
 
 ## docker build 时无法访问外网
 
