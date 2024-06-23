@@ -1,11 +1,10 @@
 # Learning Docker
 
- ## Commands
+## Commands
 
 ### Image
 
 ```shell
-
 docker image ls # == docker images
 docker image pull ros:humble # == docker pull
 docker image rm # == docker rmi
@@ -36,7 +35,7 @@ docker run -it --user ros --network=host --ipc=host -v $PWD/source:/my_source_co
 | --rm                                  | Remove container after it stopped.                                                 |
 | --name <container_name>               | Give the new container a name.                                                     |
 | -v <path_on_host>:<path_in_container> | Mount path_on_host to path_in_container. Note: these path should be absolute path. |
-| --user <user>                         | Run as a user. <user> can be user name or uid which is in docker environment.      |
+| --user`<user>`                      | Run as a user.`<user>` can be user name or uid which is in docker environment.   |
 | --network=host                        |                                                                                    |
 | --ipc=host                            |                                                                                    |
 
@@ -62,23 +61,79 @@ See subfolders
 
 ## GUI and GPU
 
-```shell
-docker run -it --network=host --ipc=host \
-    -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-    --env DISPLAY \
-    --gpus all \
-    --env NVIDIA_DRIVER_CAPABILITIES=all \
-    <IMAGE_NAME>
-```
+### 使容器内可以运行 GUI 程序
+
+该方法适用于所有显卡，步骤如下：
+
+1. docker run 时，添加下面的参数：
+
+    ```shell
+    -v /tmp/.X11-unix:/tmp/.X11-unix:rw
+    --env DISPLAY
+    ```
+
+    例如：
+
+    ```shell
+    docker run -it \
+        -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env DISPLAY \
+        <IMAGE_NAME>
+    ```
+
+3. 有时需要在主机上执行以下命令（每次开机只需要执行一次）
+
+    ```shell
+    xhost + # 允许 docker 内的程序访问主机中的 X 服务器，从而能在主机中显示
+    ```
+
+5. 测试验证
+
+    1. 在 docker 中安装一些简单的 GUI 程序：
+
+        ```shell
+        sudo apt install x11-apps
+        ```
+    2. 在 docker 中运行下面的一些 GUI 程序，如果出现窗口，则成功了
+        - xclock
+        - xeyes
+
+### 开启 N 卡加速
+
+上面的操作只是能显示图形界面，但没有 GPU 硬件加速。这会导致一些 3D 界面可能很卡，并且不能用显卡跑网络
+
+该方法只适用于 N 卡，步骤如下：
+
+1. 安装 Nvidia Container Toolkit：
+    1. 打开链接：https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+    2. 按照网页中的指引，在主机中安装 nvidia-container-toolkit
+    3. 执行网页中 Configuring Docker 的部分，注意不需要执行 Rootless mode
+
+2. docker run 时，添加下面的参数：
+    ```shell
+    --gpus all                           # 向容器中添加所有显卡
+    --env NVIDIA_DRIVER_CAPABILITIES=all # 开启 N 卡驱动的所有功能。（不加该项可以跑 CUDA，但没有 OpenGL 加速）
+    ```
+
+    例如：
+
+    ```shell
+    docker run -it \
+        -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env DISPLAY \
+        --gpus all --env NVIDIA_DRIVER_CAPABILITIES=all \
+        <IMAGE_NAME>
+    ```
+
+3. 测试：在docker中运行nvidia-smi，看是否正常输出
 
 # Issue
 
-## Network problem when building image
+## docker build 时无法访问外网
 
 ```shell
 docker build -t <IMAGE_NAME> . \
-    --build-arg "http_proxy=http://localhost:1081" \
-    --build-arg "https_proxy=http://localhost:1081" \
+    --build-arg "http_proxy=http://localhost:7890" \
+    --build-arg "https_proxy=http://localhost:7890" \
+    --build-arg "ALL_PROXY=socks5://localhost:7890" \
     --network host
 ```
 
@@ -105,4 +160,3 @@ docker build -t <IMAGE_NAME> . \
 ```shell
 sudo systemctl restart docker
 ```
-
