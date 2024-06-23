@@ -1,19 +1,19 @@
 proxy_on() {
     export http_proxy=http://localhost:7890
     export https_proxy=http://localhost:7890
-    export ALL_PROXY=socks5://localhost:7890
+    export all_proxy=socks5://localhost:7890
 }
 
 proxy_off() {
     unset http_proxy
     unset https_proxy
-    unset ALL_PROXY
+    unset all_proxy
 }
 
 proxy_info() {
     echo -e "http_proxy=${http_proxy}"
     echo -e "https_proxy=${https_proxy}"
-    echo -e "ALL_PROXY=${ALL_PROXY}"
+    echo -e "all_proxy=${all_proxy}"
     curl ipinfo.io
 }
 
