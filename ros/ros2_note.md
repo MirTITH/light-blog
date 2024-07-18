@@ -32,3 +32,25 @@ sudo sysctl -w kernel.yama.ptrace_scope=0
 ```
 
 To permanently change the value of `kernel.yama.ptrace_scope` to 0, you can edit the file `/etc/sysctl.d/10-ptrace.conf` and change the line `kernel.yama.ptrace_scope = 1` to `kernel.yama.ptrace_scope = 0`. You will then need to reboot your system for the change to take effect.
+
+## launch.py 技巧
+
+### 解决终端不打印问题
+
+在 Node 中添加 `emulate_tty=True`，output 设为 "screen" 或 "both"
+
+```python
+Node(
+    package=kThisPackageName,
+    executable="exe_name",
+    output="screen",
+    emulate_tty=True,
+    parameters=[
+        {
+            # "robot_description": robot_description_content,
+        }
+    ],
+)
+```
+
+> See this issue: https://github.com/ros2/launch/issues/188#issuecomment-465048178
