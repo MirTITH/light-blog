@@ -1,3 +1,0 @@
-[submodule "Linux/docker/dockerfile_example"]
-	path = Linux/docker/dockerfile_example
-	url = https://github.com/joshnewans/dockerfile_example.git

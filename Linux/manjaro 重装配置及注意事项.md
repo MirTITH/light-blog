@@ -89,7 +89,7 @@ UUID=7484A7EC84A7AF54                       /mnt/win_d           ntfs3   windows
 
 ### 安装 AUR 助手等
 ```bash
-# 编译各种包需要的依赖
+编译各种包需要的依赖
 sudo pacman -S base-devel
 
 # AUR 助手
@@ -109,12 +109,15 @@ sudo systemctl enable v2raya.service
 # 另一个 AUR 助手（没有梯子装不上）
 yay -S paru-bin
 
-# edge 建议先将系统语言切换成英文，这样默认bing才是国际版的
+# edge 建议先将系统语言切换成英文，这样默认 bing 才是国际版的
 paru -S microsoft-edge-stable-bin
+
+# Chrome
+paru -S google-chrome
 ```
 
 ```bash
-# 编辑配置
+编辑配置
 kate /etc/pacman.conf /etc/makepkg.conf /etc/paru.conf
 ```
 
@@ -123,7 +126,7 @@ kate /etc/pacman.conf /etc/makepkg.conf /etc/paru.conf
 | 文件         | 修改                               |
 | ------------ | ---------------------------------- |
 | pacman.conf  | 取消注释：`#Color`                 |
-| makepkg.conf | MAKEFLAGS="-j2" -> MAKEFLAGS="-j8" |
+| makepkg.conf | MAKEFLAGS = "-j2" -> MAKEFLAGS = "-j8" |
 | paru.conf    | 取消注释：`#BottomUp` `#SudoLoop`  |
 
 
@@ -147,7 +150,7 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 ```
 
-2. Set ZSH_THEME="powerlevel10k/powerlevel10k" in ~/.zshrc.
+2. Set ZSH_THEME = "powerlevel10k/powerlevel10k" in ~/.zshrc.
 
 #### 插件
 > https://zhuanlan.zhihu.com/p/61447507
@@ -174,9 +177,9 @@ plugins=(
 ```bash
 paru -S manjaro-asian-input-support-fcitx5 fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
 ```
-2. 解决 Qt6 程序无法使用输入法的问题
+2. 解决 Qt6 程序无法使用输入法的问题（现在的manjaro默认支持Qt6中文输入了，无需操作）
 
-    > 可以尝试直接将编译好的文件复制到相应目录（记得修改为你的Qt安装路径）
+    > 可以尝试直接将编译好的文件复制到相应目录（记得修改为你的 Qt 安装路径）
     ```
     cp ./libfcitx5platforminputcontextplugin.so ~/Qt/6.4.2/gcc_64/plugins/platforminputcontexts
     cp ./libfcitx5platforminputcontextplugin.so ~/Qt/Tools/QtCreator/lib/Qt/plugins/platforminputcontexts
@@ -190,7 +193,7 @@ paru -S manjaro-asian-input-support-fcitx5 fcitx5-chinese-addons fcitx5-pinyin-z
         或：
         git clone https://github.com/fcitx/fcitx5-qt.git
         ```
-    2. 修改CMakeLists.txt
+    2. 修改 CMakeLists.txt
         ```
         option(ENABLE_QT4 "Enable Qt 4" On)
         option(ENABLE_QT5 "Enable Qt 5" On)
@@ -204,7 +207,7 @@ paru -S manjaro-asian-input-support-fcitx5 fcitx5-chinese-addons fcitx5-pinyin-z
         make -j8
         sudo make install
         ```
-    4. 复制文件（记得修改为你的Qt安装路径）
+    4. 复制文件（记得修改为你的 Qt 安装路径）
     ```
     # qt6 程序
     cp ./qt6/platforminputcontext/libfcitx5platforminputcontextplugin.so ~/Qt/6.4.2/gcc_64/plugins/platforminputcontexts

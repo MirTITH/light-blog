@@ -59,6 +59,18 @@ docker commit <container> image:tag # 将容器转换成镜像
 
 See subfolders
 
+## 清理
+
+```shell
+docker system df # 查看磁盘占用
+docker container prune # 删除所有停止运行的容器
+docker buildx prune #  clear the build cache. 在 build cache 出错导致 build 失败时，这条命令很有用
+docker image prune # remove unused images
+docker volume prune # removes all anonymous volumes not used by any containers
+docker network prune # remove unused networks
+docker system prune #  remove all unused containers, images, networks, and build cache
+```
+
 ## GUI and GPU
 
 ### 使容器内可以运行 GUI 程序

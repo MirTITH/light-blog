@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=CubeMX
-Exec=/home/xy/STM32CubeMX/STM32CubeMX %u
-Icon=/home/xy/STM32CubeMX/help/STM32CubeMX.png
+Exec=/home/xy/.local/STM32CubeMX/STM32CubeMX %u
+Icon=/home/xy/.local/STM32CubeMX/help/STM32CubeMX.png
 Type=Application
 Categories=Development;
 MimeType=application/x-ioc;

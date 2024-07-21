@@ -6,13 +6,14 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Change Ubuntu source list
-COPY mirror_22.04_osa.list /etc/apt/sources.list
+# COPY ubuntu_22.04_ustc.list /etc/apt/sources.list
+COPY ubuntu_22.04_tuna.list /etc/apt/sources.list
 
 # Change ROS 2 source list
 # https://mirrors.osa.moe/ros2/ubuntu
 # https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu
 # https://mirrors.ustc.edu.cn/ros2/ubuntu
-ARG ROS2_MIRROR_URL=https://mirrors.osa.moe/ros2/ubuntu
+ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
 
 RUN rm /etc/apt/sources.list.d/ros2-latest.list
 RUN apt-get install curl gnupg2 && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
@@ -34,7 +35,7 @@ USER $USERNAME
 WORKDIR /home/$USERNAME
 
 # Install some dependencies packages
-RUN sudo apt-get update \
+RUN sudo apt-get update && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
     python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip xauth \
     git net-tools vim mesa-utils bash-completion nano psmisc
@@ -50,6 +51,18 @@ RUN sudo usermod --append --groups video $USERNAME
 RUN rosdep update
 
 COPY --chown=$USERNAME:$USERNAME entry_point.sh /entry_point.sh
+
+RUN sudo apt-get update \
+    && sudo apt-get install -y \
+    iputils-ping zsh breeze qt5ct fonts-noto-cjk
+
+# zsh
+RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+    && git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
+    && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
+    && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+RUN git config --global core.quotepath false
 
 # 保持容器运行
 ENTRYPOINT ["/entry_point.sh"]
