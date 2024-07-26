@@ -297,25 +297,31 @@ PRUNEFS="NFS afs autofs binfmt_misc ceph cgroup cgroup2 cifs coda configfs curlf
       sudo blkid | grep swap
       ```
 
-   3. 修改GRUB_CMDLINE_LINUX_DEFAULT：
+   3. 编辑 /etc/default/grub，向 `GRUB_CMDLINE_LINUX_DEFAULT` 添加 resume=xxx，例如：
 
       ```
       GRUB_CMDLINE_LINUX_DEFAULT="quiet splash resume=UUID=xxxx-xxxx-xxxx"
       ```
 
-   4. 测试是否能够休眠：
+   4. `sudo update-grub`
+
+   5. 重启
+
+   6. 测试是否能够休眠：
 
       ```shell
       sudo systemctl hibernate
       ```
 
-2. ```shell
+2. 添加休眠按钮：
+
+   ```shell
    sudo -i
    cd /var/lib/polkit-1/localauthority/50-local.d/
    vim com.ubuntu.enable-hibernate.pkla
    ```
 
-3. 粘贴：
+   粘贴：
 
    ```shell
    [Re-enable hibernate by default in upower]
@@ -328,7 +334,7 @@ PRUNEFS="NFS afs autofs binfmt_misc ceph cgroup cgroup2 cifs coda configfs curlf
    ResultActive=yes
    ```
 
-4. 保存并重启
+3. 保存并重启
 
 ## v2rayA
 

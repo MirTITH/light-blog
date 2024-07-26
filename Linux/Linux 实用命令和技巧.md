@@ -28,3 +28,49 @@ tar -I 'xz -T0 -v -9' -cf output.tar.xz file1 folder1
 tar -I 'zstd -T0 -v -10' -cf output.tar.zst file1 folder1
 ```
 
+## 关闭图形界面
+
+```shell
+# 关闭图形界面
+sudo systemctl isolate multi-user.target
+
+# 开启图形界面
+do systemctl isolate graphical.target
+```
+
+## manjaro 包管理器
+
+以下命令中，paru 和 sudo pacman 应该都可以互换
+
+paru 还可以安装 AUR 仓库中的软件
+
+```shell
+paru -Rns package_name # 删除软件，配置文件，依赖
+paru -Qdt # 列出孤包
+sudo pacman -U /path/to/package/package_name-version.pkg.tar.zst # 安装本地包
+sudo pacman -U http://www.example.com/repo/example.pkg.tar.zst # 安装远程包（指定网址）
+```
+
+#### 查询一个包含具体文件的包名
+
+```shell
+paru -Fy # 同步文件数据库
+paru -F libcrypto.so.1.1 # 查找某个文件在哪个包里（报缺失 .so 错误时很有用）
+```
+
+## tmux
+
+启用鼠标：
+
+方法一（临时）：
+
+Ctrl+B, 输入：`set -g mouse`
+
+方法二（永久）：
+
+```shell
+vim ~/.tmux.conf
+# 在文件中写入
+set-option -g mouse on
+```
+

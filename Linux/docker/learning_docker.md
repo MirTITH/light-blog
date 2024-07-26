@@ -145,7 +145,7 @@ docker system prune #  remove all unused containers, images, networks, and build
 docker build -t <IMAGE_NAME> . \
     --build-arg "http_proxy=http://localhost:7890" \
     --build-arg "https_proxy=http://localhost:7890" \
-    --build-arg "ALL_PROXY=socks5://localhost:7890" \
+    --build-arg "all_proxy=socks5://localhost:7890" \
     --network host
 ```
 

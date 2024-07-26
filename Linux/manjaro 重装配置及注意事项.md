@@ -272,7 +272,83 @@ cp xyrc ~/.local/
 
 然后在 .zshrc 和 .bashrc 中添加 `source $HOME/.local/xyrc`
 
-## 注意事项
+## 开启休眠功能
+
+KDE桌面环境的manjaro在安装时，如果选择“自动分区，带有休眠功能“，则应该已经自动配置好了。
+
+如果是手动分区安装的，则似乎不会自动配置好。
+
+### 开启步骤
+
+1. 确保已经创建并启用 swap 分区
+
+   > 建议使用 swap 分区，而不是 swap 文件
+
+2. 配置 initramfs：
+
+   编辑 /etc/mkinitcpio.conf，在 `HOOKS=` 中添加 `resume`. 
+
+   > 注意： the `resume` hook must go *after* the `udev` hook.
+
+   例如，对于我的 manjaro：
+
+   ```
+   HOOKS=(base udev autodetect kms modconf block keyboard keymap consolefont plymouth filesystems resume)
+   ```
+
+   或（来自 ArchWiki）：
+
+   ```
+   HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems resume fsck)
+   ```
+
+3. Regenerate the initramfs for these changes to take effect: 
+
+   ```shell
+   sudo mkinitcpio -P
+   ```
+
+4. 测试：
+
+   对于比较新的 UEFI 固件的电脑，到此为止应该配置完毕了，可以休眠测试一下。
+
+   如果休眠失败，则重启后再休眠测试一下。
+
+   如果还失败，则进行以下步骤：
+
+   1. 找到 SWAP 分区的 UUID（不是 PARTUUID）：
+
+      ```shell
+      sudo blkid | grep swap
+      ```
+
+   2. 编辑 /etc/default/grub，向 `GRUB_CMDLINE_LINUX_DEFAULT` 添加 resume=xxx，例如：
+
+      ```
+      GRUB_CMDLINE_LINUX_DEFAULT="quiet splash resume=UUID=xxxx-xxxx-xxxx"
+      ```
+
+      其中 resume 格式可以如下（建议使用UUID）：
+
+      - `resume=UUID=4209c845-f495-4c43-8a03-5363dd433153`
+      - `resume="PARTLABEL=Swap partition"`
+      - `resume=/dev/archVolumeGroup/archLogicalVolume`
+
+   3. 重启
+
+   4. 再次测试
+
+### 休眠方法
+
+KDE 应该在开始菜单里有休眠按钮
+
+命令行方法：
+
+```shell
+sudo systemctl hibernate
+```
+
+## manjaro 注意事项
 
 ### 安装软件时密钥出错
 Signature from "User <email@gmail.com>" is unknown trust, installation failed
