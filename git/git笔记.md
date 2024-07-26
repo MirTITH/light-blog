@@ -19,6 +19,15 @@ git remote -v   # 查看远程库地址
 git config --global core.quotepath false
 ```
 
+## 忽略文件权限
+
+有时候在 linux 中处理 exfat 或 NTFS 分区中的仓库时，会出现一大堆修改，使用 git diff 检查时，显示的是文件权限的更改。遇到此情况，可以忽略文件权限的更改。
+
+```shell
+git config core.fileMode false # 对单个仓库
+git config --global core.fileMode false # 对全局
+```
+
 ## 子模块
 
 > https://zhuanlan.zhihu.com/p/404615843
