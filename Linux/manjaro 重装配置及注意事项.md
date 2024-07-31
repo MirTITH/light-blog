@@ -256,7 +256,11 @@ sudo systemctl start sshd.service
 paru -S piper
 
 ### 禁用鼠标键盘唤醒
-[ubuntu 重装配置.md](ubuntu%20重装配置.md##%20禁用鼠标键盘唤醒)
+```shell
+paru -S wakeup-triggers
+sudo systemctl start wakeup-triggers.service
+sudo systemctl enable wakeup-triggers.service
+```
 
 ### reboot-to-manjaro.sh
 ```bash
