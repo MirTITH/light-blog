@@ -12,9 +12,17 @@ docker image rm -f # Delete image even there is a container related to the image
 docker image build -t <new_image_name> <Dockerfile_folder>
 
 # 保存、压缩镜像
-docker save my_image:latest | zstd -T16 -10 -o my_image.tar.zst
+# 注：在 Ubuntu 上，zstd 需要另外安装。通常 xz 比 zstd 压缩率高，但速度慢
+docker save my_image:latest | xz -T16 -o my_image.tar.xz # 使用 xz
+docker save my_image:latest | zstd -T16 -10 -o my_image.tar.zst # 使用 zstd
+
 # 保存、压缩并传输镜像
-docker save my_image:latest | zstd | ssh user@target_host 'zstd -d | docker load'
+docker save my_image:latest | xz | ssh user@target_host 'xz -d | docker load'  # 使用 xz
+docker save my_image:latest | zstd | ssh user@target_host 'zstd -d | docker load' # 使用 zstd
+
+# 加载镜像
+xz -d -c my_image.tar.xz | docker load # 使用 xz
+zstd -d -c my_image.tar.zst | docker load # 使用 zstd
 ```
 
 ### Container
@@ -122,20 +130,83 @@ docker system prune #  remove all unused containers, images, networks, and build
 
 2. docker run 时，添加下面的参数：
     ```shell
+    --runtime=nvidia
     --gpus all                           # 向容器中添加所有显卡
     --env NVIDIA_DRIVER_CAPABILITIES=all # 开启 N 卡驱动的所有功能。（不加该项可以跑 CUDA，但没有 OpenGL 加速）
     ```
-
+    
     例如：
-
+    
     ```shell
     docker run -it \
         -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env DISPLAY \
-        --gpus all --env NVIDIA_DRIVER_CAPABILITIES=all \
+        --runtime=nvidia --gpus all --env NVIDIA_DRIVER_CAPABILITIES=all \
         <IMAGE_NAME>
     ```
 
-3. 测试：在docker中运行nvidia-smi，看是否正常输出
+### 测试
+
+#### 测试 nvidia-smi
+
+在docker中运行 nvidia-smi，看是否正常输出
+
+#### 测试 OpenGL
+
+```shell
+sudo apt install mesa-utils
+glxinfo | grep "OpenGL version"
+```
+
+检查输出，如果类似 `OpenGL version string: 4.6.0 NVIDIA 550.107.02`，则有 GPU 加速
+
+如果类似 `OpenGL version string: 4.5 (Compatibility Profile) Mesa 24.0.9-0ubuntu0.1`，则没有 GPU 加速
+
+#### 测试 Vulkan
+
+```shell
+sudo apt install vulkan-tools
+vulkaninfo --summary
+```
+
+检查输出的 `Devices:` 部分，如果正确显示 GPU 型号，并且 deviceType=PHYSICAL_DEVICE_TYPE_DISCRETE_GPU，则有 GPU 加速，例如：
+
+```
+Devices:
+========
+GPU0:
+        apiVersion         = 1.3.277
+        driverVersion      = 550.107.2.0
+        vendorID           = 0x10de
+        deviceID           = 0x1f15
+        deviceType         = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+        deviceName         = NVIDIA GeForce RTX 2060
+        driverID           = DRIVER_ID_NVIDIA_PROPRIETARY
+        driverName         = NVIDIA
+        driverInfo         = 550.107.02
+        conformanceVersion = 1.3.7.2
+        deviceUUID         = 5078994e-b73e-29d5-6fee-afcf9a1fa407
+        driverUUID         = 12adfef6-a92a-528b-8610-45df7fa0a5b8
+```
+
+如果输出如下，则没有 GPU 加速：
+
+```
+Devices:
+========
+GPU0:
+        apiVersion         = 1.3.274
+        driverVersion      = 0.0.1
+        vendorID           = 0x10005
+        deviceID           = 0x0000
+        deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+        deviceName         = llvmpipe (LLVM 17.0.6, 256 bits)
+        driverID           = DRIVER_ID_MESA_LLVMPIPE
+        driverName         = llvmpipe
+        driverInfo         = Mesa 24.0.9-0ubuntu0.1 (LLVM 17.0.6)
+        conformanceVersion = 1.3.1.1
+        deviceUUID         = 6d657361-3234-2e30-2e39-2d3075627500
+        driverUUID         = 6c6c766d-7069-7065-5555-494400000000
+```
 
 # Issues
 

@@ -24,7 +24,7 @@ docker run -d --name $CONTAINER_NAME --user $USER_NAME \
     --network=host --ipc=host \
     --privileged \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env DISPLAY \
-    --gpus all --env NVIDIA_DRIVER_CAPABILITIES=all \
+    --runtime=nvidia --gpus all --env NVIDIA_DRIVER_CAPABILITIES=all \
     -v $HOME/.ssh:/home/$USER_NAME/.ssh \
     -v $HOME/Documents:/home/$USER_NAME/Documents \
     -v $HOME/Downloads:/home/$USER_NAME/Downloads \

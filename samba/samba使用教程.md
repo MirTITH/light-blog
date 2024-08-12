@@ -10,13 +10,14 @@
 # 安装
 sudo pacman -S samba
 
-# 添加用户
-# <用户名> 必须是 Linux 系统中的用户名
-# 之后提示输入 New SMB password，此处的密码可与系统密码不同
-sudo smbpasswd -a <用户名>
-
 # 配置 smb.conf
 sudo cp manjaro_smb.conf /etc/samba/smb.conf
+
+# 添加用户
+# 此处可能提示输入两种密码，请仔细检查：
+# sudo 密码：Linux 管理员密码
+# New SMB password：Samba 共享密码，可与 Linux 管理员密码不同
+sudo smbpasswd -a $USER
 
 # Enable Usershares
 # 之后可以直接在 Dolphin 文件管理器中右键共享文件夹
@@ -76,7 +77,7 @@ KDE Manjaro 可以直接在 Dolphin 文件管理器中右键添加：
 
 KUbuntu 应该也行，但可能由于版本较低，不好用
 
-有时候可能会弹出下面的提示，如果能正常用，建议忽略：
+有时候可能会弹出下面的提示，将 `Everyone` 设置为 `---` 即可消除。
 
 ![image-20240603145614449](samba使用教程.assets/image-20240603145614449.png)
 
