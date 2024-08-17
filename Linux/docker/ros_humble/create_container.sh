@@ -25,10 +25,11 @@ docker run -d --name $CONTAINER_NAME --user $USER_NAME \
     --privileged \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env DISPLAY \
     --runtime=nvidia --gpus all --env NVIDIA_DRIVER_CAPABILITIES=all \
+    -v $XDG_RUNTIME_DIR/pulse:/tmp/pulse -e PULSE_SERVER=unix:/tmp/pulse/native -v $HOME/.config/pulse/cookie:/home/$USER_NAME/.config/pulse/cookie \
     -v $HOME/.ssh:/home/$USER_NAME/.ssh \
     -v $HOME/Documents:/home/$USER_NAME/Documents \
     -v $HOME/Downloads:/home/$USER_NAME/Downloads \
     -v $script_dir/.bash_aliases:/home/$USER_NAME/.bash_aliases \
     -v $script_dir/.zshrc:/home/$USER_NAME/.zshrc \
     -v $script_dir/common_rc:/home/$USER_NAME/.local/common_rc \
-    $IMAGE_NAME
+    $IMAGE_NAME sleep infinity

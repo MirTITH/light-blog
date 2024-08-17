@@ -208,6 +208,44 @@ GPU0:
         driverUUID         = 6c6c766d-7069-7065-5555-494400000000
 ```
 
+## Sound
+
+使得 docker 中的程序能发出声音
+
+1. 确保主机上的 PulseAudio 已启动：
+
+   ```shell
+   # 在主机中执行
+   pactl info
+   ```
+
+   如果你看到输出包含 PulseAudio 的信息，那么它已经正常运行。
+
+2. 启动 Docker 镜像时共享音频设备
+
+   ```shell
+   docker run -it \
+       --name=my_audio_container \
+       --device /dev/snd \
+       -v $XDG_RUNTIME_DIR/pulse:/tmp/pulse \
+       -e PULSE_SERVER=unix:/tmp/pulse/native \
+       -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
+       ubuntu:22.04
+   ```
+
+3. 在 Docker 中安装必要的包
+
+   ```shell
+   apt update
+   apt install pulseaudio
+   ```
+
+4. 测试
+
+   ```shell
+   paplay /usr/share/sounds/freedesktop/stereo/audio-channel-front-center.oga
+   ```
+
 # Issues
 
 ## docker build 时无法访问外网

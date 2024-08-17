@@ -6,8 +6,8 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Change Ubuntu source list
-# COPY ubuntu_22.04_ustc.list /etc/apt/sources.list
-COPY ubuntu_22.04_tuna.list /etc/apt/sources.list
+COPY ubuntu_22.04_ustc.list /etc/apt/sources.list
+# COPY ubuntu_22.04_tuna.list /etc/apt/sources.list
 
 # Change ROS 2 source list
 # https://mirrors.osa.moe/ros2/ubuntu
@@ -16,8 +16,9 @@ COPY ubuntu_22.04_tuna.list /etc/apt/sources.list
 ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
 
 RUN rm /etc/apt/sources.list.d/ros2-latest.list
-RUN apt-get install curl gnupg2 && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] $ROS2_MIRROR_URL jammy main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+RUN apt-get update && apt-get install -y curl gnupg2 \ 
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] $ROS2_MIRROR_URL jammy main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
 # Remove docker-clean to enable auto-completion for apt
 RUN rm /etc/apt/apt.conf.d/docker-clean
@@ -38,7 +39,9 @@ WORKDIR /home/$USERNAME
 RUN sudo apt-get update && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
     python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip xauth \
-    git net-tools vim mesa-utils bash-completion nano psmisc
+    git net-tools vim mesa-utils bash-completion nano psmisc pulseaudio \
+    iputils-ping zsh breeze qt5ct fonts-noto-cjk \
+    ros-humble-gazebo-ros-pkgs
 
 # Get rid of EasyInstallDeprecationWarning
 RUN pip install setuptools==58.2.0
@@ -50,19 +53,16 @@ RUN sudo usermod --append --groups video $USERNAME
 
 RUN rosdep update
 
-COPY --chown=$USERNAME:$USERNAME entry_point.sh /entry_point.sh
-
-RUN sudo apt-get update \
-    && sudo apt-get install -y \
-    iputils-ping zsh breeze qt5ct fonts-noto-cjk
-
 # zsh
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
-    && git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
+    && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
     && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+COPY --chown=$USERNAME:$USERNAME .p10k.zsh /home/$USERNAME/
 
 RUN git config --global core.quotepath false
 
 # 保持容器运行
-ENTRYPOINT ["/entry_point.sh"]
+COPY --chown=$USERNAME:$USERNAME entry_point.sh /entry_point.sh
+ENTRYPOINT []
+CMD ["/bin/zsh"]

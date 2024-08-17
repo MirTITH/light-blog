@@ -28,8 +28,6 @@ In docker:
 rviz2
 ```
 
-You 
-
 ## Customize
 
 ### Use zsh
