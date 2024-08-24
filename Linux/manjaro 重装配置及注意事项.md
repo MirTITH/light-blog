@@ -21,17 +21,10 @@
 > 编辑文件 /etc/pacman.d/mirrorlist
 
 ```
-##
-## Manjaro Linux custom mirrorlist
-## Generated on 2023-02-22 11:31
-##
-## Please use 'pacman-mirrors -id' To reset custom mirrorlist
-## Please use 'pacman-mirrors -c all' To reset custom mirrorlist
-## To remove custom config run  'pacman-mirrors -c all'
-##
-
-## Country : China
+# Country : China
 Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
+
+# Country : China
 Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
 ```
 
