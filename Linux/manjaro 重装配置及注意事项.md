@@ -359,6 +359,10 @@ Signature from "User <email@gmail.com>" is unknown trust, installation failed
 
 <https://wiki.archlinuxcn.org/wiki/Pacman#Signature_from_%22User_%3Cemail@gmail.com%3E%22_is_unknown_trust,_installation_failed>
 
+```shell
+sudo pacman -Sy archlinux-keyring manjaro-keyring
+```
+
 ### 关闭 TTY Tab 报警声
 `setterm --blength 0`
 
