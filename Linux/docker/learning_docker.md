@@ -13,12 +13,12 @@ docker image build -t <new_image_name> <Dockerfile_folder>
 
 # 保存、压缩镜像
 # 注：在 Ubuntu 上，zstd 需要另外安装。通常 xz 比 zstd 压缩率高，但速度慢
-docker save my_image:latest | xz -T16 -o my_image.tar.xz # 使用 xz
-docker save my_image:latest | zstd -T16 -10 -o my_image.tar.zst # 使用 zstd
+docker save my_image:latest | xz -T16 -6 -v > my_image.tar.xz # 使用 xz。-T16：使用 16 个线程；-9：压缩等级（0-9，9 最高）；-v 显示进度
+docker save my_image:latest | zstd -T16 -10 -v > my_image.tar.zst # 使用 zstd。-T16：使用 16 个线程；-10：压缩等级（1-19, 19 最高）；-v 显示进度
 
 # 保存、压缩并传输镜像
 docker save my_image:latest | xz | ssh user@target_host 'xz -d | docker load'  # 使用 xz
-docker save my_image:latest | zstd | ssh user@target_host 'zstd -d | docker load' # 使用 zstd
+docker save my_image:latest | zstd --adapt | ssh user@target_host 'zstd -d | docker load' # 使用 zstd. --adapt: Dynamically adapt compression level to I/O conditions.
 
 # 加载镜像
 xz -d -c my_image.tar.xz | docker load # 使用 xz
