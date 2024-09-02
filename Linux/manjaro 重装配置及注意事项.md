@@ -6,33 +6,52 @@
 
 1. 换源
 
-- 方法一（自动配置）
+- 方法一：自动配置
     ```shell
     sudo pacman-mirrors -c China
     ```
 
-- 方法二（图形界面手动选择）
-    ```
+- 方法二：图形界面手动选择
+  
+    ```shell
     sudo pacman-mirrors -i -c China
     ```
+    
+- 方法三：编辑配置文件，可以使用官方源里没有的镜像
 
-- 方法三（编辑配置文件，可以使用官方源里没有的镜像）
+    编辑文件 `/etc/pacman.d/mirrorlist`
 
-> 编辑文件 /etc/pacman.d/mirrorlist
+    ```
+    ## Country : China
+    Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
 
-```
-# Country : China
-Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
+    ## Country : China
+    Server = https://mirrors.sjtug.sjtu.edu.cn/manjaro/stable/$repo/$arch
 
-# Country : China
-Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
-```
+    ## Country : China
+    Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
+
+    ```
+    
+    之后将 `/etc/pacman.d/mirrorlist` 设为只读，防止被自动更改：
+    
+    ```shell
+    # 添加只读属性
+    sudo chattr +a /etc/pacman.d/mirrorlist
+    
+    # 如果想再次修改，需要先删除只读属性
+    sudo chattr -a /etc/pacman.d/mirrorlist
+    
+    # 检查属性
+    lsattr /etc/pacman.d/mirrorlist
+    ```
+
 
 2. 更新系统
 
-```
-sudo pacman -Syu
-```
+    ```shell
+    sudo pacman -Syu
+    ```
 
 ### 调整挂载
 
@@ -116,11 +135,11 @@ kate /etc/pacman.conf /etc/makepkg.conf /etc/paru.conf
 
 并进行如下修改：
 
-| 文件         | 修改                               |
-| ------------ | ---------------------------------- |
-| pacman.conf  | 取消注释：`#Color`                 |
+| 文件         | 修改                                   |
+| ------------ | -------------------------------------- |
+| pacman.conf  | 取消注释：`#Color`                     |
 | makepkg.conf | MAKEFLAGS = "-j2" -> MAKEFLAGS = "-j8" |
-| paru.conf    | 取消注释：`#BottomUp` `#SudoLoop`  |
+| paru.conf    | 取消注释：`#BottomUp` `#SudoLoop`      |
 
 
 ### 删除 firefox

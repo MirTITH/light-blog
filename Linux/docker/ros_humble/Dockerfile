@@ -1,19 +1,20 @@
 FROM osrf/ros:humble-desktop-full
 
 # Create a non-root user
-ARG USERNAME=ros
+ARG USERNAME=docker_user
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Change Ubuntu source list
-COPY ubuntu_22.04_ustc.list /etc/apt/sources.list
+# COPY ubuntu_22.04_ustc.list /etc/apt/sources.list
 # COPY ubuntu_22.04_tuna.list /etc/apt/sources.list
+COPY ubuntu_22.04_osa.list /etc/apt/sources.list
+
 
 # Change ROS 2 source list
-# https://mirrors.osa.moe/ros2/ubuntu
-# https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu
-# https://mirrors.ustc.edu.cn/ros2/ubuntu
-ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
+# ARG ROS2_MIRROR_URL=https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu
+# ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
+ARG ROS2_MIRROR_URL=https://mirrors.osa.moe/ros2/ubuntu
 
 RUN rm /etc/apt/sources.list.d/ros2-latest.list
 RUN apt-get update && apt-get install -y curl gnupg2 \ 
@@ -38,9 +39,9 @@ WORKDIR /home/$USERNAME
 # Install some dependencies packages
 RUN sudo apt-get update && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
-    python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip xauth \
-    git net-tools vim mesa-utils bash-completion nano psmisc pulseaudio \
+    git net-tools vim bash-completion psmisc pulseaudio gdb \
     iputils-ping zsh breeze qt5ct fonts-noto-cjk \
+    python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip \
     ros-humble-gazebo-ros-pkgs
 
 # Get rid of EasyInstallDeprecationWarning
@@ -62,7 +63,9 @@ COPY --chown=$USERNAME:$USERNAME .p10k.zsh /home/$USERNAME/
 
 RUN git config --global core.quotepath false
 
+RUN mkdir -p /home/$USERNAME/.config
+
 # 保持容器运行
-COPY --chown=$USERNAME:$USERNAME entry_point.sh /entry_point.sh
+# COPY --chown=$USERNAME:$USERNAME entry_point.sh /entry_point.sh
 ENTRYPOINT []
 CMD ["/bin/zsh"]

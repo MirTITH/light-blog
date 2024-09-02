@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER_NAME=ros
+USER_NAME=docker_user
 
 IMAGE_NAME=$1
 CONTAINER_NAME=$2
