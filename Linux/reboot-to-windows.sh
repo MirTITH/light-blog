@@ -2,7 +2,7 @@
 
 set -e
 
-search_result=$(efibootmgr | grep ubuntu)
+search_result=$(efibootmgr | grep Windows)
 boot_id=${search_result:4:4}
 
 # echo --------------------

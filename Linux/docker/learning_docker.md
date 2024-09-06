@@ -103,7 +103,9 @@ docker system prune #  remove all unused containers, images, networks, and build
 3. 有时需要在主机上执行以下命令（每次开机只需要执行一次）
 
     ```shell
-    xhost + # 允许 docker 内的程序访问主机中的 X 服务器，从而能在主机中显示
+    xhost +local:docker # 允许 docker 内的程序访问主机中的 X 服务器，从而能在主机中显示
+    # or
+    xhost + # Allow all users to display
     ```
 
 5. 测试验证
@@ -157,9 +159,18 @@ sudo apt install mesa-utils
 glxinfo | grep "OpenGL version"
 ```
 
-检查输出，如果类似 `OpenGL version string: 4.6.0 NVIDIA 550.107.02`，则有 GPU 加速
+检查输出，如果类似 `OpenGL version string: 4.6.0 NVIDIA 550.107.02`，则有 NVIDIA GPU 加速
 
 如果类似 `OpenGL version string: 4.5 (Compatibility Profile) Mesa 24.0.9-0ubuntu0.1`，则没有 GPU 加速
+
+For AMD GPUs use the following cmd:
+
+```shell
+glxinfo | grep '^direct rendering:'
+```
+
+If you got `direct rendering: Yes` then you have 3D acceleration
+
 
 #### 测试 Vulkan
 
