@@ -24,13 +24,13 @@
     ```
     ## Country : China
     Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
-
+    
     ## Country : China
     Server = https://mirrors.sjtug.sjtu.edu.cn/manjaro/stable/$repo/$arch
-
+    
     ## Country : China
     Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
-
+    
     ```
     
     之后将 `/etc/pacman.d/mirrorlist` 设为只读，防止被自动更改：
@@ -247,7 +247,14 @@ git config --global core.quotepath false
 ### 其他软件
 - gdb
 - cmake ninja make
-- linuxqq
+- linuxqq-nt-bwrap
+    - slirp4netns: 固定 MAC 地址时需要
+    - socat: 固定 MAC 地址时需要
+    - 沙盒目录挂载配置文件：将文件 `config_files/qq-bwrap-flags.conf` 复制到 `~/.config/`
+
+- wechat-universal-bwrap
+    - 沙盒目录挂载配置文件：将文件夹 `config_files/wechat-universal/` 复制到 `~/.config/`
+
 - qqmusic
 - netease-cloud-music
 - noto-fonts-cjk
