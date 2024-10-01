@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 search_result=$(efibootmgr | grep Manjaro)
 boot_id=${search_result:4:4}
 

@@ -74,3 +74,15 @@ vim ~/.tmux.conf
 set-option -g mouse on
 ```
 
+## Force GpenGL software rendering
+
+```shell
+LIBGL_ALWAYS_SOFTWARE=1 ./the_program_name
+
+# or
+QT_XCB_FORCE_SOFTWARE_OPENGL=1 ./the_program_name
+
+# or
+export LIBGL_ALWAYS_SOFTWARE=1
+./the_program_name
+```

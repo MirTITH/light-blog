@@ -47,7 +47,6 @@ docker run -d --name $CONTAINER_NAME --user $USER_NAME \
     --network=host --ipc=host \
     --privileged \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw --env DISPLAY \
-    --runtime=nvidia --gpus all --env NVIDIA_DRIVER_CAPABILITIES=all \
     -v $XDG_RUNTIME_DIR/pulse:/tmp/pulse -e PULSE_SERVER=unix:/tmp/pulse/native -v $HOME/.config/pulse/cookie:/home/$USER_NAME/.config/pulse/cookie \
     -v $HOME/.ssh:/home/$USER_NAME/.ssh \
     -v $HOME/.gitconfig:/home/$USER_NAME/.gitconfig \
