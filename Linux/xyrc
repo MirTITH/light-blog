@@ -48,3 +48,7 @@ rr() {
 }
 
 alias rosdep_install='rosdep install --from-paths src --ignore-src -r -y'
+
+findsilent() {
+    find "$@" 2>/dev/null
+}
