@@ -4,6 +4,18 @@ proxy_on() {
     export all_proxy=socks5://localhost:7890
 }
 
+proxy_clash() {
+    export http_proxy=http://localhost:7890
+    export https_proxy=http://localhost:7890
+    export all_proxy=socks5://localhost:7890
+}
+
+proxy_v2ray() {
+    export http_proxy=http://localhost:1081
+    export https_proxy=http://localhost:1081
+    export all_proxy=socks5://localhost:1080
+}
+
 proxy_off() {
     unset http_proxy
     unset https_proxy
