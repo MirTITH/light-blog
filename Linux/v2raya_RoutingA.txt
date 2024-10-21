@@ -1,5 +1,5 @@
 # 配置一个直连端口
-inbound: http_direct = http(address: 0.0.0.0, port: 30000)
+inbound:http_direct=socks(address: 0.0.0.0, port: 30000, udp:true)
 inboundTag(http_direct) -> direct
 
 default: proxy
@@ -8,7 +8,7 @@ default: proxy
 domain(domain:mail.qq.com)->direct
 domain(domain:hf-mirror.com)->direct
 domain(domain:bing.com)->proxy
-domain(domain:gemini.google.com)->gemini
+domain(domain:gemini.google.com)->proxy
 
 domain(geosite:google-scholar)->proxy
 domain(geosite:category-scholar-!cn, geosite:category-scholar-cn)->direct
