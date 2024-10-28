@@ -214,7 +214,7 @@ class DockerCmdGenerator:
 def main():
     parser = argparse.ArgumentParser(
         description="Create a container",
-        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-noetic yj10-noetic --rc-file common_rc -v ~/Documents/:Documents -v ~/Downloads/:Download --user-data ~/Documents/yj10_ros/",
+        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-noetic yj10-noetic --rc-file common_rc -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data ~/Documents/yj10_ros/",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
