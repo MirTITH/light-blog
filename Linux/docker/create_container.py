@@ -6,6 +6,14 @@ import subprocess
 import argparse
 from typing import List
 
+# 定义颜色代码
+RED = "\033[31m"
+GREEN = "\033[32m"
+BLUE = "\033[34m"
+YELLOW_BACKGROUND = "\033[43m"
+BOLD = "\033[1m"
+RESET = "\033[0m"  # 重置为默认样式
+
 
 def ask_user_to_continue(prompt: str = "Continue?") -> bool:
     """Ask the user if they want to continue
@@ -18,6 +26,16 @@ def ask_user_to_continue(prompt: str = "Continue?") -> bool:
     return input().lower() in ["y", ""]
 
 
+def format_cmd(cmd: List[str]):
+    result = ""
+    for arg in cmd:
+        if arg.startswith("-"):
+            result += f"\n    {arg}"
+        else:
+            result += f" {arg}"
+    return result
+
+
 class DockerCmdGenerator:
     def __init__(self, args):
         self.image_name: str = getattr(args, "image-name")
@@ -26,10 +44,17 @@ class DockerCmdGenerator:
         self.user_data_dir: str = getattr(args, "user_data", None)
         self.no_nv: bool = getattr(args, "no_nv", False)
 
+        self.rc_file: str = getattr(args, "rc_file", None)
+        if self.rc_file is not None:
+            self.rc_file = self.__to_host_abs_path(self.rc_file)
+
         self.volumes: List[str] = getattr(args, "volume")
         if not self.volumes:
             self.volumes = []
 
+        # -d: Run the container in the background
+        # --name: Name of the container
+        # --user: User to run the container as
         self.cmd_prefix = ["docker", "run", "-d", "--name", self.container_name, "--user", self.container_user_name]
         self.cmd_postfix = [self.image_name, "sleep", "infinity"]
 
@@ -40,7 +65,8 @@ class DockerCmdGenerator:
 
     def run_cmd(self):
         cmd = self.generate_cmd()
-        print(f"Running command: {' '.join(cmd)}")
+
+        print(f"Running command:\n{format_cmd(cmd)}")
 
         if ask_user_to_continue():
             print("Creating container...")
@@ -121,10 +147,10 @@ class DockerCmdGenerator:
                 print(f"Warning: {host_abs_path} does not exist")
 
         if options:
-            print(f"Mounting {host_abs_path} to {container_abs_path} with options: {options}")
+            print(f"Mounting {BLUE}{host_abs_path}{RESET} -> {GREEN}{container_abs_path}{RESET} with options: {options}")
             return ["-v", f"{host_abs_path}:{container_abs_path}:{options}"]
         else:
-            print(f"Mounting {host_abs_path} to {container_abs_path}")
+            print(f"Mounting {BLUE}{host_abs_path}{RESET} -> {GREEN}{container_abs_path}{RESET}")
             return ["-v", f"{host_abs_path}:{container_abs_path}"]
 
     def __get_volumes_mount_args(self) -> List[str]:
@@ -142,7 +168,7 @@ class DockerCmdGenerator:
 
         XDG_RUNTIME_DIR = os.getenv("XDG_RUNTIME_DIR")
         HOME = os.getenv("HOME")
-        SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+        # SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
         cmd_args = []
 
@@ -152,6 +178,7 @@ class DockerCmdGenerator:
         # Enable X11 GUI
         cmd_args.extend(self.__get_mount_args("/tmp/.X11-unix", "/tmp/.X11-unix", path_type="dir", options="rw"))
         cmd_args.extend(["--env", "DISPLAY"])
+        cmd_args.extend(["--env", "QT_X11_NO_MITSHM=1"])
 
         # Enable NVIDIA GPU
         if not self.no_nv:
@@ -168,8 +195,9 @@ class DockerCmdGenerator:
         # Mount .gitconfig
         cmd_args.extend(self.__get_mount_args(f"{HOME}/.gitconfig", f"{CONTAINER_HOME}/.gitconfig", "file"))
 
-        # Mount some files in SCRIPT_DIR
-        cmd_args.extend(self.__get_mount_args(f"{SCRIPT_DIR}/common_rc", f"{CONTAINER_HOME}/.local/common_rc", "file"))
+        # Mount rc_file
+        if self.rc_file:
+            cmd_args.extend(self.__get_mount_args(f"{self.rc_file}", f"{CONTAINER_HOME}/.local/common_rc", "file"))
 
         # Mount user data directory
         if self.user_data_dir:
@@ -184,18 +212,30 @@ class DockerCmdGenerator:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Create a container")
+    parser = argparse.ArgumentParser(
+        description="Create a container",
+        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-noetic yj10-noetic --rc-file common_rc -v ~/Documents/:Documents -v ~/Downloads/:Download --user-data ~/Documents/yj10_ros/",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
     parser.add_argument("image-name", help="The name of the image to create the container from")
     parser.add_argument("container-name", help="The name of the container to create")
+    parser.add_argument("--rc-file", help="The rc file to source in the container")
     parser.add_argument("--user-name", help="The user to run the container as.", default="docker_user")
     parser.add_argument("--user-data", help="The directory to store user data. Will be mounted to /home/<user_name>/user_data")
     parser.add_argument("--no-nv", help="Do not enable NVIDIA GPU", action="store_true")
     parser.add_argument("--volume", "-v", help="Mount a volume from the host to the container", action="append")
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args()
+    except SystemExit:
+        # 解析失败时打印帮助信息
+        parser.print_help()
+        sys.exit(1)
 
     # Print arguments
+    print("Arguments:")
     for arg in vars(args):
-        print(f"{arg}: {getattr(args, arg)}")
+        print(f"    {arg}: {getattr(args, arg)}")
 
     docker_cmd_generator = DockerCmdGenerator(args)
     docker_cmd_generator.run_cmd()

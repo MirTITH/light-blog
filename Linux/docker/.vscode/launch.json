@@ -1,0 +1,28 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "create_container.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "create_container.py",
+            "console": "integratedTerminal",
+            "args": [
+                "my-ros-noetic",
+                "yj10-noetic",
+                "--rc-file",
+                "ros-noetic/common_rc",
+                "--no-nv",
+                "--user-data",
+                "~/Documents/yj10_ros/",
+                "-v",
+                "~/Documents/:Documents",
+                "-v",
+                "~/Downloads/:Downloads"
+            ]
+        }
+    ]
+}
