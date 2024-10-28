@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop-full
+FROM osrf/ros:noetic-desktop-full
 
 # Create a non-root user
 ARG USERNAME=docker_user
@@ -6,20 +6,21 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Change Ubuntu source list
-# COPY ubuntu_22.04_ustc.list /etc/apt/sources.list
-# COPY ubuntu_22.04_tuna.list /etc/apt/sources.list
-COPY ubuntu_22.04_osa.list /etc/apt/sources.list
+# COPY ubuntu_20.04_ustc.list /etc/apt/sources.list
+# COPY ubuntu_20.04_tuna.list /etc/apt/sources.list
+COPY ubuntu_20.04_osa.list /etc/apt/sources.list
 
 
 # Change ROS 2 source list
-# ARG ROS2_MIRROR_URL=https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu
-# ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
-ARG ROS2_MIRROR_URL=https://mirrors.osa.moe/ros2/ubuntu
+# ARG ROS_MIRROR_URL=https://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu
+# ARG ROS_MIRROR_URL=https://mirrors.ustc.edu.cn/ros/ubuntu
+ARG ROS_MIRROR_URL=https://mirrors.osa.moe/ros/ubuntu/
 
-RUN rm /etc/apt/sources.list.d/ros2-latest.list
-RUN apt-get update && apt-get install -y curl gnupg2 \ 
-    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] $ROS2_MIRROR_URL jammy main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+RUN rm /etc/apt/sources.list.d/ros1-latest.list \
+    && apt-get update && apt-get install curl \
+    && sh -c 'echo "deb $ROS_MIRROR_URL $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' \
+    && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
+    && apt-get update
 
 # Remove docker-clean to enable auto-completion for apt
 RUN rm /etc/apt/apt.conf.d/docker-clean
@@ -39,17 +40,9 @@ WORKDIR /home/$USERNAME
 # Install some dependencies packages
 RUN sudo apt-get update && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
-    git net-tools vim bash-completion psmisc pulseaudio gdb \
-    iputils-ping zsh breeze qt5ct fonts-noto-cjk wget \
-    python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip
-
-# Install Gazebo
-RUN sudo apt-get update && sudo apt-get install -y ros-humble-gazebo-ros-pkgs
-
-# Get rid of EasyInstallDeprecationWarning
-RUN pip install setuptools==58.2.0
-
-RUN colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && colcon mixin update default
+    git net-tools vim bash-completion psmisc pulseaudio gdb wget \
+    iputils-ping zsh breeze qt5ct fonts-noto-cjk python3-pip \
+    python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential 
 
 # Add user to video group to allow access to webcam
 RUN sudo usermod --append --groups video $USERNAME
