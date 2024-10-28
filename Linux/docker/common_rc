@@ -44,6 +44,10 @@ hf_endpoint() {
     fi
 }
 
+findsilent() {
+    find "$@" 2>/dev/null
+}
+
 alias rosdep_install='rosdep install --from-paths src --ignore-src -r -y'
 
 export PATH=$HOME/.local/bin:$PATH
