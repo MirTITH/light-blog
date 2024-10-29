@@ -17,7 +17,7 @@ docker save my_image:latest | xz -T16 -6 -v > my_image.tar.xz # 使用 xz。-T16
 docker save my_image:latest | zstd -T16 -10 -v > my_image.tar.zst # 使用 zstd。-T16：使用 16 个线程；-10：压缩等级（1-19, 19 最高）；-v 显示进度
 
 # 保存、压缩并传输镜像
-docker save my_image:latest | xz | ssh user@target_host 'cat > my_image.tar.xz'  # 使用 xz
+docker save my_image:latest | xz -T16 -9 -v | ssh user@target_host 'cat > my_image.tar.xz'  # 使用 xz
 
 # 保存、压缩、传输并加载镜像
 docker save my_image:latest | xz | ssh user@target_host 'xz -d | docker load'  # 使用 xz
