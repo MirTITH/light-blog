@@ -45,6 +45,8 @@ class DockerCmdGenerator:
         self.no_nv: bool = getattr(args, "no_nv", False)
 
         self.rc_file: str = getattr(args, "rc_file", None)
+        if getattr(args, "no_rc_file", False):
+            self.rc_file = None
         if self.rc_file is not None:
             self.rc_file = self.__to_host_abs_path(self.rc_file)
 
@@ -58,6 +60,14 @@ class DockerCmdGenerator:
         self.cmd_prefix = ["docker", "run", "-d", "--name", self.container_name, "--user", self.container_user_name]
         self.cmd_postfix = [self.image_name, "sleep", "infinity"]
 
+        print(f"Image name: {self.image_name}")
+        print(f"Container name: {self.container_name}")
+        print(f"Container user name: {self.container_user_name}")
+        print(f"User data directory: {self.user_data_dir}")
+        print(f"Do not enable NVIDIA GPU: {self.no_nv}")
+        print(f"RC file: {self.rc_file}")
+        print(f"Volumes: {self.volumes}")
+
     def generate_cmd(self) -> List[str]:
         cmd_args = self.__get_cmd_args()
         cmd = self.cmd_prefix + cmd_args + self.cmd_postfix
@@ -66,7 +76,7 @@ class DockerCmdGenerator:
     def run_cmd(self):
         cmd = self.generate_cmd()
 
-        print(f"Running command:\n{format_cmd(cmd)}")
+        print(f"Running command:\n {format_cmd(cmd)}")
 
         if ask_user_to_continue():
             print("Creating container...")
@@ -75,7 +85,7 @@ class DockerCmdGenerator:
                 print("Failed to create container")
                 sys.exit(1)
             print("Done.\n\nYou can attach to the container using vscode or by running the following command:")
-            print(f"    docker exec -it {self.container_name} /bin/bash\n")
+            print(f"    docker exec -it {self.container_name} bash\n")
             print("To remove the container, run the following command:")
             print(f"    docker rm -f {self.container_name}")
         else:
@@ -220,7 +230,8 @@ def main():
 
     parser.add_argument("image-name", help="The name of the image to create the container from")
     parser.add_argument("container-name", help="The name of the container to create")
-    parser.add_argument("--rc-file", help="The rc file to source in the container")
+    parser.add_argument("--rc-file", help="The rc file to source in the container", default="common_rc")
+    parser.add_argument("--no-rc-file", help="Do not mount the rc file", action="store_true")
     parser.add_argument("--user-name", help="The user to run the container as.", default="docker_user")
     parser.add_argument("--user-data", help="The directory to store user data. Will be mounted to /home/<user_name>/user_data")
     parser.add_argument("--no-nv", help="Do not enable NVIDIA GPU", action="store_true")
@@ -232,10 +243,10 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    # Print arguments
-    print("Arguments:")
-    for arg in vars(args):
-        print(f"    {arg}: {getattr(args, arg)}")
+    # # Print arguments
+    # print("Arguments:")
+    # for arg in vars(args):
+    #     print(f"    {arg}: {getattr(args, arg)}")
 
     docker_cmd_generator = DockerCmdGenerator(args)
     docker_cmd_generator.run_cmd()
