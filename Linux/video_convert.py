@@ -115,7 +115,7 @@ def main():
     for arg in vars(args):
         print(f"{arg}: {getattr(args, arg)}")
 
-    if hasattr(args, "size"):
+    if getattr(args, "size", None) is not None:
         ffmpeg_args.extend(["-vf", f"scale={args.size}"])
 
     src = args.src
