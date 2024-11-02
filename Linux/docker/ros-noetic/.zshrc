@@ -88,7 +88,9 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-source $HOME/.local/common_rc
+if [[ -f ~/.local/common_rc ]]; then
+    source ~/.local/common_rc
+fi
 
 rr() {
     source /opt/ros/noetic/setup.zsh

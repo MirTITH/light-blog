@@ -67,7 +67,11 @@ COPY --chown=$USERNAME:$USERNAME .bash_aliases /home/$USERNAME/
 
 RUN git config --global core.quotepath false
 
+# Create some directories to avoid permission issues
+# For example, when creating container with `-v /path/to/host_file:/home/$USERNAME/.config/file`,
+# the `.config` directory will be created with root permission, and the user will not be able to write to it.
 RUN mkdir -p /home/$USERNAME/.config
+RUN mkdir -p /home/$USERNAME/.local
 
 ENTRYPOINT []
 CMD ["/bin/zsh"]
