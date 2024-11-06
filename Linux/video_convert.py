@@ -1,10 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
 
-import argparse
+import argparse, argcomplete
 import os
 from colorama import Fore, init
 import subprocess
 from tqdm import tqdm
+import shutil
 
 init(autoreset=True)
 
@@ -49,16 +51,18 @@ def get_all_files_in_dir(dir_path: str, extenstion: set = None) -> list:
     return result
 
 
-def convert_video(src: str, dst: str, args: list = None, ffmpeg_path: str = "ffmpeg"):
+def convert_video(src: str, dst: str, args: list, ffmpeg_path: str = "ffmpeg", copy_if_larger: bool = False) -> dict:
     """Convert video in src to dst
 
     Args:
         src (str): Source file
         dst (str): Destination file
         args (list, optional): Arguments for ffmpeg. Defaults to None.
+
+    Returns:
+        dict: Result of the conversion
     """
-    if not args:
-        args = ["-c:v", "libx264", "-crf", "23", "-c:a", "copy"]
+    result = {"success": False, "copied": False}
 
     # Use temp file to avoid overwriting dst file
     temp_dst = get_temp_file_name(dst)
@@ -67,10 +71,24 @@ def convert_video(src: str, dst: str, args: list = None, ffmpeg_path: str = "ffm
     print(" ".join(cmd))
 
     run_result = subprocess.run(cmd)
+    result["success"] = run_result.returncode == 0
+
+    if copy_if_larger:
+        src_size = os.path.getsize(src)
+        output_size = os.path.getsize(temp_dst)
+        print(f"Source size: {src_size} bytes, Output size: {output_size} bytes")
+        if output_size > src_size:
+            print(f"{Fore.RED}Output size is larger than source size.")
+            os.remove(temp_dst)
+            print(f"Copying {Fore.BLUE}{src}{Fore.RESET} to {Fore.GREEN}{dst}")
+            shutil.copyfile(src, dst)
+            result["copied"] = True
 
     # Rename temp file to dst
-    if run_result.returncode == 0:
+    if result["success"] and not result["copied"]:
         os.rename(temp_dst, dst)
+
+    return result
 
 
 def make_dst_path(src_path: str, dst_folder: str, extenstion: str = None) -> str:
@@ -99,24 +117,29 @@ def main():
     parser = argparse.ArgumentParser(description="Convert video in src to dst")
     parser.add_argument("src", help="Src folder or file")
     parser.add_argument("dst", help="Dst folder or file")
-    parser.add_argument("--format", help="Output format. If you don't want to change the format, specify 'copy'.", default="mp4")
-    parser.add_argument("-s", "--size", help="Output size")
+    parser.add_argument("--format", help="Output format. If you don't want to change the format, specify 'copy'.", default="copy")
+    parser.add_argument("-s", "--scale", help="Output scale")
+    parser.add_argument("--copy-if-larger", help="Delete output file if it is larger than the source file", action="store_true")
+    argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     video_ext = {".mp4", ".mkv", ".avi", ".mov"}
 
     # ultrafast, superfast, veryfast, faster, medium, slow, slower, veryslow
     # ffmpeg_args = ["-c:v", "copy", "-c:a", "copy"]
-    ffmpeg_args = ["-c:v", "libx265", "-crf", "20", "-preset", "medium", "-c:a", "copy"]
+    ffmpeg_args = ["-c:v", "libx265", "-crf", "23", "-preset", "veryslow", "-c:a", "copy"]
     # ffmpeg_args = ["-c:v", "libx265", "-crf", "23", "-preset", "veryslow", "-c:a", "aac", "-b:a", "256k"]
     # ffmpeg_args = ["-c:v", "libx265", "-crf", "23", "-preset", "veryslow", "-c:a", "libfdk_aac", "-vbr", "5"]
 
     # Print arguments
+    print("Arguments:")
     for arg in vars(args):
         print(f"{arg}: {getattr(args, arg)}")
 
-    if getattr(args, "size", None) is not None:
-        ffmpeg_args.extend(["-vf", f"scale={args.size}"])
+    if getattr(args, "scale", None) is not None:
+        ffmpeg_args.extend(["-vf", f"scale={args.scale}"])
+
+    print("FFmpeg arguments: " + " ".join(ffmpeg_args))
 
     src = args.src
     dst = args.dst
@@ -152,7 +175,7 @@ def main():
     print("Files to convert:")
     for src_rfile, dst_file in zip(src_rfiles, dst_files):
         src_file = os.path.join(src_wd, src_rfile)
-        print(f"{Fore.BLUE}{src_file} -> {Fore.GREEN}{dst_file}")
+        print(f"{Fore.BLUE}{src_file}{Fore.RESET} -> {Fore.GREEN}{dst_file}")
         temp_file = get_temp_file_name(dst_file)
         if os.path.exists(temp_file):
             if ask_user_to_continue(f"Temp file '{temp_file}' already exists. Delete?"):
@@ -161,6 +184,9 @@ def main():
     if not ask_user_to_continue(f"Convert {len(src_rfiles)} videos?"):
         return
 
+    success_files = []
+    converted_files = []
+    copied_files = []
     for src_rfile, dst_file in tqdm(zip(src_rfiles, dst_files), total=len(src_rfiles)):
         src_file = os.path.join(src_wd, src_rfile)
         if os.path.exists(dst_file):
@@ -169,12 +195,26 @@ def main():
         dst_dir = os.path.dirname(dst_file)
         if not os.path.exists(dst_dir):
             os.makedirs(dst_dir)
-        convert_video(
+        convert_result = convert_video(
             src_file,
             dst_file,
             ffmpeg_args,
             # ffmpeg_path="/home/nros/.local/ffmpeg_build/bin/ffmpeg",
+            copy_if_larger=args.copy_if_larger,
         )
+        if convert_result["success"]:
+            success_files.append(src_file)
+            if not convert_result["copied"]:
+                converted_files.append(src_file)
+            elif convert_result["copied"]:
+                copied_files.append(src_file)
+
+    print(f"Successfully processed {len(success_files)} files:")
+    print(f"  Converted {len(converted_files)} files.")
+    if len(copied_files) > 0:
+        print(f"  Copied {len(copied_files)} files:")
+        for file in copied_files:
+            print(f"    {file}")
 
 
 if __name__ == "__main__":
