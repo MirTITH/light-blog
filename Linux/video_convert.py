@@ -7,8 +7,9 @@ from colorama import Fore, init
 import subprocess
 from tqdm import tqdm
 import shutil
+from enum import Enum
 
-init(autoreset=True)
+init(autoreset=True)  # For colorama: reset color after each print
 
 
 def ask_user_to_continue(prompt: str = "Continue?") -> bool:
@@ -22,9 +23,9 @@ def ask_user_to_continue(prompt: str = "Continue?") -> bool:
     return input().lower() in ["y", ""]
 
 
-def get_temp_file_name(file_path: str) -> str:
+def get_temp_file_name(file_path: str, postfix: str = "_temp") -> str:
     name, ext = os.path.splitext(file_path)
-    return name + "_temp" + ext
+    return name + postfix + ext
 
 
 def get_all_files_in_dir(dir_path: str, extenstion: set = None) -> list:
@@ -51,7 +52,73 @@ def get_all_files_in_dir(dir_path: str, extenstion: set = None) -> list:
     return result
 
 
-def convert_video(src: str, dst: str, args: list, ffmpeg_path: str = "ffmpeg", copy_if_larger: bool = False) -> dict:
+def remix_copy(src: str, dst: str, ffmpeg_path: str = "ffmpeg") -> bool:
+    """Remix video in src to dst
+
+    Args:
+        src (str): Source file
+        dst (str): Destination file
+
+    Returns:
+        bool: True if successful
+    """
+    result = False
+
+    # Use temp file to avoid overwriting dst file
+    temp_dst = get_temp_file_name(dst, "_copy")
+
+    cmd = [ffmpeg_path, "-i", src, "-c:v", "copy", "-c:a", "copy", temp_dst]
+    print(" ".join(cmd))
+
+    run_result = subprocess.run(cmd)
+    result = run_result.returncode == 0
+
+    # Rename temp file to dst
+    if result:
+        os.rename(temp_dst, dst)
+
+    return result
+
+
+def copy_or_remix_video(src: str, dst: str, ffmpeg_path: str = "ffmpeg") -> dict:
+    """Copy video if the source and destination have the same extension. Otherwise, remix the video.
+
+    Args:
+        src (str): Source file
+        dst (str): Destination file
+
+    Returns:
+        bool: True if successful
+    """
+
+    result = {"success": False, "remix": False}
+
+    src_ext = os.path.splitext(src)[1]
+    dst_ext = os.path.splitext(dst)[1]
+
+    if src_ext.lower() == dst_ext.lower():
+        print(f"Copying {Fore.BLUE}{src}{Fore.RESET} to {Fore.GREEN}{dst}")
+        shutil.copyfile(src, dst)
+        result["success"] = True
+        result["remix"] = False
+    else:
+        print(f"Remixing {Fore.BLUE}{src}{Fore.RESET} to {Fore.GREEN}{dst}")
+        remix_result = remix_copy(src, dst, ffmpeg_path)
+        if remix_result:
+            result["success"] = True
+            result["remix"] = True
+
+    return result
+
+
+class VideoConvertResult(Enum):
+    FAILED = 0
+    CONVERTED = 1
+    COPIED = 2
+    REMIXED = 3
+
+
+def convert_video(src: str, dst: str, args: list, ffmpeg_path: str = "ffmpeg", copy_if_larger: bool = False) -> VideoConvertResult:
     """Convert video in src to dst
 
     Args:
@@ -62,7 +129,6 @@ def convert_video(src: str, dst: str, args: list, ffmpeg_path: str = "ffmpeg", c
     Returns:
         dict: Result of the conversion
     """
-    result = {"success": False, "copied": False}
 
     # Use temp file to avoid overwriting dst file
     temp_dst = get_temp_file_name(dst)
@@ -70,8 +136,10 @@ def convert_video(src: str, dst: str, args: list, ffmpeg_path: str = "ffmpeg", c
     cmd = [ffmpeg_path, "-i", src, *args, temp_dst]
     print(" ".join(cmd))
 
-    run_result = subprocess.run(cmd)
-    result["success"] = run_result.returncode == 0
+    convert_result = subprocess.run(cmd).returncode == 0
+
+    if not convert_result:
+        return VideoConvertResult.FAILED
 
     if copy_if_larger:
         src_size = os.path.getsize(src)
@@ -79,16 +147,20 @@ def convert_video(src: str, dst: str, args: list, ffmpeg_path: str = "ffmpeg", c
         print(f"Source size: {src_size} bytes, Output size: {output_size} bytes")
         if output_size > src_size:
             print(f"{Fore.RED}Output size is larger than source size.")
-            os.remove(temp_dst)
-            print(f"Copying {Fore.BLUE}{src}{Fore.RESET} to {Fore.GREEN}{dst}")
-            shutil.copyfile(src, dst)
-            result["copied"] = True
+            copy_result = copy_or_remix_video(src, dst)
+            if copy_result["success"]:
+                os.remove(temp_dst)
+                if copy_result["remix"]:
+                    return VideoConvertResult.REMIXED
+                else:
+                    return VideoConvertResult.COPIED
+            else:
+                print(f"{Fore.RED}Failed to copy file. Use converted file even if it is larger.")
 
     # Rename temp file to dst
-    if result["success"] and not result["copied"]:
-        os.rename(temp_dst, dst)
+    os.rename(temp_dst, dst)
 
-    return result
+    return VideoConvertResult.CONVERTED
 
 
 def make_dst_path(src_path: str, dst_folder: str, extenstion: str = None) -> str:
@@ -125,11 +197,17 @@ def main():
 
     video_ext = {".mp4", ".mkv", ".avi", ".mov"}
 
+    # Video arguments
     # ultrafast, superfast, veryfast, faster, medium, slow, slower, veryslow
-    # ffmpeg_args = ["-c:v", "copy", "-c:a", "copy"]
-    ffmpeg_args = ["-c:v", "libx265", "-crf", "23", "-preset", "veryslow", "-c:a", "copy"]
-    # ffmpeg_args = ["-c:v", "libx265", "-crf", "23", "-preset", "veryslow", "-c:a", "aac", "-b:a", "256k"]
-    # ffmpeg_args = ["-c:v", "libx265", "-crf", "23", "-preset", "veryslow", "-c:a", "libfdk_aac", "-vbr", "5"]
+    ffmpeg_video_args = ["-c:v", "libx265", "-crf", "23", "-preset", "veryslow"]
+
+    # Audio arguments
+    ffmpeg_audio_args = ["-c:a", "copy"]
+    # ffmpeg_audio_args = ["-c:a", "libfdk_aac", "-vbr", "4"]
+    # ffmpeg_audio_args = ["-c:a", "aac", "-b:a", "256k"]
+    # ffmpeg_audio_args = ["-c:a", "aac", "-q:a", "2"]
+
+    ffmpeg_args = ffmpeg_video_args + ffmpeg_audio_args
 
     # Print arguments
     print("Arguments:")
@@ -176,10 +254,16 @@ def main():
     for src_rfile, dst_file in zip(src_rfiles, dst_files):
         src_file = os.path.join(src_wd, src_rfile)
         print(f"{Fore.BLUE}{src_file}{Fore.RESET} -> {Fore.GREEN}{dst_file}")
+
         temp_file = get_temp_file_name(dst_file)
         if os.path.exists(temp_file):
             if ask_user_to_continue(f"Temp file '{temp_file}' already exists. Delete?"):
                 os.remove(temp_file)
+
+        copy_file = get_temp_file_name(dst_file, "_copy")
+        if os.path.exists(copy_file):
+            if ask_user_to_continue(f"Copy file '{copy_file}' already exists. Delete?"):
+                os.remove(copy_file)
 
     if not ask_user_to_continue(f"Convert {len(src_rfiles)} videos?"):
         return
@@ -187,6 +271,7 @@ def main():
     success_files = []
     converted_files = []
     copied_files = []
+    remixed_files = []
     for src_rfile, dst_file in tqdm(zip(src_rfiles, dst_files), total=len(src_rfiles)):
         src_file = os.path.join(src_wd, src_rfile)
         if os.path.exists(dst_file):
@@ -202,18 +287,25 @@ def main():
             # ffmpeg_path="/home/nros/.local/ffmpeg_build/bin/ffmpeg",
             copy_if_larger=args.copy_if_larger,
         )
-        if convert_result["success"]:
+        if convert_result != VideoConvertResult.FAILED:
             success_files.append(src_file)
-            if not convert_result["copied"]:
+            if convert_result == VideoConvertResult.CONVERTED:
                 converted_files.append(src_file)
-            elif convert_result["copied"]:
+            elif convert_result == VideoConvertResult.COPIED:
                 copied_files.append(src_file)
+            elif convert_result == VideoConvertResult.REMIXED:
+                remixed_files.append(src_file)
 
     print(f"Successfully processed {len(success_files)} files:")
     print(f"  Converted {len(converted_files)} files.")
     if len(copied_files) > 0:
         print(f"  Copied {len(copied_files)} files:")
         for file in copied_files:
+            print(f"    {file}")
+
+    if len(remixed_files) > 0:
+        print(f"  Remixed {len(remixed_files)} files:")
+        for file in remixed_files:
             print(f"    {file}")
 
 
