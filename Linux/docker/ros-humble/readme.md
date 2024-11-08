@@ -1,20 +1,29 @@
 # ROS Humble Docker
 
-## 1-2
+## Build image
 
 ```shell
-# 1. Build image
 ./build_image.sh
-
-# 2. Create container
-./create_container.sh
 ```
 
-## 3. Attach vecode to the container
+## Create container
+Use the python script `create_container.py` in the parent directory.
 
-Use Dev Container and attach to the container: `my-ros-humble`
+```shell
+cd ..
 
-### 4. Test if GUI apps work
+# Show help
+./create_container.py -h
+
+# An example, do not use directly
+./create_container.py my-ros-humble my-project-name --rc-file common_rc -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project
+```
+
+## Attach vecode to the container
+
+Use Dev Container and attach to the container: `my-project-name`
+
+## Test if GUI apps work
 
 In your host:
 
@@ -36,7 +45,12 @@ Change the default console to zsh in vscode
 
 ### Change Qt app style
 
-This can change the look of rviz2 etc.
+#### This can:
+
+- Change the look of rviz2 etc  
+- Fix icon missing problem in some apps
+
+#### Method: 
 
 Run the GUI tool:
 
@@ -44,4 +58,6 @@ Run the GUI tool:
 qt5ct
 ```
 
-I recommend breeze theme
+My recommendation:  
+- In `Appearence` tab, change the style to `Breeze`  
+- In `Icon Theme` tab, choose Breeze then click on OK  

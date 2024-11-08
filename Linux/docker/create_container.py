@@ -84,8 +84,9 @@ class DockerCmdGenerator:
             if result.returncode != 0:
                 print("Failed to create container")
                 sys.exit(1)
-            print("Done.\n\nYou can attach to the container using vscode or by running the following command:")
-            print(f"    docker exec -it {self.container_name} bash\n")
+            print("Done.\n\nYou can attach to the container using vscode or by running one of the following command:")
+            print(f"    docker exec -it {self.container_name} bash")
+            print(f"    docker exec -it {self.container_name} zsh\n")
             print("To remove the container, run the following command:")
             print(f"    docker rm -f {self.container_name}")
         else:
@@ -224,24 +225,22 @@ class DockerCmdGenerator:
 def main():
     parser = argparse.ArgumentParser(
         description="Create a container",
-        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-noetic yj10-noetic --rc-file common_rc -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data ~/Documents/yj10_ros/",
+        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-humble my-project-name --rc-file common_rc -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    default_rc_file = os.path.join(script_dir, "common_rc")
+
     parser.add_argument("image-name", help="The name of the image to create the container from")
     parser.add_argument("container-name", help="The name of the container to create")
-    parser.add_argument("--rc-file", help="The rc file to source in the container", default="common_rc")
+    parser.add_argument("--rc-file", help="The rc file to source in the container", default=default_rc_file)
     parser.add_argument("--no-rc-file", help="Do not mount the rc file", action="store_true")
     parser.add_argument("--user-name", help="The user to run the container as.", default="docker_user")
     parser.add_argument("--user-data", help="The directory to store user data. Will be mounted to /home/<user_name>/user_data")
     parser.add_argument("--no-nv", help="Do not enable NVIDIA GPU", action="store_true")
     parser.add_argument("--volume", "-v", help="Mount a volume from the host to the container", action="append")
-    try:
-        args = parser.parse_args()
-    except SystemExit:
-        # 解析失败时打印帮助信息
-        parser.print_help()
-        sys.exit(1)
+    args = parser.parse_args()
 
     # # Print arguments
     # print("Arguments:")
