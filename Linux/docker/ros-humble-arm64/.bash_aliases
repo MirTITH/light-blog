@@ -1,4 +1,6 @@
-source $HOME/.local/common_rc
+if [ -f $HOME/.local/common_rc ]; then
+    source $HOME/.local/common_rc
+fi
 
 rr() {
     # For bash, ros-humble
