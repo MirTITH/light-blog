@@ -4,12 +4,13 @@ import os
 import sys
 import subprocess
 import argparse
-from typing import List
+from typing import List, Optional
 
 # 定义颜色代码
 RED = "\033[31m"
 GREEN = "\033[32m"
 BLUE = "\033[34m"
+YELLOW = "\033[33m"
 YELLOW_BACKGROUND = "\033[43m"
 BOLD = "\033[1m"
 RESET = "\033[0m"  # 重置为默认样式
@@ -41,18 +42,16 @@ class DockerCmdGenerator:
         self.image_name: str = getattr(args, "image-name")
         self.container_name: str = getattr(args, "container-name")
         self.container_user_name: str = getattr(args, "user_name")
-        self.user_data_dir: str = getattr(args, "user_data", None)
+        self.user_data_dir: str = self.__get_arg_abs_path(getattr(args, "user_data", None), path_type="dir", create_if_not_exist=True)
         self.no_nv: bool = getattr(args, "no_nv", False)
 
-        self.rc_file: str = getattr(args, "rc_file", None)
-        if getattr(args, "no_rc_file", False):
-            self.rc_file = None
-        if self.rc_file is not None:
-            self.rc_file = self.__to_host_abs_path(self.rc_file)
+        self.rc_file: str = self.__get_arg_abs_path(getattr(args, "rc_file", None), path_type="file", create_if_not_exist=True)
 
         self.volumes: List[str] = getattr(args, "volume")
         if not self.volumes:
             self.volumes = []
+
+        self.clangd_path: str = self.__get_arg_abs_path(getattr(args, "clangd_path", None), path_type="dir", create_if_not_exist=False)
 
         # -d: Run the container in the background
         # --name: Name of the container
@@ -60,13 +59,45 @@ class DockerCmdGenerator:
         self.cmd_prefix = ["docker", "run", "-d", "--name", self.container_name, "--user", self.container_user_name]
         self.cmd_postfix = [self.image_name, "sleep", "infinity"]
 
-        print(f"Image name: {self.image_name}")
-        print(f"Container name: {self.container_name}")
-        print(f"Container user name: {self.container_user_name}")
-        print(f"User data directory: {self.user_data_dir}")
-        print(f"Do not enable NVIDIA GPU: {self.no_nv}")
-        print(f"RC file: {self.rc_file}")
-        print(f"Volumes: {self.volumes}")
+        print(f"Image name: {BLUE}{self.image_name}{RESET}")
+        print(f"Container name: {BLUE}{self.container_name}{RESET}")
+        print(f"Container user name: {BLUE}{self.container_user_name}{RESET}")
+        print(f"User data directory: {BLUE}{self.user_data_dir}{RESET}")
+        print(f"Do not enable NVIDIA GPU: {BLUE}{self.no_nv}{RESET}")
+        print(f"RC file: {BLUE}{self.rc_file}{RESET}")
+        print(f"Volumes: {BLUE}{self.volumes}{RESET}")
+        print(f"Clangd path: {BLUE}{self.clangd_path}{RESET}")
+        print()
+
+    def __get_arg_abs_path(self, path: str, path_type: str = "", create_if_not_exist=False) -> Optional[str]:
+        if path == "":
+            return None
+
+        if path is None:
+            return None
+
+        if not path_type:
+            if path.endswith("/"):
+                path_type = "dir"
+            else:
+                path_type = "file"
+
+        abs_path = self.__to_host_abs_path(path)
+
+        # Create the directory or file if it does not exist
+        if create_if_not_exist:
+            if path_type == "dir":
+                self.__check_and_create_directory(abs_path)
+            elif path_type == "file":
+                self.__check_and_create_file(abs_path)
+            else:
+                raise ValueError(f"Invalid path type: {path_type}")
+
+        if not os.path.exists(abs_path):
+            print(f"{YELLOW}Warning: {abs_path} does not exist. Ignoring...{RESET}")
+            return None
+
+        return abs_path
 
     def generate_cmd(self) -> List[str]:
         cmd_args = self.__get_cmd_args()
@@ -155,7 +186,7 @@ class DockerCmdGenerator:
             self.__check_and_create_file(host_abs_path)
         else:
             if not os.path.exists(host_abs_path):
-                print(f"Warning: {host_abs_path} does not exist")
+                print(f"{YELLOW}Warning: {host_abs_path} does not exist{RESET}")
 
         if options:
             print(f"Mounting {BLUE}{host_abs_path}{RESET} -> {GREEN}{container_abs_path}{RESET} with options: {options}")
@@ -212,12 +243,14 @@ class DockerCmdGenerator:
 
         # Mount user data directory
         if self.user_data_dir:
-            USER_DATA_DIR = self.__to_host_abs_path(self.user_data_dir)
-            print(f"User data directory: {USER_DATA_DIR}")
-            cmd_args.extend(self.__get_mount_args(USER_DATA_DIR, f"{CONTAINER_HOME}/user_data", "dir"))
+            cmd_args.extend(self.__get_mount_args(self.user_data_dir, f"{CONTAINER_HOME}/user_data", "dir"))
 
         # Mount volumes
         cmd_args.extend(self.__get_volumes_mount_args())
+
+        # Mount clangd
+        if self.clangd_path:
+            cmd_args.extend(self.__get_mount_args(self.clangd_path, f"{CONTAINER_HOME}/.local/clangd", "dir"))
 
         return cmd_args
 
@@ -225,21 +258,30 @@ class DockerCmdGenerator:
 def main():
     parser = argparse.ArgumentParser(
         description="Create a container",
-        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-humble my-project-name --rc-file common_rc -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project",
+        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-humble my-project-name -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
     default_rc_file = os.path.join(script_dir, "common_rc")
+    default_clangd_path = os.path.join(script_dir, "mount/clangd")
 
     parser.add_argument("image-name", help="The name of the image to create the container from")
     parser.add_argument("container-name", help="The name of the container to create")
-    parser.add_argument("--rc-file", help="The rc file to source in the container", default=default_rc_file)
-    parser.add_argument("--no-rc-file", help="Do not mount the rc file", action="store_true")
+    parser.add_argument(
+        "--rc-file",
+        help=f'The rc file to source in the container, which will be mounted to /home/<user_name>/.local/common_rc.\nThe default value is {BLUE}{default_rc_file}{RESET}. Give "" to not mount any rc file.',
+        default=default_rc_file,
+    )
     parser.add_argument("--user-name", help="The user to run the container as.", default="docker_user")
-    parser.add_argument("--user-data", help="The directory to store user data. Will be mounted to /home/<user_name>/user_data")
+    parser.add_argument("--user-data", help="The directory to store user data. It will be mounted to /home/<user_name>/user_data")
     parser.add_argument("--no-nv", help="Do not enable NVIDIA GPU", action="store_true")
     parser.add_argument("--volume", "-v", help="Mount a volume from the host to the container", action="append")
+    parser.add_argument(
+        "--clangd-path",
+        help=f'Path to clangd. The default value is {BLUE}{default_clangd_path}{RESET}. Give "" to not mount clangd.',
+        default=default_clangd_path,
+    )
     args = parser.parse_args()
 
     # # Print arguments

@@ -5,23 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "create_container.py",
+            "name": "Python 调试程序: 包含参数的当前文件",
             "type": "debugpy",
             "request": "launch",
-            "program": "create_container.py",
+            "program": "${workspaceFolder}/create_container.py",
             "console": "integratedTerminal",
             "args": [
-                "my-ros-noetic",
-                "yj10-noetic",
-                "--rc-file",
-                "ros-noetic/common_rc",
-                "--no-nv",
-                "--user-data",
-                "~/Documents/yj10_ros/",
-                "-v",
-                "~/Documents/:Documents",
-                "-v",
-                "~/Downloads/:Downloads"
+                "my-ros-humble",
+                "test_container",
             ]
         }
     ]
