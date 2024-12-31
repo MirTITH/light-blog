@@ -40,7 +40,7 @@ WORKDIR /home/$USERNAME
 RUN sudo apt-get update && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
     git net-tools vim bash-completion psmisc pulseaudio gdb \
-    iputils-ping zsh breeze qt5ct fonts-noto-cjk \
+    iputils-ping zsh breeze qt5ct fonts-noto-cjk wget \
     python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip
 
 # Install Gazebo (Arm64 doesn't have this package)

@@ -59,6 +59,9 @@ class DockerCmdGenerator:
         self.cmd_prefix = ["docker", "run", "-d", "--name", self.container_name, "--user", self.container_user_name]
         self.cmd_postfix = [self.image_name, "sleep", "infinity"]
 
+        no_privileged = getattr(args, "no_privileged", False)
+        self.privileged = not no_privileged
+
         print(f"Image name: {BLUE}{self.image_name}{RESET}")
         print(f"Container name: {BLUE}{self.container_name}{RESET}")
         print(f"Container user name: {BLUE}{self.container_user_name}{RESET}")
@@ -215,7 +218,8 @@ class DockerCmdGenerator:
         cmd_args = []
 
         cmd_args.extend(["--network=host", "--ipc=host"])  # Enable host networking
-        cmd_args.extend(["--privileged"])  # Allow access to all devices
+        if self.privileged:
+            cmd_args.extend(["--privileged"])  # Allow access to all devices
 
         # Enable X11 GUI
         cmd_args.extend(self.__get_mount_args("/tmp/.X11-unix", "/tmp/.X11-unix", path_type="dir", options="rw"))
@@ -258,7 +262,7 @@ class DockerCmdGenerator:
 def main():
     parser = argparse.ArgumentParser(
         description="Create a container",
-        epilog=f"Example:\n  ./{os.path.basename(__file__)} my-ros-humble my-project-name -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project",
+        epilog=f"Example:\n  {os.path.realpath(__file__)} my-ros-humble my-project-name -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -282,6 +286,7 @@ def main():
         help=f'Path to clangd. The default value is {BLUE}{default_clangd_path}{RESET}. Give "" to not mount clangd.',
         default=default_clangd_path,
     )
+    parser.add_argument("--no-privileged", action="store_true")
     args = parser.parse_args()
 
     # # Print arguments
