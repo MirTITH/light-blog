@@ -264,3 +264,10 @@ xclock
    ln -s <刚刚解压得到的文件夹的绝对路径>/bin/* ~/.local/bin
    # 例如 ln -s ~/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/* ~/.local/bin
    ```
+
+## texlive
+
+```shell
+paru -S texlive-meta texlive-langcjk texlive-langchinese biber
+```
+

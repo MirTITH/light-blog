@@ -223,6 +223,16 @@ class DockerCmdGenerator:
 
         # Enable X11 GUI
         cmd_args.extend(self.__get_mount_args("/tmp/.X11-unix", "/tmp/.X11-unix", path_type="dir", options="rw"))
+        env_DISPLAY = os.getenv("DISPLAY")
+        if env_DISPLAY != ":0":
+            print(f"{YELLOW}Warning: $DISPLAY is set to {env_DISPLAY}")
+            print(f"{YELLOW}    Usually, $DISPLAY should be set to :0")
+            print(f"{YELLOW}    This may becaused by running the script in a non-GUI environment, VNC environment or using vscode remote-ssh.{RESET}")
+            print(f"{YELLOW}    GUI applications may not work properly.{RESET}")
+            print(f"{YELLOW}    To fix this, run the script in a GUI environment or run the following command before running the script:{RESET}")
+            print(f"{YELLOW}    export DISPLAY=:0{RESET}")
+            if ask_user_to_continue(f"Continue with $DISPLAY={env_DISPLAY}?") == False:
+                sys.exit(1)
         cmd_args.extend(["--env", "DISPLAY"])
         cmd_args.extend(["--env", "QT_X11_NO_MITSHM=1"])
 

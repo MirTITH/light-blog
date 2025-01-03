@@ -1,1 +1,0 @@
-docker build -t nvidia_ros_noetic .

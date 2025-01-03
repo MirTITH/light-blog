@@ -1,14 +1,25 @@
-FROM dustynv/ros:humble-desktop-l4t-r36.2.0
+FROM ubuntu:22.04
 
 # Create a non-root user
 ARG USERNAME=docker_user
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+# Update ca-certificates to avoid "Certificate verification failed" error
+# RUN apt-get update && apt-get install -y ca-certificates
+
 # Change Ubuntu source list
 # COPY mirrors/ubuntu_22.04_ustc.list /etc/apt/sources.list
 # COPY mirrors/ubuntu_22.04_tuna.list /etc/apt/sources.list
 COPY mirrors/ubuntu_22.04_osa_ports.list /etc/apt/sources.list
+
+# 设置时区环境变量
+ENV TZ=Asia/Shanghai
+
+# 安装 tzdata 并设置时区
+RUN apt-get update && apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/$TZ /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 
 # Change ROS 2 source list
@@ -16,7 +27,7 @@ COPY mirrors/ubuntu_22.04_osa_ports.list /etc/apt/sources.list
 # ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
 ARG ROS2_MIRROR_URL=https://mirrors.osa.moe/ros2/ubuntu
 
-RUN rm /etc/apt/sources.list.d/ros2.list
+# RUN rm /etc/apt/sources.list.d/ros2.list
 RUN apt-get update && apt-get install -y curl gnupg2 \ 
     && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] $ROS2_MIRROR_URL jammy main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
@@ -36,11 +47,21 @@ RUN groupadd --gid $USER_GID $USERNAME \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
+# Install ROS2
+RUN sudo apt-get update && sudo apt-get install -y locales \
+    && sudo locale-gen en_US en_US.UTF-8 \
+    && sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+RUN sudo apt-get update && sudo apt-get install -y software-properties-common \
+    && sudo add-apt-repository universe -y \
+    && sudo apt-get upgrade -y \
+    && sudo apt-get install -y ros-humble-desktop ros-dev-tools
+
 # Install some dependencies packages
 RUN sudo apt-get update && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
     git net-tools vim bash-completion psmisc pulseaudio gdb \
-    iputils-ping zsh breeze qt5ct fonts-noto-cjk wget \
+    iputils-ping zsh breeze qt5ct fonts-noto-cjk \
     python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip
 
 # Install Gazebo (Arm64 doesn't have this package)
@@ -54,7 +75,7 @@ RUN colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mix
 # Add user to video group to allow access to webcam
 RUN sudo usermod --append --groups video $USERNAME
 
-RUN rosdep update
+RUN sudo rosdep init && rosdep update
 
 # zsh
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \

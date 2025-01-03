@@ -1,34 +1,32 @@
-FROM dustynv/ros:humble-desktop-l4t-r36.2.0
+FROM nvcr.io/nvidia/l4t-base:35.4.1
 
 # Create a non-root user
 ARG USERNAME=docker_user
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+# Update ca-certificates to avoid "Certificate verification failed" error
+RUN apt-get update && apt-get install -y ca-certificates
+
 # Change Ubuntu source list
-# COPY mirrors/ubuntu_22.04_ustc.list /etc/apt/sources.list
-# COPY mirrors/ubuntu_22.04_tuna.list /etc/apt/sources.list
-COPY mirrors/ubuntu_22.04_osa_ports.list /etc/apt/sources.list
-
-
-# Change ROS 2 source list
-# ARG ROS2_MIRROR_URL=https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu
-# ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
-ARG ROS2_MIRROR_URL=https://mirrors.osa.moe/ros2/ubuntu
-
-RUN rm /etc/apt/sources.list.d/ros2.list
-RUN apt-get update && apt-get install -y curl gnupg2 \ 
-    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] $ROS2_MIRROR_URL jammy main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+COPY mirrors/ubuntu_20.04_osa_ports.list /etc/apt/sources.list
+# COPY mirrors/ubuntu_20.04_tuna_ports.list /etc/apt/sources.list
 
 # Remove docker-clean to enable auto-completion for apt
 RUN rm /etc/apt/apt.conf.d/docker-clean
 
+# 设置时区环境变量
+ENV TZ=Asia/Shanghai
+
+# 安装 tzdata 并设置时区
+RUN apt-get update && apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/$TZ /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
+
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && apt-get update \
-    && apt-get install -y sudo \
+    && apt-get update && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
@@ -39,22 +37,12 @@ WORKDIR /home/$USERNAME
 # Install some dependencies packages
 RUN sudo apt-get update && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
-    git net-tools vim bash-completion psmisc pulseaudio gdb \
-    iputils-ping zsh breeze qt5ct fonts-noto-cjk wget \
-    python3-colcon-common-extensions python3-colcon-mixin software-properties-common python3-pip
-
-# Install Gazebo (Arm64 doesn't have this package)
-# RUN sudo apt-get update && sudo apt-get install -y ros-humble-gazebo-ros-pkgs
-
-# Get rid of EasyInstallDeprecationWarning
-RUN pip install setuptools==58.2.0
-
-RUN colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && colcon mixin update default
+    git vim bash-completion gdb curl \
+    iputils-ping zsh python3 python3-pip 
+    
 
 # Add user to video group to allow access to webcam
 RUN sudo usermod --append --groups video $USERNAME
-
-RUN rosdep update
 
 # zsh
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \

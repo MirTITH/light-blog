@@ -1,7 +1,5 @@
 proxy_on() {
-    export http_proxy=http://localhost:7890
-    export https_proxy=http://localhost:7890
-    export all_proxy=socks5://localhost:7890
+    proxy_v2ray
 }
 
 proxy_clash() {
