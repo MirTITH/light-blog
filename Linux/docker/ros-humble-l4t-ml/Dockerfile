@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM nvcr.io/nvidia/l4t-ml:r36.2.0-py3
 
 ARG DOCKER_FILE_FOLDER
 
