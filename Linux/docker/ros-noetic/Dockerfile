@@ -17,7 +17,7 @@ COPY mirrors/ubuntu_20.04_osa.list /etc/apt/sources.list
 ARG ROS_MIRROR_URL=https://mirrors.osa.moe/ros/ubuntu/
 
 RUN rm /etc/apt/sources.list.d/ros1-latest.list \
-    && apt-get update && apt-get install curl \
+    && apt-get update && apt-get install -y curl \
     && sh -c 'echo "deb $ROS_MIRROR_URL $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' \
     && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - \
     && apt-get update

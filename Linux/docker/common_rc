@@ -1,5 +1,5 @@
 proxy_on() {
-    proxy_v2ray
+    proxy_clash
 }
 
 proxy_clash() {
