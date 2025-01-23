@@ -26,11 +26,10 @@
     Server = https://mirrors.osa.moe/manjaro/stable/$repo/$arch
     
     ## Country : China
-    Server = https://mirrors.sjtug.sjtu.edu.cn/manjaro/stable/$repo/$arch
-    
-    ## Country : China
     Server = https://mirrors.ustc.edu.cn/manjaro/stable/$repo/$arch
     
+    ## Country : China
+    Server = https://mirrors.sjtug.sjtu.edu.cn/manjaro/stable/$repo/$arch
     ```
     
     之后将 `/etc/pacman.d/mirrorlist` 设为只读，防止被自动更改：

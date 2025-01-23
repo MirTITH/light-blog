@@ -28,6 +28,16 @@ tar -I 'xz -T0 -v -9' -cf output.tar.xz file1 folder1
 tar -I 'zstd -T0 -v -10' -cf output.tar.zst file1 folder1
 ```
 
+### 压缩的同时通过 SSH 传输
+
+```shell
+# 使用 zstd 压缩
+tar -I 'zstd -T16 -19 -v' -cf - my_folder | ssh user@host "cat > Documents/my_folder.tar.zst"
+
+# 使用 xz 压缩
+tar -I 'xz -T16 -9 -v' -cf - my_folder | ssh user@host "cat > Documents/my_folder.tar.xz"
+```
+
 ## 关闭图形界面
 
 ```shell

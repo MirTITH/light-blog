@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/l4t-ml:r36.2.0-py3
+FROM dustynv/l4t-pytorch:r36.2.0
 
 ARG DOCKER_FILE_FOLDER
 
@@ -96,6 +96,10 @@ RUN git config --global core.quotepath false
 # the `.config` directory will be created with root permission, and the user will not be able to write to it.
 RUN mkdir -p /home/$USERNAME/.config
 RUN mkdir -p /home/$USERNAME/.local
+RUN mkdir -p /home/$USERNAME/.cache/huggingface
+RUN mkdir -p /home/$USERNAME/.cache/modelscope
+
+RUN pip3 install -U modelscope huggingface huggingface_hub
 
 ENTRYPOINT []
 CMD ["/bin/zsh"]

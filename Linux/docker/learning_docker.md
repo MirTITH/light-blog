@@ -20,8 +20,8 @@ docker save my_image:latest | zstd -T16 -10 -v > my_image.tar.zst # 使用 zstd�
 docker save my_image:latest | xz -T16 -9 -v | ssh user@target_host 'cat > my_image.tar.xz'  # 使用 xz
 
 # 保存、压缩、传输并加载镜像
-docker save my_image:latest | xz | ssh user@target_host 'xz -d | docker load'  # 使用 xz
-docker save my_image:latest | zstd --adapt | ssh user@target_host 'zstd -d | docker load' # 使用 zstd. --adapt: Dynamically adapt compression level to I/O conditions.
+docker save my_image:latest | xz -T16 -v | ssh user@target_host 'xz -d | docker load'  # 使用 xz
+docker save my_image:latest | zstd -T0 --adapt -v | ssh user@target_host 'zstd -d | docker load' # 使用 zstd. --adapt: Dynamically adapt compression level to I/O conditions.
 
 # 加载镜像
 xz -d -c my_image.tar.xz | docker load # 使用 xz

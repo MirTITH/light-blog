@@ -96,7 +96,7 @@ rr() {
     # For zsh, ros-humble
     eval "$(register-python-argcomplete3 ros2)"
     eval "$(register-python-argcomplete3 colcon)"
-    source /opt/ros/humble/install/setup.zsh
+    source /opt/ros/humble/setup.zsh
     source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
     source /usr/share/colcon_cd/function/colcon_cd.sh
     export _colcon_cd_root=/opt/ros/humble/
