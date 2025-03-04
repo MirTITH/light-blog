@@ -1,2 +1,2 @@
-/mount
-/*/mirrors
+/mount/*
+!mount/readme.md

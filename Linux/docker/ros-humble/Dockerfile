@@ -8,15 +8,15 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Change Ubuntu source list
-# COPY mirrors/ubuntu_22.04_ustc.list /etc/apt/sources.list
+COPY mirrors/ubuntu_22.04_ustc.list /etc/apt/sources.list
 # COPY mirrors/ubuntu_22.04_tuna.list /etc/apt/sources.list
-COPY mirrors/ubuntu_22.04_osa.list /etc/apt/sources.list
+# COPY mirrors/ubuntu_22.04_osa.list /etc/apt/sources.list
 
 
 # Change ROS 2 source list
 # ARG ROS2_MIRROR_URL=https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu
-# ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
-ARG ROS2_MIRROR_URL=https://mirrors.osa.moe/ros2/ubuntu
+ARG ROS2_MIRROR_URL=https://mirrors.ustc.edu.cn/ros2/ubuntu
+# ARG ROS2_MIRROR_URL=https://mirrors.osa.moe/ros2/ubuntu
 
 RUN rm /etc/apt/sources.list.d/ros2-latest.list
 RUN apt-get update && apt-get install -y curl gnupg2 \ 
@@ -63,9 +63,10 @@ RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/inst
     && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k \
     && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-COPY --chown=$USERNAME:$USERNAME $DOCKER_FILE_FOLDER/.p10k.zsh /home/$USERNAME/
+
 COPY --chown=$USERNAME:$USERNAME $DOCKER_FILE_FOLDER/.zshrc /home/$USERNAME/
 COPY --chown=$USERNAME:$USERNAME $DOCKER_FILE_FOLDER/.bash_aliases /home/$USERNAME/
+COPY --chown=$USERNAME:$USERNAME common_files/.p10k.zsh /home/$USERNAME/
 
 RUN git config --global core.quotepath false
 
