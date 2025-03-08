@@ -21,11 +21,14 @@
 ## 压缩
 
 ```shell
-# 压缩为 tar.xz，压缩等级选择范围：0-9, 默认为 6
-tar -I 'xz -T0 -v -9' -cf output.tar.xz file1 folder1
+# 压缩为 tar.xz
+# -T16: 使用16个线程压缩，0 表示使用所有可用的 CPU 核心
+# -v: 启用详细模式，显示压缩进度和详细信息
+# -9: 设置压缩级别为9（范围：0-9, 默认为 6）
+tar -I 'xz -T16 -v -9' -cf output.tar.xz file1 folder1
 
 # 压缩为 tar.zst，压缩等级选择范围：1-19, Default: 3
-tar -I 'zstd -T0 -v -10' -cf output.tar.zst file1 folder1
+tar -I 'zstd -T16 -v -19' -cf output.tar.zst file1 folder1
 ```
 
 ### 压缩的同时通过 SSH 传输
@@ -33,9 +36,13 @@ tar -I 'zstd -T0 -v -10' -cf output.tar.zst file1 folder1
 ```shell
 # 使用 zstd 压缩
 tar -I 'zstd -T16 -19 -v' -cf - my_folder | ssh user@host "cat > Documents/my_folder.tar.zst"
-
 # 使用 xz 压缩
 tar -I 'xz -T16 -9 -v' -cf - my_folder | ssh user@host "cat > Documents/my_folder.tar.xz"
+
+# 使用 zstd 压缩并自动解压（需要先在服务端安装 zstd）
+tar -I 'zstd -T16 -v' -cf - my_folder | ssh user@host "tar -I 'zstd' -xf - -C Documents/my_folder"
+# 使用 xz 压缩并自动解压（一般ubuntu默认安装了 xz）
+tar -I 'xz -T16 -v' -cf - my_folder | ssh user@host "tar -I 'xz' -xf - -C Documents/my_folder"
 ```
 
 ## 关闭图形界面

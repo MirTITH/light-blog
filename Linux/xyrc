@@ -1,20 +1,40 @@
 proxy_on() {
-    export http_proxy=http://localhost:7890
-    export https_proxy=http://localhost:7890
-    export all_proxy=socks5://localhost:7890
+    set_proxy localhost 7890 7890
 }
+
+proxy_gmk() {
+    set_proxy gmk 7890 7890
+}
+
 
 proxy_off() {
     unset http_proxy
     unset https_proxy
+    unset ftp_proxy
     unset all_proxy
 }
+
 
 proxy_info() {
     echo -e "http_proxy=${http_proxy}"
     echo -e "https_proxy=${https_proxy}"
+    echo -e "ftp_proxy=${ftp_proxy}"
     echo -e "all_proxy=${all_proxy}"
     curl ipinfo.io
+}
+
+set_proxy() {
+    if [ $# -ne 3 ]; then
+        echo "Usage: set_proxy host http_port socks_port"
+    else
+        # http
+        export http_proxy=http://$1:$2
+        export https_proxy=http://$1:$2
+        export ftp_proxy=http://$1:$2
+
+        # socks5
+        export all_proxy=socks5://$1:$3
+    fi
 }
 
 hf_endpoint() {
@@ -33,6 +53,8 @@ hf_endpoint() {
 }
 
 # alias hibernate='systemctl hibernate'
+
+alias enable_attach_debug='sudo sysctl -w kernel.yama.ptrace_scope=0'
 
 rr() {
     # ros2
