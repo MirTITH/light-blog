@@ -40,9 +40,40 @@ tar -I 'zstd -T16 -19 -v' -cf - my_folder | ssh user@host "cat > Documents/my_fo
 tar -I 'xz -T16 -9 -v' -cf - my_folder | ssh user@host "cat > Documents/my_folder.tar.xz"
 
 # 使用 zstd 压缩并自动解压（需要先在服务端安装 zstd）
-tar -I 'zstd -T16 -v' -cf - my_folder | ssh user@host "tar -I 'zstd' -xf - -C Documents/my_folder"
+# 从本地传到服务器
+tar -I 'zstd -T0 -v --adapt' -cf - my_folder | ssh user@host "tar -I 'zstd' -xf - -C Documents/my_folder"
+# 从服务器传到本地
+ssh user@host "tar -I 'zstd -T0 -v --adapt' -cf - /path/to/server_folder" | tar -I 'zstd' -xf - -C ~/local
+
 # 使用 xz 压缩并自动解压（一般ubuntu默认安装了 xz）
 tar -I 'xz -T16 -v' -cf - my_folder | ssh user@host "tar -I 'xz' -xf - -C Documents/my_folder"
+```
+
+shell 函数：
+
+```shell
+push_to_server() {
+    local src="${1:?用法：push_to_server 本地文件夹 用户@主机:远程路径}"
+    local remote="${2:?用法：push_to_server 本地文件夹 用户@主机:远程路径}"
+    local user_host="${remote%:*}"
+    local dest_path="${remote#*:}"
+    
+    tar -I 'zstd -T0 -v' -cf - "$src" | ssh "$user_host" "tar -I 'zstd' -xf - -C \"$dest_path\""
+}
+
+pull_from_server() {
+    local remote="${1:?用法：pull_from_server 用户@主机:远程路径 本地目标路径}"
+    local user_host="${remote%:*}"
+    local src_path="${remote#*:}"
+    local dest="${2:?用法：pull_from_server 用户@主机:远程路径 本地目标路径}"
+    
+    # 自动提取父目录和目标目录名
+    local parent_dir="${src_path%/*}"
+    local dir_name="${src_path##*/}"
+
+    # 强制进入父目录打包（天然去除父路径）
+    ssh "$user_host" "tar -C \"$parent_dir\" -I 'zstd -T0 -v' -cf - \"$dir_name\"" | tar -I 'zstd' -xf - -C "$dest"
+}
 ```
 
 ## 关闭图形界面
