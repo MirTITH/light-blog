@@ -134,3 +134,22 @@ QT_XCB_FORCE_SOFTWARE_OPENGL=1 ./the_program_name
 export LIBGL_ALWAYS_SOFTWARE=1
 ./the_program_name
 ```
+
+## 使 Qt 程序以 x11 运行
+
+### 在终端中
+
+```shell
+QT_QPA_PLATFORM=xcb <your_app>
+```
+
+### desktop 文件
+
+以 yakuake 为例：
+```shell
+`cp /usr/share/applications/org.kde.yakuake.desktop ~/.local/share/applications/`
+```
+
+Then open `~/.local/share/applications/org.kde.yakuake.desktop` file with your favourite text editor, find the line `Exec=yakuake` and change it to `Exec=env QT_QPA_PLATFORM=xcb yakuake`. Now restart the app.
+
+> [Workaround for yakuake in Wayland : r/kde](https://www.reddit.com/r/kde/comments/hh99xb/workaround_for_yakuake_in_wayland/)
