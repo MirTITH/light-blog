@@ -272,7 +272,7 @@ class DockerCmdGenerator:
 def main():
     parser = argparse.ArgumentParser(
         description="Create a container",
-        epilog=f"Example:\n  {os.path.realpath(__file__)} my-ros-humble my-project-name -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project",
+        epilog=f"Example:\n  {sys.argv[0]} my-ros-humble my-project-name -v ~/Documents/:Documents -v ~/Downloads/:Downloads --user-data /path/to/project",
         formatter_class=argparse.RawTextHelpFormatter,
     )
 

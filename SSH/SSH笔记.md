@@ -66,6 +66,10 @@ ssh -R [收听接口:]收听端口:目标主机:目标端口 username@hostname
 
 ```bash
 B$ ssh -NfR A_port:localhost:B_port A_username@A_IP -p 22
+
+# 以上命令执行后可能会存在终端关不掉的情况，需要结束ssh进程才能关掉
+# 使用nohup命令可以解决这个问题：
+B$ nohup ssh -NfR A_port:localhost:B_port A_username@A_IP -p 22
 ```
 
 **效果**

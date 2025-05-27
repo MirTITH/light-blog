@@ -52,6 +52,8 @@ export PATH=$HOME/.local/bin:$PATH
 
 export QT_QPA_PLATFORMTHEME=qt5ct
 
+# export ROS_DOMAIN_ID=233
+
 # Add ~/.local/clangd/bin to the PATH if it exists
 if [ -d "$HOME/.local/clangd/bin" ]; then
     export PATH=$HOME/.local/clangd/bin:$PATH

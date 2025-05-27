@@ -1,0 +1,1 @@
+这里存放 build_image.sh 时被复制到 image 中的文件

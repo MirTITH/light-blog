@@ -8,15 +8,15 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 # Change Ubuntu source list
-# COPY mirrors/ubuntu_20.04_ustc.list /etc/apt/sources.list
+COPY mirrors/ubuntu_20.04_ustc.list /etc/apt/sources.list
 # COPY mirrors/ubuntu_20.04_tuna.list /etc/apt/sources.list
-COPY mirrors/ubuntu_20.04_osa.list /etc/apt/sources.list
+# COPY mirrors/ubuntu_20.04_osa.list /etc/apt/sources.list
 
 
 # Change ROS 2 source list
-# ARG ROS_MIRROR_URL=https://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu
+ARG ROS_MIRROR_URL=https://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu
 # ARG ROS_MIRROR_URL=https://mirrors.ustc.edu.cn/ros/ubuntu
-ARG ROS_MIRROR_URL=https://mirrors.osa.moe/ros/ubuntu/
+# ARG ROS_MIRROR_URL=https://mirrors.osa.moe/ros/ubuntu/
 
 RUN rm /etc/apt/sources.list.d/ros1-latest.list \
     && apt-get update && apt-get install -y curl \
