@@ -17,7 +17,7 @@ target_link_libraries 用于链接该库
 
 在使用编写良好的库时，只需要这两步就可以添加该库
 
-### 查找路径 
+### 库的搜索路径 
 
 ```cmake
 # These are search paths for find_package()

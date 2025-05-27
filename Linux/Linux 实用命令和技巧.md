@@ -25,10 +25,10 @@
 # -T16: 使用16个线程压缩，0 表示使用所有可用的 CPU 核心
 # -v: 启用详细模式，显示压缩进度和详细信息
 # -9: 设置压缩级别为9（范围：0-9, 默认为 6）
-tar -I 'xz -T16 -v -9' -cf output.tar.xz file1 folder1
+tar -I 'xz -T0 -v -9' -cf output.tar.xz file1 folder1
 
 # 压缩为 tar.zst，压缩等级选择范围：1-19, Default: 3
-tar -I 'zstd -T16 -v -19' -cf output.tar.zst file1 folder1
+tar -I 'zstd -T0 -v -19' -cf output.tar.zst file1 folder1
 ```
 
 ### 压缩的同时通过 SSH 传输
@@ -134,3 +134,22 @@ QT_XCB_FORCE_SOFTWARE_OPENGL=1 ./the_program_name
 export LIBGL_ALWAYS_SOFTWARE=1
 ./the_program_name
 ```
+
+## 使 Qt 程序以 x11 运行
+
+### 在终端中
+
+```shell
+QT_QPA_PLATFORM=xcb <your_app>
+```
+
+### desktop 文件
+
+以 yakuake 为例：
+```shell
+`cp /usr/share/applications/org.kde.yakuake.desktop ~/.local/share/applications/`
+```
+
+Then open `~/.local/share/applications/org.kde.yakuake.desktop` file with your favourite text editor, find the line `Exec=yakuake` and change it to `Exec=env QT_QPA_PLATFORM=xcb yakuake`. Now restart the app.
+
+> [Workaround for yakuake in Wayland : r/kde](https://www.reddit.com/r/kde/comments/hh99xb/workaround_for_yakuake_in_wayland/)

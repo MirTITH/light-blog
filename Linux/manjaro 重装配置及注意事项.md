@@ -186,48 +186,9 @@ plugins=(
 
 
 ### 安装 fcitx5 中文输入法
-1. 安装输入法
 ```bash
 paru -S manjaro-asian-input-support-fcitx5 fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
 ```
-2. 解决 Qt6 程序无法使用输入法的问题（现在的manjaro默认支持Qt6中文输入了，无需操作）
-
-    > 可以尝试直接将编译好的文件复制到相应目录（记得修改为你的 Qt 安装路径）
-    ```
-    cp ./libfcitx5platforminputcontextplugin.so ~/Qt/6.4.2/gcc_64/plugins/platforminputcontexts
-    cp ./libfcitx5platforminputcontextplugin.so ~/Qt/Tools/QtCreator/lib/Qt/plugins/platforminputcontexts
-    ```
-
-    如果以上操作无效：
-
-    1. 克隆仓库
-        ```
-        git clone git@github.com:fcitx/fcitx5-qt.git
-        或：
-        git clone https://github.com/fcitx/fcitx5-qt.git
-        ```
-    2. 修改 CMakeLists.txt
-        ```
-        option(ENABLE_QT4 "Enable Qt 4" On)
-        option(ENABLE_QT5 "Enable Qt 5" On)
-        option(ENABLE_QT6 "Enable Qt 6" On)
-        ```
-    3. 编译安装
-        ```
-        cd fcitx5-qt
-        mkdir build && cd build
-        cmake ..
-        make -j8
-        sudo make install
-        ```
-    4. 复制文件（记得修改为你的 Qt 安装路径）
-    ```
-    # qt6 程序
-    cp ./qt6/platforminputcontext/libfcitx5platforminputcontextplugin.so ~/Qt/6.4.2/gcc_64/plugins/platforminputcontexts
-    # qt creator
-    cp ./qt6/platforminputcontext/libfcitx5platforminputcontextplugin.so ~/Qt/Tools/QtCreator/lib/Qt/plugins/platforminputcontexts
-    ```
-
 ### 修改 grub
 ```bash
 kate /etc/default/grub
