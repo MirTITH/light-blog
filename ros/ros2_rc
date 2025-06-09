@@ -1,3 +1,6 @@
+# This script is used to set up the ROS 2 environment for the user.
+# Replace humble to your ROS 2 distribution if necessary.
+
 rr() {
     # export ROS_DOMAIN_ID=221
     alias rosdep_install='rosdep install --from-paths src --ignore-src -r -y'
