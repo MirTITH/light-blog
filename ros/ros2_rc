@@ -15,18 +15,18 @@ rr() {
         export _colcon_cd_root=/opt/ros/humble/
 
         # Source MoveIt2 workspace if it exists
-        if [ -f ~/Documents/ros2/moveit2_main_ws/install/setup.bash ]; then
-            source ~/Documents/ros2/moveit2_main_ws/install/setup.bash
-        else
-            echo "No MoveIt2 workspace found, skipping source."
-        fi
+        # if [ -f ~/Documents/ros2/moveit2_main_ws/install/setup.bash ]; then
+        #     source ~/Documents/ros2/moveit2_main_ws/install/setup.bash
+        # else
+        #     echo "No MoveIt2 workspace found, skipping source."
+        # fi
     elif [[ "$current_shell" == "zsh" ]]; then
-        eval "$(register-python-argcomplete3 ros2)"
-        eval "$(register-python-argcomplete3 colcon)"
         source /opt/ros/humble/setup.zsh
-        source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
+        # source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
         source /usr/share/colcon_cd/function/colcon_cd.sh
         export _colcon_cd_root=/opt/ros/humble/
+        eval "$(register-python-argcomplete3 ros2)"
+        eval "$(register-python-argcomplete3 colcon)"
 
         # Source MoveIt2 workspace if it exists
         # if [ -f ~/Documents/ros2/moveit2_main_ws/install/setup.zsh ]; then
