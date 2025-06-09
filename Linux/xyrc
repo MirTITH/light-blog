@@ -6,14 +6,12 @@ proxy_gmk() {
     set_proxy gmk 7890 7890
 }
 
-
 proxy_off() {
     unset http_proxy
     unset https_proxy
     unset ftp_proxy
     unset all_proxy
 }
-
 
 proxy_info() {
     echo -e "http_proxy=${http_proxy}"
@@ -56,21 +54,33 @@ hf_endpoint() {
 
 alias enable_attach_debug='sudo sysctl -w kernel.yama.ptrace_scope=0'
 
-rr() {
-    # ros2
-    eval "$(register-python-argcomplete3 ros2)"
-    eval "$(register-python-argcomplete3 colcon)"
-    source /opt/ros/humble/setup.zsh
-    source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
-    source /usr/share/colcon_cd/function/colcon_cd.sh
-    export _colcon_cd_root=/opt/ros/humble/
-
-    # moveit
-    # source $HOME/.local/ws_moveit/install/setup.zsh
-}
-
-alias rosdep_install='rosdep install --from-paths src --ignore-src -r -y'
-
 findsilent() {
     find "$@" 2>/dev/null
 }
+
+push_to_server() {
+    local src="${1:?用法：push_to_server 本地文件夹 用户@主机:远程路径}"
+    local remote="${2:?用法：push_to_server 本地文件夹 用户@主机:远程路径}"
+    local user_host="${remote%:*}"
+    local dest_path="${remote#*:}"
+    
+    tar -I 'zstd -T0 -v --adapt' -cf - "$src" | ssh "$user_host" "tar -I 'zstd' -xf - -C \"$dest_path\""
+}
+
+pull_from_server() {
+    local remote="${1:?用法：pull_from_server 用户@主机:远程路径 本地目标路径}"
+    local user_host="${remote%:*}"
+    local src_path="${remote#*:}"
+    local dest="${2:?用法：pull_from_server 用户@主机:远程路径 本地目标路径}"
+    
+    # 自动提取父目录和目标目录名
+    local parent_dir="${src_path%/*}"
+    local dir_name="${src_path##*/}"
+
+    # 强制进入父目录打包（天然去除父路径）
+    ssh "$user_host" "tar -C \"$parent_dir\" -I 'zstd -T0 -v' -cf - \"$dir_name\"" | tar -I 'zstd' -xf - -C "$dest"
+}
+
+# For CUDA
+# export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+# export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
