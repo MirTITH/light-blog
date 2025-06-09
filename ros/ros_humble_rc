@@ -1,5 +1,5 @@
 rr() {
-    export ROS_DOMAIN_ID=221
+    # export ROS_DOMAIN_ID=221
     alias rosdep_install='rosdep install --from-paths src --ignore-src -r -y'
 
     # 判断当前 shell 类型
