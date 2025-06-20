@@ -2,11 +2,15 @@
 # Replace humble to your ROS 2 distribution if necessary.
 
 rr() {
+    # Change ROS_DOMAIN_ID if needed
     # export ROS_DOMAIN_ID=221
     alias rosdep_install='rosdep install --from-paths src --ignore-src -r -y'
 
     # 判断当前 shell 类型
     current_shell=$(ps -p $$ -o comm=)
+
+    # Set this to your MoveIt2 workspace path
+    MOVEIT2_PATH=~/Documents/ros2/moveit2_main_ws
 
     if [[ "$current_shell" == "bash" ]]; then
         source /opt/ros/humble/setup.bash
@@ -15,10 +19,12 @@ rr() {
         export _colcon_cd_root=/opt/ros/humble/
 
         # Source MoveIt2 workspace if it exists
-        if [ -f ~/Documents/ros2/moveit2_main_ws/install/setup.bash ]; then
-            source ~/Documents/ros2/moveit2_main_ws/install/setup.bash
-        else
-            echo "No MoveIt2 workspace found, skipping source."
+        if [ -n "$MOVEIT2_PATH" ]; then
+            if [ -f ${MOVEIT2_PATH}/install/setup.bash ]; then
+                source ${MOVEIT2_PATH}/install/setup.bash
+            else
+                echo "No MoveIt2 workspace found, skipping source."
+            fi
         fi
     elif [[ "$current_shell" == "zsh" ]]; then
         source /opt/ros/humble/setup.zsh
@@ -27,10 +33,12 @@ rr() {
         export _colcon_cd_root=/opt/ros/humble/
 
         # Source MoveIt2 workspace if it exists
-        if [ -f ~/Documents/ros2/moveit2_main_ws/install/setup.zsh ]; then
-            source ~/Documents/ros2/moveit2_main_ws/install/setup.zsh
-        else
-            echo "No MoveIt2 workspace found, skipping source."
+        if [ -n "$MOVEIT2_PATH" ]; then
+            if [ -f ${MOVEIT2_PATH}/install/setup.zsh ]; then
+                source ${MOVEIT2_PATH}/install/setup.zsh
+            else
+                echo "No MoveIt2 workspace found, skipping source."
+            fi
         fi
         eval "$(register-python-argcomplete3 ros2)"
         eval "$(register-python-argcomplete3 colcon)"
@@ -53,3 +61,6 @@ rs() {
         echo "未识别的 shell: $current_shell"
     fi
 }
+
+# Uncomment the following line to automatically source the ROS 2 environment
+# rr
