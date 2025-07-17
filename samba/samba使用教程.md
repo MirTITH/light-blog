@@ -32,6 +32,10 @@ sudo systemctl enable smb
 
 # 启动
 sudo systemctl start smb
+
+# (Optional) Make your server accessible via NetBIOS host name
+sudo systemctl start nmb
+sudo systemctl enable nmb
 ```
 
 ### Ubuntu
@@ -77,7 +81,7 @@ KDE Manjaro 可以直接在 Dolphin 文件管理器中右键添加：
 
 KUbuntu 应该也行，但可能由于版本较低，不好用
 
-有时候可能会弹出下面的提示，将 `Everyone` 设置为 `---` 即可消除。
+有时候可能会弹出下面的提示，可以不用管它
 
 ![image-20240603145614449](samba使用教程.assets/image-20240603145614449.png)
 
