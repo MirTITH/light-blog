@@ -140,13 +140,12 @@ kate /etc/pacman.conf /etc/makepkg.conf /etc/paru.conf
 | makepkg.conf | MAKEFLAGS = "-j2" -> MAKEFLAGS = "-j8" |
 | paru.conf    | 取消注释：`#BottomUp` `#SudoLoop`      |
 
+### 删除 manjaro-browser-settings
 
-### 删除 firefox
+这个包会篡改 firefox 主页
+
 ```bash
-sudo pacman -Rns firefox
-
-# 如果说会破坏依赖，可以尝试如下命令，删除软件包和所有依赖这个软件包的程序
-sudo pacman -Rsc firefox
+paru -Rns manjaro-browser-settings
 ```
 
 ### Zsh
