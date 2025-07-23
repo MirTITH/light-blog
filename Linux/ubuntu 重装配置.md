@@ -496,13 +496,13 @@ export XMODIFIERS="@im=fcitx"
 sudo apt install $(check-language-support)
 
 # 安装中文语言包
-sudo apt install 'language-pack-zh-han*'
+sudo apt install "language-pack-zh-han*"
 
 # 安装gnome包
-sudo apt install 'language-pack-gnome-zh-han*'
+sudo apt install "language-pack-gnome-zh-han*"
 
 # 安装kde包
-sudo apt install 'language-pack-kde-zh-han*'
+sudo apt install "language-pack-kde-zh-han*"
 ```
 
 # 一些软件
