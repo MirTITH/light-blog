@@ -57,18 +57,22 @@ sudo add-apt-repository universe
 sudo apt update && sudo apt install curl -y
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
-# 添加源（以下二选一）：
+# 添加源（以下几个源选择一个）：
 # 官方源
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 # HITsz 内网源
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] https://mirrors.osa.moe/ros2/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+# 中科大源
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] https://mirrors.ustc.edu.cn/ros2/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+# 清华源
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
 sudo apt update
 sudo apt upgrade
 sudo apt install ros-humble-desktop ros-dev-tools
 # 完成！
 
-# Gazebo 11
+# Gazebo 11（可选）
 sudo apt install ros-humble-gazebo-ros-pkgs
 
 # colcon mixin
@@ -85,35 +89,9 @@ source /opt/ros/humble/setup.bash
 ros2 run demo_nodes_py listener
 ```
 
-### zsh 下 ros2 命令补全
-
-在 `~/.zshrc` 中加上：
-
-```shell
-# argcomplete for ros2 & colcon
-eval "$(register-python-argcomplete3 ros2)"
-eval "$(register-python-argcomplete3 colcon)"
-
-source /opt/ros/humble/setup.zsh
-source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.zsh
-source /usr/share/colcon_cd/function/colcon_cd.sh
-export _colcon_cd_root=/opt/ros/humble/
-```
-
-> https://blog.csdn.net/lhz_king/article/details/132456374
-
-### bash 下 ros2 命令补全
-
-在 `~/.bashrc` 中加上：
-
-```shell
-source /opt/ros/humble/setup.bash
-source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
-source /usr/share/colcon_cd/function/colcon_cd.sh
-export _colcon_cd_root=/opt/ros/humble/
-```
-
 ### 解决 EasyInstallDeprecationWarning
+
+如果没有报 warning，可以跳过这一步。
 
 因为 ros2 humble 安装 Python 包的方式已经被弃用了，所以报 warning. 
 
