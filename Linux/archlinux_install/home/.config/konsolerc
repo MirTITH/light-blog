@@ -1,0 +1,15 @@
+[Desktop Entry]
+DefaultProfile=xy.profile
+
+[General]
+ConfigVersion=1
+
+[KonsoleWindow]
+RememberWindowSize=false
+
+[TabBar]
+CloseTabOnMiddleMouseButton=true
+ExpandTabWidth=true
+
+[UiSettings]
+ColorScheme=

@@ -134,20 +134,11 @@ kate /etc/pacman.conf /etc/makepkg.conf /etc/paru.conf
 
 并进行如下修改：
 
-| 文件         | 修改                                   |
-| ------------ | -------------------------------------- |
-| pacman.conf  | 取消注释：`#Color`                     |
-| makepkg.conf | MAKEFLAGS = "-j2" -> MAKEFLAGS = "-j8" |
-| paru.conf    | 取消注释：`#BottomUp` `#SudoLoop`      |
-
-
-### 删除 firefox
-```bash
-sudo pacman -Rns firefox
-
-# 如果说会破坏依赖，可以尝试如下命令，删除软件包和所有依赖这个软件包的程序
-sudo pacman -Rsc firefox
-```
+| 文件         | 修改                                       |
+| ------------ | ------------------------------------------ |
+| pacman.conf  | 取消注释：`#Color`                         |
+| makepkg.conf | MAKEFLAGS = "-j2" → MAKEFLAGS="-j$(nproc)" |
+| paru.conf    | 取消注释：`#BottomUp` `#SudoLoop`          |
 
 ### Zsh
 #### Oh My Zsh
@@ -214,13 +205,11 @@ git config --global core.quotepath false
     - socat: 固定 MAC 地址时需要
     - 沙盒目录挂载配置文件：将文件 `config_files/qq-bwrap-flags.conf` 复制到 `~/.config/`
 
-- wechat-universal-bwrap
-    - 沙盒目录挂载配置文件：将文件夹 `config_files/wechat-universal/` 复制到 `~/.config/`
-
+- wechat
 - qqmusic
 - netease-cloud-music
 - noto-fonts-cjk
-- ttf-lxgw-wenkai
+- ttf-lxgw-wenkai ttf-lxgw-wenkai-mono
 - dotnet-runtime-6.0
 - tldr
 
