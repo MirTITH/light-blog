@@ -140,6 +140,14 @@ kate /etc/pacman.conf /etc/makepkg.conf /etc/paru.conf
 | makepkg.conf | MAKEFLAGS = "-j2" → MAKEFLAGS="-j$(nproc)" |
 | paru.conf    | 取消注释：`#BottomUp` `#SudoLoop`          |
 
+### 删除 manjaro-browser-settings
+
+这个包会篡改 firefox 主页
+
+```bash
+paru -Rns manjaro-browser-settings
+```
+
 ### Zsh
 #### Oh My Zsh
 ```bash
