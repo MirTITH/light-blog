@@ -249,3 +249,54 @@ xclock
 paru -S texlive-meta texlive-langcjk texlive-langchinese biber
 ```
 
+## Matlab
+### For Arch
+
+1. 安装mpm (Matlab package manager)
+```shell
+paru -S matlab-mpm
+```
+
+2. 使用mpm安装Matlab
+```shell
+mpm install --release=<release> --destination=~/matlab MATLAB <other products>
+```
+
+3. 激活Matlab
+
+如果 `--release <= R2022b`
+```shell
+~/matlab/bin/activate_matlab.sh
+```
+如果 `--release >= R2023a`
+
+```shell
+~/matlab/bin/glnxa64/MathWorksProductAuthorizer.sh
+```
+
+4. 修复链接库
+
+如果 `--release >= R2023a`，在运行`MathWorksProductAuthorizer.sh`时极大概率报`segfault`，是由于某个版本的`gnutls`更新导致的，运行以下命令使得matlab激活脚本使用老版的`gnutls`：
+```shell
+wget https://archive.archlinux.org/packages/g/gnutls/gnutls-3.8.9-1-x86_64.pkg.tar.zst
+mkdir -p matlab/gnutls
+tar -xf gnutls-3.8.9-1-x86_64.pkg.tar.zst -C matlab/gnutls
+mkdir -p ~/matlab/bin/glnxa64/gnutls
+cp -a ~/matlab/gnutls/usr/lib/libgnutls* ~/matlab/bin/glnxa64/gnutls/
+cd /home/user/matlab/bin/glnxa64/
+ln -s gnutls/* ./
+```
+之后应该可以成功进行Matlab的激活。
+
+## Vivado
+
+1. 安装依赖库
+```shell
+paru -S ncurses5-compat-libs  libxcrypt-compat  libpng12  lib32-libpng12  gtk3  inetutils  xorg-xlsclients  cpio
+```
+
+2. 在Vivado官网下载安装脚本并运行
+```shell
+chmod +x FPGA_*.bin
+./ FPGA_*.bin
+```
