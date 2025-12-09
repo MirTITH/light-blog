@@ -68,6 +68,15 @@ kate /etc/locale.gen
 sudo locale-gen
 ```
 
+配置 fonts.conf，避免在中文环境中展示日文字形：
+
+```bash
+mkdir -p ~/.config/fontconfig/
+cp ./home/.config/fontconfig/fonts.conf ~/.config/fontconfig/
+# 为当前用户重新生成缓存
+fc-cache -f -v
+```
+
 ### Konsole 配置
 
 ```bash
