@@ -106,6 +106,10 @@ paru -S base-devel bash-completion dosfstools fatresize ntfs-3g gdb cmake ninja 
 paru -S ttf-lxgw-wenkai ttf-lxgw-wenkai-mono adobe-source-han-sans-otc-fonts noto-fonts-cjk
 paru -S zsh oh-my-zsh-git zsh-theme-powerlevel10k-git conda-zsh-completion zsh-autosuggestions zsh-syntax-highlighting ttf-meslo-nerd-font-powerlevel10k
 
+# 安装 time-based job scheduler (Timeshift 自动快照需要)
+paru -S cronie
+sudo systemctl enable --now cronie.service 
+
 # 其他软件
 paru -S typora tldr visual-studio-code-bin moonlight-qt mission-center
 ```
