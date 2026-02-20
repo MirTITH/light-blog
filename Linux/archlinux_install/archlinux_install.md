@@ -169,6 +169,22 @@ Timeout=30
 LockOnStart=true
 ```
 
+### mDNS
+
+> https://wiki.archlinux.org/title/Avahi
+
+```bash
+sudo pacman -S avahi nss-mdns
+sudo systemctl enable --now avahi-daemon.service
+```
+
+Then, edit the file `/etc/nsswitch.conf` and change the `hosts` line to include `mdns_minimal [NOTFOUND=return]` before `resolve` and `dns`:
+
+```
+hosts: mymachines mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] files myhostname dns
+```
+
+
 ## 软件安装
 
 ### WeChat
