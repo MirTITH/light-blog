@@ -402,7 +402,15 @@ chsh -s $(which zsh)
 
 Log out and log back in again to use your new default shell.
 
-如果需要临时切换到bash: 
+修复消失的Snap（如firefox）和flatpak程序：
+
+在`/etc/zsh/zprofile`中添加：
+
+```bash
+emulate sh -c 'source /etc/profile'
+```
+
+注：如果需要临时切换到bash: 
 
 ```shell
 exec bash

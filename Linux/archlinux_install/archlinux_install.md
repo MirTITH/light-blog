@@ -68,6 +68,15 @@ kate /etc/locale.gen
 sudo locale-gen
 ```
 
+配置 fonts.conf，避免在中文环境中展示日文字形：
+
+```bash
+mkdir -p ~/.config/fontconfig/
+cp ./home/.config/fontconfig/fonts.conf ~/.config/fontconfig/
+# 为当前用户重新生成缓存
+fc-cache -f -v
+```
+
 ### Konsole 配置
 
 ```bash
@@ -96,6 +105,10 @@ paru -U mihomo-party-bin-1.8.4-1-x86_64.pkg.tar.zst
 paru -S base-devel bash-completion dosfstools fatresize ntfs-3g gdb cmake ninja make gwenview yakuake timeshift xorg-xhost grub-btrfs htop xorg-xeyes vlc vlc-plugin-ffmpeg kdegraphics-thumbnailers ffmpegthumbs print-manager cups system-config-printer kdenetwork-filesharing samba power-profiles-daemon kwalletmanager filelight
 paru -S ttf-lxgw-wenkai ttf-lxgw-wenkai-mono adobe-source-han-sans-otc-fonts noto-fonts-cjk
 paru -S zsh oh-my-zsh-git zsh-theme-powerlevel10k-git conda-zsh-completion zsh-autosuggestions zsh-syntax-highlighting ttf-meslo-nerd-font-powerlevel10k
+
+# 安装 time-based job scheduler (Timeshift 自动快照需要)
+paru -S cronie
+sudo systemctl enable --now cronie.service 
 
 # 其他软件
 paru -S typora tldr visual-studio-code-bin moonlight-qt mission-center

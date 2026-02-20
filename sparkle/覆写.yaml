@@ -1,0 +1,7 @@
+# https://mihomo.party/docs/guide/override/yaml
+
+# 将规则插入到原规则前面
++rules:
+  - DOMAIN-SUFFIX,tith.ip-ddns.com,DIRECT
+  - DOMAIN-SUFFIX,osa.moe,DIRECT
+  - DOMAIN-SUFFIX,mathworks.com,DIRECT
