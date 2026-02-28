@@ -272,6 +272,22 @@ paru -S matlab-mpm
 ```shell
 mpm install --release=<release> --destination=~/matlab MATLAB <other products>
 ```
+若希望为设备上所有用户安装，则将目录修改为公共目录，例如:
+```shell
+sudo mpm install --release R2025b --products \
+                 Simulink \
+                 Stateflow \
+                 Simulink_Control_Design \
+                 Simulink_Compiler \
+                 Simulink_Real-Time \
+                 DSP_System_Toolbox \
+                 Simscape \
+                 Simscape_Electrical \
+                 Simscape_Fluids \
+                 Simscape_Multibody \
+                 Fixed-Point_Designer \
+                 --matlabroot /opt/MATLAB/R2025b/
+```
 
 3. 激活Matlab
 
@@ -283,6 +299,10 @@ mpm install --release=<release> --destination=~/matlab MATLAB <other products>
 
 ```shell
 ~/matlab/bin/glnxa64/MathWorksProductAuthorizer.sh
+```
+注意，当为所有用户安装时，应相应修改路径。可能需要sudo以提供权限，否则可能出现权限冲突的错误提示：Unable to install license. Please try again later.
+```shell
+sudo /opt/MATLAB/R2025b/bin/glnxa64/MathWorksProductAuthorizer.sh
 ```
 
 4. 修复链接库
@@ -297,7 +317,26 @@ cp -a ~/matlab/gnutls/usr/lib/libgnutls* ~/matlab/bin/glnxa64/gnutls/
 cd /home/user/matlab/bin/glnxa64/
 ln -s gnutls/* ./
 ```
-之后应该可以成功进行Matlab的激活。
+为所有用户安装的命令相应修改为
+```shell
+wget https://archive.archlinux.org/packages/g/gnutls/gnutls-3.8.9-1-x86_64.pkg.tar.zst
+mkdir -p matlab/gnutls
+tar -xf gnutls-3.8.9-1-x86_64.pkg.tar.zst -C matlab/gnutls
+sudo mkdir -p /opt/MATLAB/R2025b/bin/glnxa64/gnutls
+sudo cp -a matlab/gnutls/usr/lib/libgnutls.* /opt/MATLAB/R2025b/bin/glnxa64/gnutls/
+sudo ln -s gnutls/* ./
+```
+之后应该可以回到上一步成功进行Matlab的激活。
+```shell
+sudo ./MathWorksProductAuthorizer.sh
+```
+
+5. 权限问题
+   直接运行会出现安全提示：You are currently running MATLAB as root。在 Linux 中，长期以 root 身份运行图形界面程序会有安全风险，且以后产生的代码文件权限也会变成 root，导致普通用户无法编辑。最后可以把MATLAB目录的所有权交还给普通用户
+   首先创建软连接：
+   ```shell
+   sudo ln -s /opt/MATLAB/R2025b/bin/matlab /usr/local/bin/matlab
+   ```
 
 ## Vivado
 
