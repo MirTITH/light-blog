@@ -21,7 +21,7 @@ After installing, initialize your newly-installed Miniconda. The following comma
 取消默认进入 base
 
 ```shell
-conda config --set auto_activate_base false
+conda config --set auto_activate false
 ```
 
 ## Conda CUDA
@@ -193,6 +193,17 @@ sudo pacman -S nvidia-container-toolkit
 # 配置
 sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
+```
+
+如果更新显卡驱动后 docker 容器启动异常，报错类似于：
+```
+Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: failed to fulfil mount request: open /usr/lib/libEGL_nvidia.so.590.48.01: no such file or directory
+```
+
+可重新安装 nvidia-container-toolkit，或执行：
+
+```bash
+sudo nvidia-ctk cdi generate --output="/etc/cdi/nvidia.yaml"
 ```
 
 docker 运行 GUI 程序
